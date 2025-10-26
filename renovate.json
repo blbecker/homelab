@@ -23,5 +23,6 @@
       "matchPackagePatterns": [".*fluxcd.*", "HelmRepository", "HelmRelease"],
       "enabled": false
     }
-  ]
+  ],
+  "dependencyDashboard": true
 }
