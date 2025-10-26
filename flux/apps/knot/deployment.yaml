@@ -50,15 +50,15 @@ spec:
 
           livenessProbe:
             tcpSocket:
-              port: knot
+              port: knot-web
             initialDelaySeconds: 10
             periodSeconds: 10
-          readinessProbe:
-            httpGet:
-              path: /xrpc/_health
-              port: knot
-            initialDelaySeconds: 10
-            timeoutSeconds: 5
+          # readinessProbe:
+          #   httpGet:
+          #     path: /xrpc/_health
+          #     port: knot
+          #   initialDelaySeconds: 10
+          #   timeoutSeconds: 5
           resources:
             requests:
               memory: "250M"
