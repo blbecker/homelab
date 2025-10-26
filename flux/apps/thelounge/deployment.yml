@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: thelounge
+  namespace: thelounge
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: thelounge
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: thelounge
+    spec:
+      dnsConfig:
+        options:
+          - name: ndots
+            value: "1"
+      securityContext:
+        readOnlyRootFilesystem: true
+      containers:
+        - name: thelounge
+          image: linuxserver/thelounge:4.4.3
+          env:
+            - name: TZ
+              value: "America/New_York"
+            - name: PUID
+              value: "2000"
+            - name: PGID
+              value: "2000"
+          podSecurityContext:
+            fsGroup: 2000
+            fsGroupChangePolicy: "Always"
+          ports:
+            - name: thelounge
+              containerPort: 9000
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /config
+              name: thelounge-config
+          livenessProbe:
+            httpGet:
+              path: /
+              port: thelounge
+            initialDelaySeconds: 10
+            timeoutSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: thelounge
+            initialDelaySeconds: 10
+            timeoutSeconds: 5
+          resources:
+            requests:
+              memory: "250M"
+              cpu: ".25"
+            limits:
+              memory: "1G"
+              cpu: "1"
+      volumes:
+        - name: thelounge-config
+          persistentVolumeClaim:
+            claimName: thelounge-config

@@ -1,0 +1,16 @@
+# TODO: PiStar isn't setup yet
+# apiVersion: externaldns.k8s.io/v1alpha1
+# kind: DNSEndpoint
+# metadata:
+#   name: pistar
+#   namespace: external-dns
+# spec:
+#   endpoints:
+#     - dnsName: pistar.tartarus.us
+#       recordTTL: 300
+#       recordType: A
+#       targets:
+#         - 172.17.1.23
+#       providerSpecific:
+#         - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
+#           value: "false"

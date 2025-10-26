@@ -1,0 +1,69 @@
+---
+# tasks file for tartarus_bootstrap
+- name: Include secrets
+  ansible.builtin.include_vars: secrets.yml
+  no_log: true
+
+- name: Create a group for ansible user
+  tags:
+    - bootstrap
+  ansible.builtin.group:
+    name: ansible
+    gid: 9999
+    state: present
+
+- name: Create ansible user
+  tags:
+    - bootstrap
+  ansible.builtin.user:
+    name: ansible
+    group: ansible
+    groups: sudo,ansible
+    shell: /bin/bash
+    append: true
+    password: "!"
+    comment: "Ansible management user"
+    uid: 9999
+  register: user
+
+- name: Set ansibles ssh public key
+  tags:
+    - bootstrap
+  ansible.posix.authorized_key:
+    user: ansible
+    state: present
+    key: "{{ item }}"
+  with_file:
+    - public_keys/ansible.pub
+
+- name: Configure sudo for ansible user
+  copy:
+    dest: /etc/sudoers.d/ansible
+    content: |
+      ansible ALL=(ALL) NOPASSWD:ALL
+    owner: root
+    group: root
+    mode: "0440"
+    validate: "visudo -cf %s"
+
+- name: Create a destination for ansible's kubeconfig
+  ansible.builtin.file:
+    path: "{{ user.home }}/.kube"
+    owner: ansible
+    group: ansible
+    mode: "0600"
+
+- name: Configure kubectl
+  ansible.builtin.copy:
+    src: ansible_kubecfg.yaml
+    dest: "{{ user.home }}/.kube/config"
+# - name: Create an A record for this host
+#   community.general.cloudflare_dns:
+#     domain: tartarus.us
+#     record: "{{ inventory_hostname_short }}"
+#     type: A
+#     value: "{{ ansible_default_ipv4.address }}"
+#     solo: true
+#     # comment: "Created by Ansible"
+#     api_token: "{{ cloudflare_token }}"
+#     state: present

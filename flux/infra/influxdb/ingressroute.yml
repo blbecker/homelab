@@ -1,0 +1,22 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: influxdb-web
+  namespace: influxdb
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`influxdb.tartarus.us`)
+      kind: Rule
+      services:
+        - name: influxdb
+          kind: Service
+          port: 8086
+          scheme: http
+      middlewares:
+        - name: https-redirect-middleware
+          namespace: influxdb
+
+  tls:
+    secretName: letsencrypt-wildcard-cert-tartarus.us-prod

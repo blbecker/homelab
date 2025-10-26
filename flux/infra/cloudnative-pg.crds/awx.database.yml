@@ -1,0 +1,10 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: awx
+  namespace: cloudnative-pg
+spec:
+  name: awx
+  owner: awx
+  cluster:
+    name: main

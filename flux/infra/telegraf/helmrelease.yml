@@ -1,0 +1,217 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: telegraf
+  namespace: telegraf
+spec:
+  chart:
+    spec:
+      chart: telegraf
+      version: 1.X.X
+      sourceRef:
+        kind: HelmRepository
+        name: influxdb
+        namespace: flux-system
+  interval: 15m
+  timeout: 5m
+  releaseName: telegraf
+  postRenderers:
+    - kustomize:
+        patches:
+          - target:
+              version: v1
+              kind: Deployment
+              name: telegraf
+            patch: |-
+              apiVersion: apps/v1
+              kind: Deployment
+              metadata:
+                name: telegraf
+                namespace: telegraf
+              spec:
+                template:
+                  spec:
+                    dnsConfig: 
+                      options: 
+                        - name: ndots 
+                          value: "1"
+                    initContainers: 
+                      - name: snmp-mib-updater 
+                        image: alpine:latest 
+                        command: ['sh', '-c', 'apk add --no-cache net-snmp-libs']
+  values:
+    volumes:
+      - name: mibs-configmap
+        configMap:
+          name: mibs-configmap
+    mountPoints:
+      - name: mibs-configmap
+        mountPath: /mibs
+    rbac:
+      # Specifies whether RBAC resources should be created
+      create: true
+      # Create only for the release namespace or cluster wide (Role vs ClusterRole)
+      clusterWide: false
+    # trunk-ignore(checkov/CKV_SECRET_6)
+    envFromSecret: telegraf-secrets
+    env:
+      - name: MIBDIRS
+        value: /mibs:/usr/share/snmp/mibs
+    config:
+      # agent:
+      #   snmp_translator: gosmi
+      docker_endpoint: ""
+      outputs:
+        - influxdb_v2:
+            urls:
+              - https://influxdb.tartarus.us
+            token: "${TELEGRAF_TOKEN}"
+            organization: tartarus
+            bucket: telegraf
+
+      inputs:
+        - internet_speed:
+            interval: 6h
+            memory_saving_mode: true
+            connections: 4
+            cache: true
+
+        - upsd:
+            ## A running NUT server to connect to.
+            ## IPv6 addresses must be enclosed in brackets (e.g. "[::1]")
+            server: augustus.tartarus.us
+            port: 3493
+            username: monuser
+            password: "${AUGUSTUS_NUT_MONUSER}"
+
+            ## Force parsing numbers as floats
+            ## It is highly recommended to enable this setting to parse numbers
+            ## consistently as floats to avoid database conflicts where some numbers are
+            ## parsed as integers and others as floats.
+            force_float: true
+
+        - snmp:
+            agents:
+              - udp://router.tartarus.us:161
+            # timeout: 5s
+            # version: 3
+            community: public
+            agent_host_tag: source
+            # Number of retries to attempt.
+            # retries: 3
+            # path:
+            #   - /usr/share/snmp/mibs
+            #   - /mibs
+
+            # The GETBULK max-repetitions parameter.
+            # max_repetitions: 10
+
+            # SNMPv3 authentication and encryption options.
+            #
+            # Security Name.
+            # sec_name: priv
+            # # Authentication protocol; one of "MD5", "SHA", "SHA224", "SHA256", "SHA384", "SHA512" or "".
+            # auth_protocol: SHA
+            # # Authentication password.
+            # auth_password: "${ROUTER_SNMP_AUTH_PASS}"
+            # # Security Level; one of "noAuthNoPriv", "authNoPriv", or "authPriv".
+            # sec_level: authPriv
+            # # Privacy protocol used for encrypted messages; one of "DES", "AES", "AES192", "AES192C", "AES256", "AES256C", or "".
+            # ## Protocols "AES192", "AES192", "AES256", and "AES256C" require the underlying net-snmp tools
+            # ## to be compiled with --enable-blumenthal-aes (http://www.net-snmp.org/docs/INSTALL.html)
+            # priv_protocol: AES
+            # # Privacy password used for encrypted messages.
+            # priv_password: "${ROUTER_SNMP_PRIV_PASS}"
+            field:
+              - oid: DISMAN-EVENT-MIB::sysUpTimeInstance
+                name: uptime
+                conversion: float(2)
+
+              - oid: SNMPv2-MIB::sysName.0
+                name: source
+                is_tag: true
+
+              - oid: HOST-RESOURCES-MIB::hrMemorySize.0
+                name: memorySize
+
+            table:
+              - oid: IF-MIB::ifTable
+                name: interface
+                inherit_tags:
+                  - source
+                field:
+                  - oid: IF-MIB::ifDescr
+                    name: ifDescr
+                    is_tag: true
+              - oid: IF-MIB::ifXTable
+                name: interface
+                inherit_tags:
+                  - source
+                field:
+                  - oid: IF-MIB::ifDescr
+                    name: ifDescr
+                    is_tag: true
+
+        - snmp:
+            agents:
+              - udp://qnap.tartarus.us:161
+            # timeout: 5s
+            # version: 3
+            community: public
+            agent_host_tag: source
+            # Number of retries to attempt.
+            # retries: 3
+
+            # SNMPv3 authentication and encryption options.
+            #
+            # Security Name.
+            # sec_name: qnap
+            # # Authentication protocol; one of "MD5", "SHA", "SHA224", "SHA256", "SHA384", "SHA512" or "".
+            # auth_protocol: SHA
+            # # Authentication password.
+            # auth_password: "${QNAP_SNMP_AUTH_PASS}"
+            # # Security Level; one of "noAuthNoPriv", "authNoPriv", or "authPriv".
+            # sec_level: authPriv
+            # # Privacy protocol used for encrypted messages; one of "DES", "AES", "AES192", "AES192C", "AES256", "AES256C", or "".
+            # ## Protocols "AES192", "AES192", "AES256", and "AES256C" require the underlying net-snmp tools
+            # ## to be compiled with --enable-blumenthal-aes (http://www.net-snmp.org/docs/INSTALL.html)
+            # priv_protocol: AES
+            # # Privacy password used for encrypted messages.
+            # priv_password: "${QNAP_SNMP_PRIV_PASS}"
+            field:
+              - oid: DISMAN-EVENT-MIB::sysUpTimeInstance
+                name: uptime
+                conversion: float(2)
+
+              - oid: SNMPv2-MIB::sysName.0
+                name: source
+                is_tag: true
+
+              - oid: HOST-RESOURCES-MIB::hrMemorySize.0
+                name: memorySize
+
+            table:
+              - oid: IF-MIB::ifTable
+                name: interface
+                inherit_tags:
+                  - source
+                field:
+                  - oid: IF-MIB::ifDescr
+                    name: ifDescr
+                    is_tag: true
+                  - oid: IF-MIB::ifIndex
+                    name: ifIndex
+                    is_tag: true
+              - oid: IF-MIB::ifXTable
+                name: interface
+                inherit_tags:
+                  - source
+                field:
+                  - oid: IF-MIB::ifDescr
+                    name: ifDescr
+                    is_tag: true
+                  - oid: IF-MIB::ifIndex
+                    name: ifIndex
+                    is_tag: true
+    service:
+      enabled: false

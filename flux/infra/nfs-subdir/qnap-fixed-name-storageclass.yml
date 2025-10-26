@@ -1,0 +1,8 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: qnap-fixed-name-nfs-client
+provisioner: k8s-sigs.io/qnap-nfs-subdir-provisioner
+parameters:
+  pathPattern: "${.PVC.annotations.nfs.io/storage-path}" # waits for nfs.io/storage-path annotation, if not specified will accept as empty string.
+  onDelete: retain

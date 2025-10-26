@@ -1,0 +1,120 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: plex
+  namespace: plex
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: plex
+
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: plex
+    spec:
+      nodeSelector:
+        intel.feature.node.kubernetes.io/gpu: "true"
+      securityContext:
+        readOnlyRootFilesystem: false
+      containers:
+        - name: plex
+          image: linuxserver/plex:1.42.1
+          imagePullPolicy: Always
+          env:
+            - name: TZ
+              value: America/New_York
+            - name: PUID
+              value: "2000"
+            - name: PGID
+              value: "2000"
+            - name: ADVERTISE_IP
+              value: https://plex.tartarus.us
+            - name: HOSTNAME
+              value: plex.tartarus.us
+          securityContext:
+            readOnlyRootFilesystem: false
+            fsGroup: 2000
+            fsGroupChangePolicy: Always
+          ports:
+            - name: pms
+              containerPort: 32400
+              protocol: TCP
+            - name: pms-dlna-udp
+              containerPort: 1900
+              protocol: UDP
+            - name: pms-dlna-tcp
+              containerPort: 32469
+              protocol: TCP
+            - name: home-theater
+              containerPort: 3005
+              protocol: TCP
+            - name: bonjour
+              containerPort: 5353
+              protocol: UDP
+            - name: roku
+              containerPort: 8324
+              protocol: TCP
+            - name: gdm-1
+              containerPort: 32410
+              protocol: UDP
+            - name: gdm-2
+              containerPort: 32412
+              protocol: UDP
+            - name: gdm-3
+              containerPort: 32413
+              protocol: UDP
+            - name: gdm-4
+              containerPort: 32414
+              protocol: UDP
+          volumeMounts:
+            - mountPath: /config
+              name: plex-config
+            - mountPath: /data
+              name: plex-media
+            - mountPath: /transcode
+              name: plex-transcode
+            - mountPath: /config/Library/Application Support/Plex Media Server/Cache
+              name: plex-cache
+          readinessProbe:
+            httpGet:
+              path: /identity
+              port: pms
+              scheme: HTTPS
+            initialDelaySeconds: 30
+            timeoutSeconds: 5
+          livenessProbe:
+            tcpSocket:
+              port: pms
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          resources:
+            requests:
+              memory: 4G
+              cpu: "2"
+              gpu.intel.com/i915: "1"
+            limits:
+              memory: 4G
+              cpu: "3"
+              gpu.intel.com/i915: "1"
+      dnsConfig:
+        options:
+          - name: ndots
+            value: "1"
+
+      volumes:
+        - name: plex-config
+          persistentVolumeClaim:
+            claimName: plex-config
+        - name: plex-media
+          persistentVolumeClaim:
+            claimName: plex-media-qnap
+        - name: plex-transcode
+          emptyDir:
+            sizeLimit: 20Gi
+        - name: plex-cache
+          emptyDir:
+            sizeLimit: 30Gi

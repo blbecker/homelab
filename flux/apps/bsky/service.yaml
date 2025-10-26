@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: bsky
+  namespace: bsky
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: bsky
+  ports:
+    - name: bsky
+      port: 6767
+      targetPort: bsky
+      protocol: TCP

@@ -1,0 +1,38 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: main
+  namespace: cloudnative-pg
+spec:
+  instances: 3
+
+  storage:
+    storageClass: longhorn-no-replication
+    size: 10Gi
+
+  walStorage:
+    storageClass: longhorn-no-replication
+    size: 10Gi
+
+  affinity:
+    enablePodAntiAffinity: true
+    topologyKey: kubernetes.io/hostname
+    podAntiAffinityType: required
+
+  managed:
+    roles:
+      - name: awx
+        ensure: present
+        comment: Ansible AWX (Tower)
+        login: true
+        superuser: false
+        passwordSecret:
+          name: awx-pg-user-creds
+
+      - name: gotify
+        ensure: present
+        comment: Gotify notification server
+        login: true
+        superuser: false
+        passwordSecret:
+          name: gotify-pg-user-creds

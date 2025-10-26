@@ -1,0 +1,15 @@
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: router
+  namespace: external-dns
+spec:
+  endpoints:
+    - dnsName: tor-router.tartarus.us
+      recordTTL: 300
+      recordType: A
+      targets:
+        - 192.168.30.2
+      providerSpecific:
+        - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
+          value: "false"

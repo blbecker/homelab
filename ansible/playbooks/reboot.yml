@@ -1,0 +1,13 @@
+---
+- name: Update and reboot hosts
+  hosts: all
+  become: true
+  tasks:
+    - name: Perform a dist-upgrade.
+      ansible.builtin.apt:
+        upgrade: dist
+        update_cache: true
+
+    - name: Remove dependencies that are no longer required.
+      ansible.builtin.apt:
+        autoremove: true

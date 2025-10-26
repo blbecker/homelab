@@ -1,0 +1,15 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: cert-manager
+  namespace: cert-manager
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: jetstack-cert-manager
+    namespace: flux-system
+  interval: 15m
+  timeout: 5m
+  # releaseName: cert-manager
+  values:
+    installCRDs: true

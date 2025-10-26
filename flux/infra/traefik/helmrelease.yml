@@ -1,0 +1,49 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: traefik
+  namespace: traefik
+spec:
+  chart:
+    spec:
+      chart: traefik
+      version: 23.X.X
+      sourceRef:
+        kind: HelmRepository
+        name: traefik
+        namespace: flux-system
+  interval: 15m
+  timeout: 5m
+  install:
+    crds: CreateReplace
+  upgrade:
+    crds: CreateReplace
+  releaseName: traefik
+  values: # https://github.com/traefik/traefik-helm-chart/blob/master/traefik/values.yaml
+    ports:
+      web:
+        redirectTo: websecure
+    logs.general.level: DEBUG
+    forwardedHeaders:
+      enabled: true
+      trustedIPs:
+        - 10.0.0.0/8
+    ssl:
+      enabled: true
+      permanentRedirect: false
+
+    access:
+      enabled: true
+
+    service:
+      loadBalancerIP: 192.168.40.84
+
+    # Create an IngressRoute for the dashboard
+    ingressRoute:
+      dashboard:
+        enabled: true
+        # Custom match rule with host domain
+        matchRule: Host(`traefik.tartarus.us`)
+        entryPoints: ["websecure"]
+        tls:
+          secretName: letsencrypt-wildcard-cert-tartarus.us-prod

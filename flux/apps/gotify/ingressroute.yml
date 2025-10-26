@@ -1,0 +1,20 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: gotify-web
+  namespace: gotify
+  annotations:
+    switchboard.borchero.com/ignore: "all"
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`gotify.tartarus.us`)
+      kind: Rule
+      services:
+        - name: gotify
+          kind: Service
+          port: gotify-http
+
+  tls:
+    secretName: letsencrypt-wildcard-cert-tartarus.us-prod

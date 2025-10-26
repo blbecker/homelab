@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: plex
+  namespace: plex
+spec:
+  type: LoadBalancer
+  selector:
+    app.kubernetes.io/name: plex
+  loadBalancerIP: 192.168.40.70
+  ports:
+    - name: pms
+      port: 32400
+      targetPort: pms
+      protocol: TCP
+    - name: pms-dlna-udp
+      port: 1900
+      targetPort: pms-dlna-udp
+      protocol: UDP
+    - name: pms-dlna-tcp
+      port: 32469
+      targetPort: pms-dlna-tcp
+      protocol: TCP
+    - name: home-theater
+      port: 3005
+      targetPort: home-theater
+      protocol: TCP
+    - name: bonjour
+      port: 5353
+      targetPort: bonjour
+      protocol: UDP
+    - name: roku
+      port: 8324
+      targetPort: roku
+      protocol: TCP
+    - name: gdm-1
+      port: 32410
+      targetPort: gdm-1
+      protocol: UDP
+    - name: gdm-2
+      port: 32412
+      targetPort: gdm-2
+      protocol: UDP
+    - name: gdm-3
+      port: 32413
+      targetPort: gdm-3
+      protocol: UDP
+    - name: gdm-4
+      port: 32414
+      targetPort: gdm-4
+      protocol: UDP

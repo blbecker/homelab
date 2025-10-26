@@ -1,0 +1,25 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: kubernetes-dashboard
+  namespace: kubernetes-dashboard
+spec:
+  chart:
+    spec:
+      chart: kubernetes-dashboard
+      version: 6.X.X
+      sourceRef:
+        kind: HelmRepository
+        name: kubernetes-dashboard
+        namespace: flux-system
+  interval: 15m
+  timeout: 5m
+  releaseName: kubernetes-dashboard
+  values: # https://github.com/kubernetes/dashboard/blob/master/charts/helm-chart/kubernetes-dashboard/values.yaml
+    protocolHttp: true
+    service:
+      externalPort: 9090
+    rbac:
+      clusterReadOnlyRole: true
+    metricsScraper:
+      enabled: true

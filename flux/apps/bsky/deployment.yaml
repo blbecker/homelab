@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bsky
+  namespace: bsky
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: bsky
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: bsky
+    spec:
+      dnsConfig:
+        options:
+          - name: ndots
+            value: "1"
+      securityContext:
+        readOnlyRootFilesystem: true
+      containers:
+        - name: bsky
+          image: ghcr.io/bluesky-social/pds:0.4.182
+          env:
+            - name: TZ
+              value: "America/New_York"
+          envFrom:
+            - configMapRef:
+                name: bsky-configmap
+            - secretRef:
+                name: bsky-secrets
+          podSecurityContext:
+            fsGroup: 2000
+            fsGroupChangePolicy: "Always"
+          ports:
+            - name: bsky
+              containerPort: 3000
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /pds
+              name: data
+          livenessProbe:
+            tcpSocket:
+              port: bsky
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /xrpc/_health
+              port: bsky
+            initialDelaySeconds: 10
+            timeoutSeconds: 5
+          resources:
+            requests:
+              memory: "250M"
+              cpu: ".5"
+            limits:
+              memory: "2G"
+              cpu: "2"
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: bsky-data

@@ -1,0 +1,18 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: reflector
+  namespace: reflector
+spec:
+  chart:
+    spec:
+      chart: reflector
+      version: 6.X.X
+      sourceRef:
+        kind: HelmRepository
+        name: reflector
+        namespace: flux-system
+  interval: 15m
+  timeout: 5m
+  releaseName: reflector
+  # values: # https://github.com/emberstack/kubernetes-reflector/blob/main/src/helm/reflector/values.yaml

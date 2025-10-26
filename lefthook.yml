@@ -1,0 +1,61 @@
+# EXAMPLE USAGE:
+#
+#   Refer for explanation to following link:
+#   https://github.com/evilmartians/lefthook/blob/master/docs/configuration.md
+#
+# pre-push:
+#   commands:
+#     packages-audit:
+#       tags: frontend security
+#       run: yarn audit
+#     gems-audit:
+#       tags: backend security
+#       run: bundle audit
+#
+# pre-commit:
+#   parallel: true
+#   commands:
+#     eslint:
+#       glob: "*.{js,ts,jsx,tsx}"
+#       run: yarn eslint {staged_files}
+#     rubocop:
+#       tags: backend style
+#       glob: "*.rb"
+#       exclude: '(^|/)(application|routes)\.rb$'
+#       run: bundle exec rubocop --force-exclusion {all_files}
+#     govet:
+#       tags: backend style
+#       files: git ls-files -m
+#       glob: "*.go"
+#       run: go vet {files}
+#   scripts:
+#     "hello.js":
+#       runner: node
+#     "any.go":
+#       runner: go run
+
+pre-commit:
+  parallel: true
+  commands:
+    tf-format:
+      glob: "*.{tf,tfvars,tftest.hcl}"
+      run: terraform fmt terraform {staged_files}
+
+    prettier:
+      glob: "*.{js,md,yml,yaml,json}"
+      run: prettier {staged_files} --ignore-unknown --write
+
+    encrypt:
+      stage_fixed: true
+      run: |
+        ejson e terraform/secrets.tfvars.ejson && \
+        dotenvx encrypt
+
+    # gitleaks:
+    #   run: docker run -v $(pwd):/path zricethezav/gitleaks:latest protect --staged --verbose --source="/path"
+    # kubeconform:
+    #   glob: "flux/**/*.yml"
+    #   run: docker run -v $(pwd):/data ghcr.io/yannh/kubeconform:latest -summary -ignore-missing-schemas /data/flux/ --ignore-filename-pattern /data/flux/infra/telegraf/mib-initcontainer-patch.yaml
+    # kubescore:
+    # glob: "flux/**/*.yml"
+    # run: docker run -v $(pwd):/project zegl/kube-score:latest score {staged_files} --ignore-test container-ephemeral-storage-request-and-limit --ignore-test container-security-context-user-group-id --ignore-test pod-networkpolicy --ignore-test container-security-context-readonlyrootfilesystem --output-format human

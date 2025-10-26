@@ -1,0 +1,22 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
+kind: Kustomization
+metadata:
+  name: cloudnative-pg.crds
+  namespace: flux-system
+spec:
+  interval: 15m
+  path: flux/infra/cloudnative-pg.crds
+  prune: true
+  dependsOn:
+    - name: cloudnative-pg
+  timeout: 2m0s
+  retryInterval: 2m0s
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  validation: server
+  healthChecks:
+    - apiVersion: postgresql.cnpg.io/v1
+      kind: Cluster
+      name: main
+      namespace: cloudnative-pg

@@ -1,0 +1,24 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: grafana-web
+  namespace: grafana
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`grafana.tartarus.us`)
+      kind: Rule
+      observability:
+        accessLogs: true
+      services:
+        - name: grafana-web
+          kind: Service
+          port: 3000
+          scheme: http
+      middlewares:
+        - name: https-redirect-middleware
+          namespace: grafana
+
+  tls:
+    secretName: letsencrypt-wildcard-cert-tartarus.us-prod

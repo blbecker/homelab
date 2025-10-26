@@ -1,0 +1,69 @@
+---
+- name: Apply common everywhere
+  hosts: all
+  become: true
+  tags:
+    - always
+  roles:
+    - tartarus_bootstrap
+    - common
+
+- name: Apply zfs and telegraf to nas
+  hosts: nas
+  become: true
+  tags:
+    - telegraf
+    - zfs
+    - nas
+  roles:
+    - tartarus_mail
+    - tartarus_zfs
+    - tartarus_telegraf
+
+- name: Configure k3s servers
+  hosts:
+    - k3s_servers
+  become: true
+  serial: 1
+  tags:
+    - k3s
+  roles:
+    - tartarus_k3s
+
+- name: Configure k3s agents
+  hosts:
+    - k3s_agents
+  become: true
+  tags:
+    - k3s
+  roles:
+    - tartarus_k3s
+
+- name: Configure Quicksync
+  hosts:
+    - romans
+  become: true
+  tags:
+    - quicksync
+  roles:
+    - tartarus_quicksync
+
+- name: Configure UPS monitoring (servers)
+  hosts:
+    - nut_servers
+  become: true
+  tags:
+    - nut_server
+    - nut
+  roles:
+    - tartarus_nut_server
+
+- name: Configure UPS monitoring (clients)
+  hosts:
+    - nut_clients
+  become: true
+  tags:
+    - nut_client
+    - nut
+  roles:
+    - tartarus_nut_client

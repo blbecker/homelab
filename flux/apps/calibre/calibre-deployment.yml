@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: calibre
+  namespace: calibre
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: calibre
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: calibre
+    spec:
+      dnsConfig:
+        options:
+          - name: ndots
+            value: "1"
+      securityContext:
+        readOnlyRootFilesystem: true
+      containers:
+        - name: calibre
+          image: linuxserver/calibre:8.4.0
+          env:
+            - name: TZ
+              value: "America/New_York"
+            - name: PUID
+              value: "2000"
+            - name: PGID
+              value: "2000"
+          podSecurityContext:
+            fsGroup: 2000
+            fsGroupChangePolicy: "Always"
+          ports:
+            - name: calibre-ui
+              containerPort: 8080
+              protocol: TCP
+            - name: calibre-ui-tls
+              containerPort: 8181
+              protocol: TCP
+            - name: calibre-server
+              containerPort: 8081
+              protocol: TCP
+
+          volumeMounts:
+            - mountPath: /config
+              name: calibre-config
+            - mountPath: /data
+              name: calibre-media
+          livenessProbe:
+            tcpSocket:
+              port: calibre-ui
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: calibre-ui
+            initialDelaySeconds: 10
+            timeoutSeconds: 5
+          resources:
+            requests:
+              memory: "250M"
+              cpu: ".5"
+            limits:
+              memory: "2G"
+              cpu: "2"
+
+      volumes:
+        - name: calibre-config
+          persistentVolumeClaim:
+            claimName: calibre-config
+        - name: calibre-media
+          persistentVolumeClaim:
+            claimName: calibre-media-qnap

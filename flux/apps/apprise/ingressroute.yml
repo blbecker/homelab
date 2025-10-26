@@ -1,0 +1,22 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: apprise-web
+  namespace: apprise
+  annotations:
+    switchboard.borchero.com/ignore: "all"
+    external-dns.alpha.kubernetes.io/target: traefik.tartarus.us
+    kubernetes.io/ingress.class: traefik
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`apprise.tartarus.us`)
+      kind: Rule
+      services:
+        - name: apprise
+          kind: Service
+          port: apprise-http
+
+  tls:
+    secretName: letsencrypt-wildcard-cert-tartarus.us-prod

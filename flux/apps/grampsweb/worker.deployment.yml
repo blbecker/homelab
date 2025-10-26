@@ -1,0 +1,132 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grampsweb-worker
+  namespace: grampsweb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: grampsweb-worker
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: grampsweb-worker
+    spec:
+      securityContext:
+        readOnlyRootFilesystem: false
+        # runAsUser: 2000
+        # runAsGroup: 2000
+        # fsGroup: 2000
+        # fsGroupChangePolicy: "Always"
+      containers:
+        - name: grampsweb-worker
+          image: ghcr.io/gramps-project/grampsweb:v25.5.2
+          imagePullPolicy: Always
+          command: ["celery"]
+          args:
+            [
+              "-A",
+              "gramps_webapi.celery",
+              "worker",
+              "--loglevel=INFO",
+              "--concurrency=2",
+            ]
+          env:
+            - name: TZ
+              value: "America/New_York"
+            - name: PUID
+              value: "2000"
+            - name: PGID
+              value: "2000"
+
+          envFrom:
+            - configMapRef:
+                name: grampsweb-config
+            - secretRef:
+                name: grampsweb-secret
+
+          ports:
+            - name: grampsweb
+              containerPort: 5000
+              protocol: TCP
+          volumeMounts:
+            - name: grampsweb-users
+              mountPath: /app/users # persist user database
+            - name: grampsweb-index
+              mountPath: /app/indexdir # persist search index
+            - name: grampsweb-thumb-cache
+              mountPath: /app/thumbnail_cache # persist thumbnails
+            - name: grampsweb-cache
+              mountPath: /app/cache # persist export and report caches
+            - name: grampsweb-secret
+              mountPath: /app/secret # persist flask secret
+            - name: grampsweb-db
+              mountPath: /root/.gramps/grampsdb # persist Gramps database
+            - name: grampsweb-media
+              mountPath: /app/media # persist media files
+            - name: grampsweb-tmp
+              mountPath: /tmp
+          resources:
+            requests:
+              memory: "250M"
+              cpu: "250m"
+            limits:
+              memory: "1G"
+              cpu: "1"
+
+          livenessProbe:
+            exec:
+              command:
+                - celery
+                - -A
+                - gramps_webapi.celery
+                - inspect
+                - ping
+            initialDelaySeconds: 10
+            periodSeconds: 60
+            timeoutSeconds: 5
+          readinessProbe:
+            exec:
+              command:
+                - celery
+                - -A
+                - gramps_webapi.celery
+                - inspect
+                - ping
+            initialDelaySeconds: 5
+            periodSeconds: 30
+            timeoutSeconds: 5
+      dnsConfig:
+        options:
+          - name: ndots
+            value: "1"
+
+      volumes:
+        - name: grampsweb-config
+          persistentVolumeClaim:
+            claimName: grampsweb-config
+        - name: grampsweb-users
+          persistentVolumeClaim:
+            claimName: grampsweb-users
+        - name: grampsweb-index
+          persistentVolumeClaim:
+            claimName: grampsweb-index
+        - name: grampsweb-thumb-cache
+          emptyDir:
+            sizeLimit: 20Gi
+        - name: grampsweb-cache
+          emptyDir:
+            sizeLimit: 20Gi
+        - name: grampsweb-secret
+          persistentVolumeClaim:
+            claimName: grampsweb-secret
+        - name: grampsweb-db
+          persistentVolumeClaim:
+            claimName: grampsweb-db
+        - name: grampsweb-media
+          persistentVolumeClaim:
+            claimName: grampsweb-media
+        - name: grampsweb-tmp
+          persistentVolumeClaim:
+            claimName: grampsweb-tmp

@@ -1,0 +1,23 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: device-plugin-operator
+  namespace: intel
+spec:
+  chart:
+    spec:
+      chart: intel-device-plugins-operator
+      version: 0.X.X
+      sourceRef:
+        kind: HelmRepository
+        name: intel
+        namespace: flux-system
+  interval: 15m
+  timeout: 5m
+  releaseName: intel-device-plugins-operator
+  install:
+    crds: CreateReplace
+  upgrade:
+    crds: CreateReplace
+  values:
+  # https://github.com/intel/helm-charts/blob/main/charts/device-plugin-operator/values.yaml

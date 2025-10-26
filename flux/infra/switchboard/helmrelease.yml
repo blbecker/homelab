@@ -1,0 +1,30 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: switchboard
+  namespace: switchboard
+spec:
+  chart:
+    spec:
+      chart: switchboard
+      version: 0.6.X
+      sourceRef:
+        kind: HelmRepository
+        name: switchboard
+        namespace: flux-system
+  interval: 15m
+  timeout: 5m
+  releaseName: switchboard
+  values: # https://github.com/borchero/switchboard/blob/main/chart/values.yaml
+    externalDNS:
+      sources:
+        - crd
+
+    integrations:
+      externalDNS:
+        enabled: true
+        targetService:
+          # -- The name of the (Traefik) service whose IP address should be used for DNS records.
+          name: traefik
+          # -- The namespace of the (Traefik) service whose IP address should be used for DNS records.
+          namespace: traefik

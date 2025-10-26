@@ -1,0 +1,284 @@
+name: Deploy
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read # Required to access repository content
+  pull-requests: read # Required to access the pull request data
+
+env:
+  tf_version: "1.12.2"
+  tg_version: "0.85.0"
+  working_dir: "terraform"
+
+jobs:
+  # JOB to run change detection
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      terraform: ${{ steps.filter.outputs.terraform }}
+      ansible: ${{ steps.filter.outputs.ansible }}
+      flux: ${{ steps.filter.outputs.flux }}
+      docs: ${{ steps.filter.outputs.docs }}
+
+    # Set job outputs to values from filter step
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            terraform:
+              - 'terraform/**'
+              - '.github/**' # Run CI jobs if workflows change
+            ansible:
+              - 'ansible/**'
+              - '.github/**'
+            flux:
+              - 'flux/**'
+              - '.github/**'
+            docs:
+              - 'docs/**'
+              - '.github/**'
+  # Job to run Gitleaks
+  gitleaks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  kube-conform:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/yannh/kubeconform:v0.6.7-alpine
+      volumes:
+        # Mount the host directory into the container
+        - ${{ github.workspace }}:/data
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run kube-conform on Kubernetes manifests
+        run: |
+          /kubeconform -summary -ignore-missing-schemas -output json /data/flux/
+
+  # We've got some work to do before kube score will pass
+  #
+  # kube-score:
+  #   runs-on: ubuntu-latest
+  #   continue-on-error: true
+  #   container:
+  #     image: zegl/kube-score:v1.19.0
+  #     volumes:
+  #       # Mount the host directory into the container
+  #       - ${{ github.workspace }}:/data
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v4
+
+  #     - name: Run kube-score on Kubernetes manifests
+  #       run: |
+  #         /data/scripts/do-kube-score.sh --ignore-test container-ephemeral-storage-request-and-limit --ignore-test container-security-context-user-group-id --ignore-test pod-networkpolicy --ignore-test container-security-context-readonlyrootfilesystem --output-format human
+
+  # Job to lint Ansible playbooks in "ansible" directory
+  # ansible-lint:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v4
+  #
+  #     - name: Set up Python
+  #       uses: actions/setup-python@v5
+  #       with:
+  #         python-version: '3.x'
+  #
+  #     - name: Install ansible and ansible-lint
+  #       run: |
+  #         pip install ansible ansible-lint
+  #
+  #     - name: Run ansible-lint
+  #       run: |
+  #         ansible-lint ansible/
+
+  terragrunt-plan:
+    needs: changes
+    if: ${{ needs.changes.outputs.terraform == 'true' }}
+    runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.check.outputs.changed }}
+    concurrency:
+      group: tgplan-${{ github.ref }}
+      cancel-in-progress: false
+
+    # if: contains(github.event.pull_request.changed_files, 'terraform/')
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install asdf and tools
+        uses: asdf-vm/actions/install@v4
+
+        # I'd prefer to do this in asdf, but there's not a plugin for that yet?
+      - name: Install ejson
+        run: |
+          ejson_version=1.5.4
+          arch=amd64
+
+          if ! type wget &> /dev/null; then
+            sudo apt update && \
+            sudo apt install -y wget
+          fi
+
+          wget https://github.com/Shopify/ejson/releases/download/v${ejson_version}/ejson_${ejson_version}_linux_${arch}.deb -O /tmp/ejson.deb && \
+          sudo dpkg -i /tmp/ejson.deb && \
+          ejson --version
+
+      - name: Attach WireGuard connection
+        shell: bash
+        run: |
+          sudo apt install wireguard resolvconf
+          sudo bash -c 'cat << EOF > /etc/wireguard/wg0.conf
+          [Interface]
+          Address = ${{ secrets.WG_IP }}
+          PrivateKey = ${{ secrets.WG_PRIVATE }}
+
+          [Peer]
+          PublicKey = ${{ secrets.WG_ENDPOINT_PUBLIC }}
+          AllowedIPs = ${{ secrets.WG_ALLOWED_IPS }}
+          Endpoint = ${{ secrets.WG_ENDPOINT }}
+          EOF'
+
+          sudo chmod 600 /etc/wireguard/wg0.conf
+          sudo wg-quick up wg0
+
+      - name: Verify WireGuard connection
+        run: ip a ; ping -c 4 -W 10 ${{ secrets.WG_GW_IP }} || (echo "Failed to ping gateway!"; exit 1)
+
+      - name: Decrypt ejson secrets
+        env:
+          DOTENV_PRIVATE_KEY: "${{ secrets.DOTENV_PRIVATE_KEY }}"
+        run: dotenvx get EJSON_PRIVATE_KEY |  ejson decrypt --key-from-stdin $GITHUB_WORKSPACE/terraform/secrets.tfvars.ejson > $GITHUB_WORKSPACE/terraform/secrets.tfvars.json
+
+      - name: Run per-module plan
+        env:
+          DOTENV_PRIVATE_KEY: "${{ secrets.DOTENV_PRIVATE_KEY }}"
+        run: ./scripts/terragrunt-plan.sh ./terraform ./plans
+
+      - name: Detect changes
+        id: check
+        run: |
+          if [ -f ./plans/changed.flag ] && [ "$(cat ./plans/changed.flag)" = "1" ]; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Set artifact slug
+        if: steps.check.outputs.changed == 'true'
+        id: slug
+        run: |
+          if [[ "${GITHUB_REF}" == refs/pull/* ]]; then
+            num=$(echo "${GITHUB_REF}" | cut -d/ -f3)
+            echo "slug=pr-${num}" >> $GITHUB_OUTPUT
+          else
+            echo "slug=${GITHUB_REF_NAME}" >> $GITHUB_OUTPUT
+          fi
+
+      - uses: actions/upload-artifact@v4
+        if: steps.check.outputs.changed == 'true'
+        with:
+          # Include branch or PR ref in artifact slug
+          name: tfplans-${{ steps.slug.outputs.slug }}
+          path: plans/
+
+      - name: Cleanup wireguard connection
+        if: always()
+        run: sudo wg-quick down wg0 || echo "WireGuard connection already down"
+
+  terragrunt-apply:
+    # Only run on main and if plans reported changes
+    if: github.ref == 'refs/heads/main' && needs.terragrunt-plan.outputs.changed == 'true'
+    needs: terragrunt-plan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set artifact slug
+        id: slug
+        run: |
+          if [[ "${GITHUB_REF}" == refs/pull/* ]]; then
+            num=$(echo "${GITHUB_REF}" | cut -d/ -f3)
+            echo "slug=pr-${num}" >> $GITHUB_OUTPUT
+          else
+            echo "slug=${GITHUB_REF_NAME}" >> $GITHUB_OUTPUT
+          fi
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: tfplans-${{ steps.slug.outputs.slug }}
+          path: plans
+
+      - name: Install asdf and tools
+        uses: asdf-vm/actions/install@v4
+
+        # I'd prefer to do this in asdf, but there's not a plugin for that yet?
+      - name: Install ejson
+        run: |
+          ejson_version=1.5.4
+          arch=amd64
+
+          if ! type wget &> /dev/null; then
+            sudo apt update && \
+            sudo apt install -y wget
+          fi
+
+          wget https://github.com/Shopify/ejson/releases/download/v${ejson_version}/ejson_${ejson_version}_linux_${arch}.deb -O /tmp/ejson.deb && \
+          sudo dpkg -i /tmp/ejson.deb && \
+          ejson --version
+
+      - name: Attach WireGuard connection
+        shell: bash
+        run: |
+          sudo apt install wireguard resolvconf
+          sudo bash -c 'cat << EOF > /etc/wireguard/wg0.conf
+          [Interface]
+          Address = ${{ secrets.WG_IP }}
+          PrivateKey = ${{ secrets.WG_PRIVATE }}
+
+          [Peer]
+          PublicKey = ${{ secrets.WG_ENDPOINT_PUBLIC }}
+          AllowedIPs = ${{ secrets.WG_ALLOWED_IPS }}
+          Endpoint = ${{ secrets.WG_ENDPOINT }}
+          EOF'
+
+          sudo chmod 600 /etc/wireguard/wg0.conf
+          sudo wg-quick up wg0
+
+      - name: Verify WireGuard connection
+        run: ip a ; ping -c 4 -W 10 ${{ secrets.WG_GW_IP }} || (echo "Failed to ping gateway!"; exit 1)
+
+      - name: Decrypt ejson secrets
+        env:
+          DOTENV_PRIVATE_KEY: "${{ secrets.DOTENV_PRIVATE_KEY }}"
+        run: dotenvx get EJSON_PRIVATE_KEY |  ejson decrypt --key-from-stdin $GITHUB_WORKSPACE/terraform/secrets.tfvars.ejson > $GITHUB_WORKSPACE/terraform/secrets.tfvars.json
+
+      - name: Apply per-module plans
+        env:
+          DOTENV_PRIVATE_KEY: "${{ secrets.DOTENV_PRIVATE_KEY }}"
+        run: ./scripts/terragrunt-apply.sh ./terraform
+
+      - name: Cleanup wireguard connection
+        if: always()
+        run: sudo wg-quick down wg0 || echo "WireGuard connection already down"

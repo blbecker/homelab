@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: sillytavern
+  namespace: sillytavern
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: sillytavern
+  ports:
+    - name: sillytavern
+      port: 8000
+      targetPort: sillytavern
+      protocol: TCP

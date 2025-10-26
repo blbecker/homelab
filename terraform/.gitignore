@@ -1,0 +1,4 @@
+dev.env
+.terraform
+state
+secrets.tfvars.json

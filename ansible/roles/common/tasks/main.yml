@@ -1,0 +1,56 @@
+---
+# - name: Update
+#   ansible.builtin.apt:
+#     state: latest
+#     update_cache: true
+
+- name: Configure apt
+  ansible.builtin.copy:
+    src: files/etc/apt/sources.list
+    dest: /etc/apt/sources.list
+    owner: root
+    group: root
+    mode: "0644"
+  notify:
+    - Refresh package cache
+
+- name: Refresh package cache
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: Install common packages
+  ansible.builtin.apt:
+    pkg:
+      - vim
+      - sudo
+      - gdisk
+      - wget
+      - curl
+      - gnupg2
+      - lsb-release
+      - ca-certificates
+      - apt-transport-https
+      - software-properties-common
+      - mailutils
+      - zsh
+      - git
+      - rsync
+      - tmux
+      - plocate
+    state: present
+    update_cache: true
+# - name: Create a group for my user
+#   ansible.builtin.group:
+#     name: blbecker
+#     gid: 1000
+#     state: present
+
+# - name: Create my user
+#   ansible.builtin.user:
+#     name: blbecker
+#     group: blbecker
+#     groups: sudo,blbecker
+#     shell: /bin/zsh
+#     append: true
+#     uid: 1000

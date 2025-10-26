@@ -1,0 +1,13 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: telegraf
+resources:
+  - ./helmrelease.yml
+configMapGenerator:
+  - name: mibs-configmap
+    files:
+      - mibs/mikrotik.mib
+      - mibs/qnap.mib
+generatorOptions:
+  disableNameSuffixHash: true

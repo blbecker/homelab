@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: fastenhealth
+  namespace: fastenhealth
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: fastenhealth
+  ports:
+    - name: fastenhealth
+      port: 8080
+      targetPort: fastenhealth
+      protocol: TCP

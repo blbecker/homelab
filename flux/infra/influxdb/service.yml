@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: influxdb
+  namespace: influxdb
+spec:
+  type: LoadBalancer
+  selector:
+    app.kubernetes.io/name: influxdb
+  ports:
+    - name: influxdb-web
+      port: 8086
+      targetPort: influxdb-web
+      protocol: TCP

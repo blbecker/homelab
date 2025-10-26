@@ -1,0 +1,25 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: prometheus-web
+  namespace: prometheus-operator
+  annotations:
+    switchboard.borchero.com/ignore: "all"
+    external-dns.alpha.kubernetes.io/target: traefik.tartarus.us
+    kubernetes.io/ingress.class: traefik
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`prometheus.tartarus.us`)
+      kind: Rule
+      services:
+        - name: prometheus-operator-kube-p-prometheus
+          kind: Service
+          port: 9090
+      middlewares:
+        - name: https-redirect-middleware
+          namespace: prometheus-operator
+
+  tls:
+    secretName: letsencrypt-wildcard-cert-tartarus.us-prod

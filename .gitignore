@@ -1,0 +1,6 @@
+.decrypted~*
+.vscode
+.aider*
+node_modules
+.env.keys
+plans

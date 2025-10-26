@@ -1,0 +1,52 @@
+baseURL: https://blbecker.github.io/
+languageCode: en-us
+title: Homelab-Flux
+
+enableRobotsTXT: true
+enableGitInfo: true
+enableEmoji: true
+hasCJKLanguage: true
+enableInlineShortcodes: true
+
+outputs:
+  home: [HTML]
+  page: [HTML]
+  section: [HTML, RSS]
+
+module:
+  hugoVersion:
+    extended: true
+    min: "0.120.1"
+
+  # workspace: hugo.work
+
+  imports:
+    - path: github.com/imfing/hextra
+
+menu:
+  main:
+    - name: Documentation
+      weight: 1
+      pageRef: /docs
+
+params:
+  description: Documentation for my homelab
+
+  theme:
+    # light | dark | system
+    default: system
+    displayToggle: true
+
+    # Search
+  # flexsearch is enabled by default
+  search:
+    enable: true
+    type: flexsearch
+
+    flexsearch:
+      # index page by: content | summary | heading | title
+      index: content
+
+  editURL:
+    enable: true
+    base: "https://github.com/blbecker/homelab-flux/edit/main/exampleSite/content"

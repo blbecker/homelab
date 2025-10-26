@@ -1,0 +1,5 @@
+# Ignore artifacts:
+build
+coverage
+.terraform
+secrets.tfvars.json

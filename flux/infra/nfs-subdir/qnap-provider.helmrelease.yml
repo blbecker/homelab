@@ -1,0 +1,36 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: qnap-nfs-subdir
+  namespace: nfs-subdir
+spec:
+  chart:
+    spec:
+      chart: nfs-subdir-external-provisioner
+      version: 4.X.X
+      sourceRef:
+        kind: HelmRepository
+        name: nfs-subdir
+        namespace: flux-system
+  interval: 15m
+  timeout: 5m
+  releaseName: qnap-nfs-subdir-external-provisioner
+  values: # https://github.com/kubernetes-sigs/nfs-subdir-external-provisioner/blob/master/charts/nfs-subdir-external-provisioner/values.yaml
+    nfs:
+      server: qnap.tartarus.us
+      path: /k8s
+      mountOptions:
+        - timeo=200
+        - retrans=3
+        - proto=tcp
+        - nfsvers=4.1
+        - noatime
+        - nodiratime
+        - hard
+      volumeName: nas-tartarus-nfs-root
+      # Reclaim policy for the main nfs volume
+      reclaimPolicy: Retain
+    storageClass:
+      name: qnap-nfs-subdir
+      provisionerName: k8s-sigs.io/qnap-nfs-subdir-provisioner
+      pathPattern: ${.PVC.namespace}/${.PVC.name}

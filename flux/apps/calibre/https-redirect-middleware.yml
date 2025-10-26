@@ -1,0 +1,10 @@
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: https-redirect-middleware
+  namespace: calibre
+spec:
+  redirectScheme:
+    scheme: https
+    permanent: true

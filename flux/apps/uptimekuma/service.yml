@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: uptimekuma
+  namespace: uptimekuma
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: uptimekuma
+  ports:
+    - name: uptimekuma
+      port: 3001
+      targetPort: uptimekuma
+      protocol: TCP

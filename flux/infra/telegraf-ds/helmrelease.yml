@@ -1,0 +1,57 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: telegraf-ds
+  namespace: telegraf-ds
+spec:
+  chart:
+    spec:
+      chart: telegraf-ds
+      version: 1.X.X
+      sourceRef:
+        kind: HelmRepository
+        name: influxdb
+        namespace: flux-system
+  interval: 15m
+  timeout: 5m
+  releaseName: telegraf-ds
+  values:
+    # trunk-ignore(checkov/CKV_SECRET_6)
+    envFromSecret: telegraf-ds-token
+    config:
+      docker_endpoint: ""
+      outputs:
+        - influxdb_v2:
+            urls:
+              - https://influxdb.tartarus.us
+            token: "${TELEGRAF_TOKEN}"
+            organization: tartarus
+            bucket: telegraf
+
+      inputs:
+        - diskio:
+        - kernel:
+        - mem:
+        - net:
+        - processes:
+        - swap:
+        - system:
+        - sensors:
+        - cpu:
+            collect_cpu_time: false
+            percpu: true
+            report_active: false
+            totalcpu: true
+        - disk:
+            ignore_fs:
+              - tmpfs
+              - devtmpfs
+              - devfs
+              - iso9660
+              - overlay
+              - aufs
+              - squashfs
+        - kubernetes:
+            bearer_token: /var/run/secrets/kubernetes.io/serviceaccount/token
+            insecure_skip_verify: true
+            url: https://$HOSTIP:10250
