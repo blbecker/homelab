@@ -31,7 +31,7 @@ spec:
             - configMapRef:
                 name: knot-configmap
           podSecurityContext:
-            fsGroup: 2000
+            fsGroup: 1000
             fsGroupChangePolicy: "Always"
           ports:
             - name: knot-web
@@ -48,11 +48,11 @@ spec:
             - mountPath: /etc/ssh/keys
               name: knot-keys
 
-          livenessProbe:
-            tcpSocket:
-              port: knot-web
-            initialDelaySeconds: 10
-            periodSeconds: 10
+          # livenessProbe:
+          #   tcpSocket:
+          #     port: knot-web
+          #   initialDelaySeconds: 10
+          #   periodSeconds: 10
           # readinessProbe:
           #   httpGet:
           #     path: /xrpc/_health
