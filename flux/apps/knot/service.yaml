@@ -5,7 +5,6 @@ metadata:
   namespace: knot
 spec:
   type: ClusterIP
-  loadBalancerIP: 192.168.40.72
   selector:
     app.kubernetes.io/name: knot
   ports:
@@ -21,6 +20,7 @@ metadata:
   namespace: knot
 spec:
   type: LoadBalancer
+  loadBalancerIP: 192.168.40.72
   selector:
     app.kubernetes.io/name: knot
   ports:
