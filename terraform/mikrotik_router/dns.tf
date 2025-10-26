@@ -25,6 +25,12 @@ resource "routeros_ip_dns_record" "augustus" {
   type    = "A"
 }
 
+resource "routeros_ip_dns_record" "knot-ssh" {
+  name    = "knot-ssh.tartarus.us"
+  address = "192.168.40.85"
+  type    = "A"
+}
+
 resource "routeros_ip_dns_record" "nas" {
   name  = "nas.tartarus.us"
   type  = "CNAME"
