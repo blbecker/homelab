@@ -64,3 +64,6 @@ spec:
         - name: data
           persistentVolumeClaim:
             claimName: bsky-data
+        - name: pds-blob
+          persistentVolumeClaim:
+            claimName: pds-blob

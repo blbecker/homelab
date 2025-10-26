@@ -1,12 +1,14 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: bsky-data
+  name: pds-blob
   namespace: bsky
+  annotations:
+    nfs.io/storage-path: "pds-blob"
 spec:
-  storageClassName: longhorn
+  storageClassName: qnap-fixed-name-nfs-client
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
       storage: 5Gi
