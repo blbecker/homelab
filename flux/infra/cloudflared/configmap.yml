@@ -32,7 +32,7 @@ data:
         httpHostHeader: "bsky.tartarus.us"
 
     - hostname: knot.tartarus.us
-      service: http://knot.bsky.svc.cluster.local:5555
+      service: http://knot-web.knot.svc.cluster.local:5555
       originRequest:
         httpHostHeader: "knot.tartarus.us"
 
