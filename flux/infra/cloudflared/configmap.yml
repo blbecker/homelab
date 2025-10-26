@@ -31,6 +31,11 @@ data:
       originRequest:
         httpHostHeader: "bsky.tartarus.us"
 
+    - hostname: knot.tartarus.us
+      service: http://knot.bsky.svc.cluster.local:5555
+      originRequest:
+        httpHostHeader: "knot.tartarus.us"
+
     - hostname: irc.tartarus.us
       service: https://traefik.traefik.svc.cluster.local:443
       originRequest:

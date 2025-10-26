@@ -1,0 +1,15 @@
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: knot-external-dns
+  namespace: knot
+spec:
+  endpoints:
+    - dnsName: knot.tartarus.us
+      recordTTL: 300
+      recordType: CNAME
+      targets:
+        - 2a3d2a8b-ccac-4bf4-8e6e-357d25235a98.cfargotunnel.com
+      providerSpecific:
+        - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
+          value: "true"

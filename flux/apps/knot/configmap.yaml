@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: knot-configmap
+  namespace: knot
+data:
+  KNOT_SERVER_HOSTNAME: knot.tartarus.us
+  KNOT_SERVER_OWNER: did:plc:u6nttbpfrjvdgyzjj6c7fih7
+  KNOT_SERVER_DB_PATH: /app/knotserver.db
+  KNOT_REPO_SCAN_PATH: /home/git/repositories
+  KNOT_SERVER_INTERNAL_LISTEN_ADDR: localhost:5444
