@@ -22,7 +22,7 @@ spec:
           - 0
       containers:
         - name: grafana
-          image: grafana/grafana:11.6.2
+          image: grafana/grafana:11.6.7
           imagePullPolicy: Always
           ports:
             - name: http-grafana
