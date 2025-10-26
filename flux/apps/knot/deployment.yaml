@@ -48,17 +48,17 @@ spec:
             - mountPath: /etc/ssh/keys
               name: knot-keys
 
-          # livenessProbe:
-          #   tcpSocket:
-          #     port: knot-web
-          #   initialDelaySeconds: 10
-          #   periodSeconds: 10
-          # readinessProbe:
-          #   httpGet:
-          #     path: /xrpc/_health
-          #     port: knot
-          #   initialDelaySeconds: 10
-          #   timeoutSeconds: 5
+          livenessProbe:
+            tcpSocket:
+              port: knot-web
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /xrpc/sh.tangled.knot.version
+              port: knot-web
+            initialDelaySeconds: 10
+            timeoutSeconds: 5
           resources:
             requests:
               memory: "250M"
