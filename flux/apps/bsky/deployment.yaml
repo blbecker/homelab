@@ -42,6 +42,9 @@ spec:
           volumeMounts:
             - mountPath: /pds
               name: data
+            - mountPath: /pds-blob
+              name: pds-blob
+
           livenessProbe:
             tcpSocket:
               port: bsky
