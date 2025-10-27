@@ -59,6 +59,11 @@ data:
       originRequest:
         noTLSVerify: true
         httpHostHeader: "gotify.tartarus.us"
+
+    - hostname: uptimekuma.tartarus.us
+      service: http://uptimekuma.uptimekuma.svc.cluster.local:3001
+      originRequest:
+        httpHostHeader: "uptimekuma.tartarus.us"
         
     # This rule matches any traffic which didn't match a previous rule, and responds with HTTP 404.
     - service: http_status:404
