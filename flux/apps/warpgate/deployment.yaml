@@ -45,6 +45,9 @@ spec:
           volumeMounts:
             - mountPath: /data
               name: data
+            - name: warpgate-cert
+              mountPath: /data
+              readOnly: true
           livenessProbe:
             tcpSocket:
               port: warpgate-http
@@ -67,3 +70,11 @@ spec:
         - name: data
           persistentVolumeClaim:
             claimName: warpgate-data
+        - name: warpgate-cert
+          secret:
+            secretName: letsencrypt-wildcard-cert-tartarus.us-prod
+            items:
+              - key: tls.crt
+                path: tls.certificate.pem
+              - key: tls.key
+                path: tls.key.pem
