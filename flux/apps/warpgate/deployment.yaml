@@ -26,8 +26,6 @@ spec:
       containers:
         - name: warpgate
           image: ghcr.io/warp-tech/warpgate:0.17.0
-          command: ["/bin/sh"]
-          args: ["-c", "while true; do echo hello; sleep 10;done"]
           env:
             - name: TZ
               value: "America/New_York"
@@ -47,11 +45,11 @@ spec:
           volumeMounts:
             - mountPath: /data
               name: data
-          # livenessProbe:
-          #   tcpSocket:
-          #     port: warpgate-http
-          #   initialDelaySeconds: 10
-          #   periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: warpgate-http
+            initialDelaySeconds: 10
+            periodSeconds: 10
           # readinessProbe:
           #   httpGet:
           #     path: /xrpc/_health
