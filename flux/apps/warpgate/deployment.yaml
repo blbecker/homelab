@@ -40,7 +40,7 @@ spec:
             - name: warpgate-mysql
               containerPort: 33306
               protocol: TCP
-            - name: warpgate-postgres
+            - name: warpgate-pg
               containerPort: 55432
               protocol: TCP
           volumeMounts:

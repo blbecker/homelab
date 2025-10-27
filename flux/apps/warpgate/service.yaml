@@ -20,7 +20,7 @@ spec:
       port: 33306
       targetPort: warpgate-mysql
       protocol: TCP
-    - name: warpgate-postgres
+    - name: warpgate-pg
       port: 55432
-      targetPort: warpgate-postgres
+      targetPort: warpgate-pg
       protocol: TCP
