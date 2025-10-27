@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: warpgate
+  namespace: warpgate
+spec:
+  type: LoadBalancer
+  selector:
+    app.kubernetes.io/name: warpgate
+  ports:
+    - name: warpgate-http
+      port: 8888
+      targetPort: warpgate-http
+      protocol: TCP
+    - name: warpgate-ssh
+      port: 2222
+      targetPort: warpgate-ssh
+      protocol: TCP
+    - name: warpgate-mysql
+      port: 33306
+      targetPort: warpgate-mysql
+      protocol: TCP
+    - name: warpgate-postgres
+      port: 55432
+      targetPort: warpgate-postgres
+      protocol: TCP
