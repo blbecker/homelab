@@ -20,6 +20,8 @@ spec:
           - name: ndots
             value: "1"
       securityContext:
+        fsGroup: 1000
+        fsGroupChangePolicy: "Always"
         readOnlyRootFilesystem: true
       containers:
         - name: knot
@@ -30,9 +32,6 @@ spec:
           envFrom:
             - configMapRef:
                 name: knot-configmap
-          podSecurityContext:
-            fsGroup: 1000
-            fsGroupChangePolicy: "Always"
           ports:
             - name: knot-web
               containerPort: 5555
