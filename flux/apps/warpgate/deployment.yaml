@@ -46,7 +46,7 @@ spec:
             - mountPath: /data
               name: data
             - name: warpgate-cert
-              mountPath: /data
+              mountPath: /tls
               readOnly: true
           livenessProbe:
             tcpSocket:
