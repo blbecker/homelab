@@ -20,6 +20,8 @@ spec:
           - name: ndots
             value: "1"
       securityContext:
+        fsGroup: 1000
+        fsGroupChangePolicy: "Always"
         readOnlyRootFilesystem: true
       containers:
         - name: warpgate
@@ -29,9 +31,6 @@ spec:
           env:
             - name: TZ
               value: "America/New_York"
-          podSecurityContext:
-            fsGroup: 1000
-            fsGroupChangePolicy: "Always"
           ports:
             - name: warpgate-http
               containerPort: 8888
