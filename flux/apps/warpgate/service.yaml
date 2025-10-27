@@ -5,6 +5,7 @@ metadata:
   namespace: warpgate
 spec:
   type: LoadBalancer
+  loadBalancerIP: 192.168.40.86
   selector:
     app.kubernetes.io/name: warpgate
   ports:
