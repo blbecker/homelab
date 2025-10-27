@@ -113,3 +113,14 @@ resource "routeros_ip_firewall_nat" "plex_port_forward" {
 
   comment = "plex port forward"
 }
+resource "routeros_ip_firewall_nat" "warpgate_http_port_forward" {
+  chain    = "dstnat"
+  action   = "dst-nat"
+  protocol = "tcp"
+  dst_port = 8888
+
+  to_addresses = "192.168.40.86"
+  to_ports     = "8888"
+
+  comment = "warpgate http port forward"
+}
