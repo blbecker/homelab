@@ -30,7 +30,7 @@ spec:
             - name: TZ
               value: "America/New_York"
           podSecurityContext:
-            fsGroup: 2000
+            fsGroup: 1000
             fsGroupChangePolicy: "Always"
           ports:
             - name: warpgate-http
