@@ -21,7 +21,7 @@ spec:
         fsGroupChangePolicy: "Always"
       containers:
         - name: sillytavern
-          image: ghcr.io/sillytavern/sillytavern:1.13.0
+          image: ghcr.io/sillytavern/sillytavern:1.13.5
           imagePullPolicy: Always
           env:
             - name: TZ
