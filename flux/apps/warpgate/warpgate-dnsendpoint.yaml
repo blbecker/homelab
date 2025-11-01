@@ -1,8 +1,8 @@
 apiVersion: externaldns.k8s.io/v1alpha1
 kind: DNSEndpoint
 metadata:
-  name: knot-ssh
-  namespace: knot
+  name: warpgate
+  namespace: warpgate
 spec:
   endpoints:
     - dnsName: wg.tartarus.us
