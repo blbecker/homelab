@@ -1,0 +1,30 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: harbor
+  namespace: harbor
+spec:
+  chart:
+    spec:
+      chart: harbor
+      version: 2.14.0
+      sourceRef:
+        kind: HelmRepository
+        name: harbor
+        namespace: flux-system
+  interval: 15m
+  timeout: 5m
+  releaseName: harbor
+  values: # https://artifacthub.io/packages/helm/harbor/harbor?modal=values
+    expose:
+      type: clusterIP
+      tls:
+        enabled: false
+    externalURL: https://harbor.tartarus.us
+    persistence:
+      registry:
+        # TODO: configure nfs mount for the registry
+      jobService:
+        jobLog:
+          # TODO: Configure a 1G longhorn volume for this
+      existingSecretSecretKey: harbor-secrets # Configure a 16 char secret for this
