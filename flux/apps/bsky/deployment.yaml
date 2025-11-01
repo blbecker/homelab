@@ -23,7 +23,7 @@ spec:
         readOnlyRootFilesystem: true
       containers:
         - name: bsky
-          image: ghcr.io/bluesky-social/pds:0.4.182
+          image: ghcr.io/bluesky-social/pds:0.4.188
           env:
             - name: TZ
               value: "America/New_York"
