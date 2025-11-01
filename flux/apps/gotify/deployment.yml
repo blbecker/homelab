@@ -24,7 +24,7 @@ spec:
         readOnlyRootFilesystem: true
       containers:
         - name: gotify
-          image: gotify/server:2.6.1
+          image: gotify/server:2.7.3
           envFrom:
             - secretRef:
                 name: gotify-secrets
