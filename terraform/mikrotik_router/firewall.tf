@@ -124,3 +124,36 @@ resource "routeros_ip_firewall_nat" "warpgate_http_port_forward" {
 
   comment = "warpgate http port forward"
 }
+resource "routeros_ip_firewall_nat" "warpgate_ssh_port_forward" {
+  chain    = "dstnat"
+  action   = "dst-nat"
+  protocol = "tcp"
+  dst_port = 2222
+
+  to_addresses = "192.168.40.86"
+  to_ports     = "2222"
+
+  comment = "warpgate ssh port forward"
+}
+resource "routeros_ip_firewall_nat" "warpgate_mysql_port_forward" {
+  chain    = "dstnat"
+  action   = "dst-nat"
+  protocol = "tcp"
+  dst_port = 33306
+
+  to_addresses = "192.168.40.86"
+  to_ports     = "33306"
+
+  comment = "warpgate mysql port forward"
+}
+resource "routeros_ip_firewall_nat" "warpgate_postgres_port_forward" {
+  chain    = "dstnat"
+  action   = "dst-nat"
+  protocol = "tcp"
+  dst_port = 55432
+
+  to_addresses = "192.168.40.86"
+  to_ports     = "55432"
+
+  comment = "warpgate postgres port forward"
+}
