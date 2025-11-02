@@ -45,24 +45,24 @@ spec:
               name: minetest-data
             - name: minetest-configmap
               mountPath: /configmaps
-              # livenessProbe:
-          #   httpGet:
-          #     path: /
-          #     port: minetest
-          #   initialDelaySeconds: 10
-          #   timeoutSeconds: 10
-          # readinessProbe:
-          #   httpGet:
-          #     path: /
-          #     port: minetest
-          #   initialDelaySeconds: 10
-          #   timeoutSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /
+              port: minetest
+            initialDelaySeconds: 10
+            timeoutSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: minetest
+            initialDelaySeconds: 10
+            timeoutSeconds: 5
           resources:
             requests:
-              memory: "1G"
+              memory: "1.5G"
               cpu: "1"
             limits:
-              memory: "1G"
+              memory: "1.5G"
               cpu: "1"
 
       volumes:

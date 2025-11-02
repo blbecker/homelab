@@ -39,11 +39,11 @@ spec:
               name: uptimekuma-config
           resources:
             requests:
-              memory: "250M"
+              memory: "500M"
               cpu: "250m"
             limits:
-              memory: "1G"
-              cpu: "1"
+              memory: "500M"
+              cpu: "250m"
           readinessProbe:
             httpGet:
               path: /

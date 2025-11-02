@@ -59,11 +59,11 @@ spec:
             timeoutSeconds: 5
           resources:
             requests:
-              memory: "250M"
-              cpu: ".5"
+              memory: "750M"
+              cpu: "1.5"
             limits:
-              memory: "2G"
-              cpu: "2"
+              memory: "750M"
+              cpu: "1.5"
       volumes:
         - name: bazarr-config
           persistentVolumeClaim:

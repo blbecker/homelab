@@ -56,8 +56,8 @@ spec:
               memory: "250M"
               cpu: ".25"
             limits:
-              memory: "1G"
-              cpu: "1"
+              memory: "250M"
+              cpu: ".25"
       volumes:
         - name: thelounge-config
           persistentVolumeClaim:

@@ -69,11 +69,11 @@ spec:
             timeoutSeconds: 5
           resources:
             requests:
-              memory: "512M"
+              memory: "750M"
               cpu: ".5"
             limits:
-              memory: "1G"
-              cpu: "1"
+              memory: "750M"
+              cpu: ".5"
 
       volumes:
         - name: syncthing-config

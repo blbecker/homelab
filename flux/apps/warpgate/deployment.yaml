@@ -53,19 +53,19 @@ spec:
               port: warpgate-http
             initialDelaySeconds: 10
             periodSeconds: 10
-          # readinessProbe:
-          #   httpGet:
-          #     path: /xrpc/_health
-          #     port: warpgate
-          #   initialDelaySeconds: 10
-          #   timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /
+              port: warpgate-http
+            initialDelaySeconds: 10
+            timeoutSeconds: 5
           resources:
             requests:
-              memory: "250M"
+              memory: "500M"
               cpu: ".5"
             limits:
-              memory: "2G"
-              cpu: "2"
+              memory: "500M"
+              cpu: ".5"
       volumes:
         - name: data
           persistentVolumeClaim:

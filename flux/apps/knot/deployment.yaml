@@ -63,8 +63,8 @@ spec:
               memory: "250M"
               cpu: ".5"
             limits:
-              memory: "2G"
-              cpu: "2"
+              memory: "250M"
+              cpu: ".5"
       volumes:
         - name: knot-data
           persistentVolumeClaim:
