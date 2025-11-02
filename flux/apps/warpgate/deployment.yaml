@@ -53,12 +53,12 @@ spec:
               port: warpgate-http
             initialDelaySeconds: 10
             periodSeconds: 10
-          readinessProbe:
-            httpGet:
-              path: /
-              port: warpgate-http
-            initialDelaySeconds: 10
-            timeoutSeconds: 5
+          # readinessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: warpgate-http
+          #   initialDelaySeconds: 10
+          #   timeoutSeconds: 5
           resources:
             requests:
               memory: "500M"
