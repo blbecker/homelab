@@ -23,7 +23,7 @@ spec:
         readOnlyRootFilesystem: true
       containers:
         - name: plcbundle
-          image: atscan/plcbundle:v0.4.10
+          image: atscan/plcbundle:v0.4.12
           command: ["plcbundle"]
           args:
             - "serve"
@@ -50,7 +50,7 @@ spec:
           livenessProbe:
             tcpSocket:
               port: plcbundle
-            initialDelaySeconds: 10
+            initialDelaySeconds: 60
             periodSeconds: 10
           readinessProbe:
             httpGet:
