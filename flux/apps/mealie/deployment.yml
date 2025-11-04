@@ -59,11 +59,11 @@ spec:
             timeoutSeconds: 5
           resources:
             requests:
-              memory: "500M"
-              cpu: ".25"
+              memory: "1G"
+              cpu: ".5"
             limits:
-              memory: "500M"
-              cpu: ".25"
+              memory: "1G"
+              cpu: ".5"
 
       volumes:
         - name: mealie-config
