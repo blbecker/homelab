@@ -46,17 +46,15 @@ spec:
             - name: minetest-configmap
               mountPath: /configmaps
           livenessProbe:
-            httpGet:
-              path: /
+            tcpSocket:
               port: minetest
             initialDelaySeconds: 10
-            timeoutSeconds: 10
+            periodSeconds: 10
           readinessProbe:
-            httpGet:
-              path: /
+            tcpSocket:
               port: minetest
             initialDelaySeconds: 10
-            timeoutSeconds: 5
+            periodSeconds: 10
           resources:
             requests:
               memory: "1.5G"
