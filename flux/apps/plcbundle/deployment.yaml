@@ -60,10 +60,10 @@ spec:
             timeoutSeconds: 5
           resources:
             requests:
-              memory: "500M"
+              memory: "1G"
               cpu: "1"
             limits:
-              memory: "500M"
+              memory: "1G"
               cpu: "1"
       volumes:
         - name: plcbundle
