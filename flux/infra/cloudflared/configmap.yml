@@ -66,7 +66,7 @@ data:
         httpHostHeader: "uptimekuma.tartarus.us"
 
     - hostname: plc.tartarus.us
-      service: http://plcbundle.bundle.svc.cluster.local:8080
+      service: http://plcbundle.plcbundle.svc.cluster.local:8080
       originRequest:
         httpHostHeader: "plc.tartarus.us"
         
