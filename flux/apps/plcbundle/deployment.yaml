@@ -47,17 +47,17 @@ spec:
             - mountPath: /data
               name: plcbundle
 
-          livenessProbe:
-            tcpSocket:
-              port: plcbundle
-            initialDelaySeconds: 60
-            periodSeconds: 10
-          readinessProbe:
-            httpGet:
-              path: /status
-              port: plcbundle
-            initialDelaySeconds: 10
-            timeoutSeconds: 5
+          # livenessProbe:
+          #   tcpSocket:
+          #     port: plcbundle
+          #   initialDelaySeconds: 60
+          #   periodSeconds: 10
+          # readinessProbe:
+          #   httpGet:
+          #     path: /status
+          #     port: plcbundle
+          #   initialDelaySeconds: 10
+          #   timeoutSeconds: 5
           resources:
             requests:
               memory: "1G"
