@@ -64,6 +64,11 @@ data:
       service: http://uptimekuma.uptimekuma.svc.cluster.local:3001
       originRequest:
         httpHostHeader: "uptimekuma.tartarus.us"
+
+    - hostname: plc.tartarus.us
+      service: http://plcbundle.bundle.svc.cluster.local:8080
+      originRequest:
+        httpHostHeader: "plc.tartarus.us"
         
     # This rule matches any traffic which didn't match a previous rule, and responds with HTTP 404.
     - service: http_status:404
