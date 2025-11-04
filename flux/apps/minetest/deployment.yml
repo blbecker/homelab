@@ -45,16 +45,16 @@ spec:
               name: minetest-data
             - name: minetest-configmap
               mountPath: /configmaps
-          livenessProbe:
-            tcpSocket:
-              port: minetest
-            initialDelaySeconds: 10
-            periodSeconds: 10
-          readinessProbe:
-            tcpSocket:
-              port: minetest
-            initialDelaySeconds: 10
-            periodSeconds: 10
+          # livenessProbe:
+          #   tcpSocket:
+          #     port: minetest
+          #   initialDelaySeconds: 10
+          #   periodSeconds: 10
+          # readinessProbe:
+          #   tcpSocket:
+          #     port: minetest
+          #   initialDelaySeconds: 10
+          #   periodSeconds: 10
           resources:
             requests:
               memory: "1.5G"
