@@ -94,11 +94,11 @@ spec:
           resources:
             requests:
               memory: 8G
-              cpu: "3"
+              cpu: "2"
               gpu.intel.com/i915: "1"
             limits:
               memory: 8G
-              cpu: "3"
+              cpu: "2"
               gpu.intel.com/i915: "1"
       dnsConfig:
         options:
