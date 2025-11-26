@@ -157,3 +157,26 @@ resource "routeros_ip_firewall_nat" "warpgate_postgres_port_forward" {
 
   comment = "warpgate postgres port forward"
 }
+resource "routeros_ip_firewall_nat" "syncthing_tcp_port_forward" {
+  chain    = "dstnat"
+  action   = "dst-nat"
+  protocol = "tcp"
+  dst_port = 22000
+
+  to_addresses = "192.168.40.71"
+  to_ports     = "22000"
+
+  comment = "syncthing tcp port forward"
+}
+
+resource "routeros_ip_firewall_nat" "syncthing_udp_port_forward" {
+  chain    = "dstnat"
+  action   = "dst-nat"
+  protocol = "udp"
+  dst_port = 22000
+
+  to_addresses = "192.168.40.71"
+  to_ports     = "22000"
+
+  comment = "syncthing udp port forward"
+}
