@@ -3,6 +3,9 @@ kind: Service
 metadata:
   name: snmp-exporter
   namespace: prometheus-operator
+  labels:
+    app.kubernetes.io/name: snmp-exporter
+
 spec:
   type: ClusterIP
   selector:
