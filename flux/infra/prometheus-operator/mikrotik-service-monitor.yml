@@ -8,7 +8,7 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: snmp-exporter
+      app.kubernetes.io/name: snmp-exporter
   endpoints:
     - port: prom
       interval: 60s
