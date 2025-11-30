@@ -1,5 +1,6 @@
 variable "mikrotik_password" {
-  type = string
+  type      = string
+  sensitive = true
 }
 
 variable "mikrotik_host" {
@@ -11,9 +12,15 @@ variable "mikrotik_user" {
 }
 
 variable "cloudflare_api_token" {
-  type = string
+  type      = string
+  sensitive = true
 }
 
 variable "_public_key" {
   type = string
+}
+
+variable "snmp_password" {
+  type      = string
+  sensitive = true
 }
