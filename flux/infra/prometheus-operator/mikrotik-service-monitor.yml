@@ -24,4 +24,4 @@ spec:
           replacement: snmp-exporter.prometheus-operator.svc.cluster.local:9116
   namespaceSelector:
     matchNames:
-      - monitoring
+      - prometheus-operator
