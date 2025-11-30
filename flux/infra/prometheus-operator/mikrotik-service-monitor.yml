@@ -4,13 +4,13 @@ metadata:
   name: mikrotik-snmp
   namespace: prometheus-operator
   labels:
-    release: prometheus
+    release: prometheus-operator
 spec:
   selector:
     matchLabels:
       app: snmp-exporter
   endpoints:
-    - port: metrics
+    - port: prom
       interval: 60s
       path: /snmp
       params:
