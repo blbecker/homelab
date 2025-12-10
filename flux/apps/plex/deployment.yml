@@ -22,7 +22,7 @@ spec:
         readOnlyRootFilesystem: false
       containers:
         - name: plex
-          image: linuxserver/plex:1.42.1
+          image: linuxserver/plex:1.42.2
           imagePullPolicy: Always
           env:
             - name: TZ
