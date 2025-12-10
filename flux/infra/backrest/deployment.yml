@@ -64,12 +64,12 @@ spec:
               port: http
             initialDelaySeconds: 10
             periodSeconds: 5
-          # readinessProbe:
-          #   httpGet:
-          #     path: /rest/noauth/health
-          #     port: http
-          #   initialDelaySeconds: 10
-          #   timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 10
+            timeoutSeconds: 5
           resources:
             requests:
               memory: "750M"
