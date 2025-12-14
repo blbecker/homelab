@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: retrogames-games
+  name: retrogames-data
   namespace: backrest
   annotations:
     nfs.io/storage-path: "retro-games"
