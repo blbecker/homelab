@@ -43,6 +43,8 @@ spec:
               value: /cache
             - name: BACKREST_PORT
               value: "9898"
+            - name: TMPDIR
+              value: /backrest-tmp
           podSecurityContext:
             fsGroup: 2000
             fsGroupChangePolicy: "Always"
@@ -57,8 +59,12 @@ spec:
               name: backrest-data
             - mountPath: /mnt/syncthing
               name: syncthing-data
+            - mountPath: /mnt/retrogames
+              name: retrogames-data
             - mountPath: /cache
               name: backrest-cache
+            - mountPath: /backrest-tmp
+              name: backrest-tmp
           livenessProbe:
             tcpSocket:
               port: http
@@ -88,6 +94,12 @@ spec:
         - name: syncthing-data
           persistentVolumeClaim:
             claimName: syncthing-data
+        - name: retrogames-data
+          persistentVolumeClaim:
+            claimName: retrogames-data
         - name: backrest-cache
           emptyDir:
-            sizeLimit: 20Gi
+            sizeLimit: 10Gi
+        - name: backrest-tmp
+          emptyDir:
+            sizeLimit: 5Gi
