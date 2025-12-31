@@ -36,3 +36,11 @@ spec:
         superuser: false
         passwordSecret:
           name: gotify-pg-user-creds
+
+      - name: immich
+        ensure: present
+        comment: immich notification server
+        login: true
+        superuser: false
+        passwordSecret:
+          name: immich-pg-user-creds
