@@ -39,6 +39,8 @@ spec:
 
       - name: immich
         ensure: present
-        comment: immich notification server
+        comment: immich photo server
         login: true
         superuser: false
+        passwordSecret:
+          name: immich-pg-user-creds
