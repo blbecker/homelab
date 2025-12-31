@@ -133,6 +133,12 @@ resource "routeros_ip_dns_record" "hubitat" {
   type    = "A"
 }
 
+resource "routeros_ip_dns_record" "wpsd" {
+  name    = "wpsd.tartarus.us"
+  address = "192.168.40.40"
+  type    = "A"
+}
+
 resource "routeros_ip_dns_record" "nextdns_a_1" {
   name    = "dns.nextdns.io"
   address = "45.90.28.0"
