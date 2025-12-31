@@ -42,5 +42,3 @@ spec:
         comment: immich notification server
         login: true
         superuser: false
-        passwordSecret:
-          name: immich-pg-user-creds
