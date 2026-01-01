@@ -4,7 +4,7 @@ metadata:
   name: navidrome
   namespace: navidrome
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   selector:
     app.kubernetes.io/name: navidrome
   ports:

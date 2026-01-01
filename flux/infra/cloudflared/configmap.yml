@@ -36,17 +36,17 @@ data:
       originRequest:
         httpHostHeader: "knot.tartarus.us"
 
-    - hostname: irc.tartarus.us
-      service: https://traefik.traefik.svc.cluster.local:443
-      originRequest:
-        noTLSVerify: true
-        httpHostHeader: "irc.tartarus.us"
-
     - hostname: heimdall.tartarus.us
       service: https://traefik.traefik.svc.cluster.local:443
       originRequest:
         noTLSVerify: true
         httpHostHeader: "heimdall.tartarus.us"
+
+    - hostname: irc.tartarus.us
+      service: https://traefik.traefik.svc.cluster.local:443
+      originRequest:
+        noTLSVerify: true
+        httpHostHeader: "irc.tartarus.us"
 
     - hostname: dashy.tartarus.us
       service: https://traefik.traefik.svc.cluster.local:443
@@ -69,6 +69,11 @@ data:
       service: http://plcbundle.plcbundle.svc.cluster.local:8080
       originRequest:
         httpHostHeader: "plc.tartarus.us"
+
+    - hostname: navidrome.tartarus.us
+      service: http://navidrome.plcbundle.svc.cluster.local:4533
+      originRequest:
+        httpHostHeader: "navidrome.tartarus.us"
         
     # This rule matches any traffic which didn't match a previous rule, and responds with HTTP 404.
     - service: http_status:404
