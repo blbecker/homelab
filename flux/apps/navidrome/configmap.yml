@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: navidrome-config
+  namespace: navidrome
+data:
+  ND_CACHEFOLDER: /cache
+  ND_TRANSCODINGCACHESIZE: 5GiB
