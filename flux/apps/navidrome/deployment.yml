@@ -53,17 +53,17 @@ spec:
               name: navidrome-music
             - mountPath: /cache
               name: navidrome-cache
-          # livenessProbe:
-          #   tcpSocket:
-          #     port: http
-          #   initialDelaySeconds: 10
-          #   periodSeconds: 5
-          # readinessProbe:
-          #   httpGet:
-          #     path: /rest/noauth/health
-          #     port: http
-          #   initialDelaySeconds: 10
-          #   timeoutSeconds: 5
+          livenessProbe:
+            tcpSocket:
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /ping
+              port: http
+            initialDelaySeconds: 10
+            timeoutSeconds: 5
           resources:
             requests:
               memory: 750M
