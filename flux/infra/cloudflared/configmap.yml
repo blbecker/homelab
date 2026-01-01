@@ -65,11 +65,6 @@ data:
       originRequest:
         httpHostHeader: "uptimekuma.tartarus.us"
 
-    - hostname: plc.tartarus.us
-      service: http://plcbundle.plcbundle.svc.cluster.local:8080
-      originRequest:
-        httpHostHeader: "plc.tartarus.us"
-
     - hostname: navidrome.tartarus.us
       service: http://navidrome.navidrome.svc.cluster.local:4533
       originRequest:
