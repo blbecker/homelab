@@ -14,3 +14,6 @@ spec:
   values: # https://github.com/bitnami/charts/blob/main/bitnami/redis/values.yaml
     architecture: replication
     global.storageClass: longhorn-no-replication
+    master.persistence.storageClass: longhorn-no-replication
+    replica.persistence.storageClass: longhorn-no-replication
+    sentinel.persistence.storageClass: longhorn-no-replication
