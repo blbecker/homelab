@@ -13,3 +13,4 @@ spec:
   releaseName: redis
   values: # https://github.com/bitnami/charts/blob/main/bitnami/redis/values.yaml
     architecture: replication
+    global.storageClass: longhorn-no-replication
