@@ -71,7 +71,7 @@ data:
         httpHostHeader: "plc.tartarus.us"
 
     - hostname: navidrome.tartarus.us
-      service: http://navidrome.plcbundle.svc.cluster.local:4533
+      service: http://navidrome.navidrome.svc.cluster.local:4533
       originRequest:
         httpHostHeader: "navidrome.tartarus.us"
         
