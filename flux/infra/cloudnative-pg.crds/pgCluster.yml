@@ -6,7 +6,7 @@ metadata:
 spec:
   instances: 3
 
-  imageName: ghcr.io/tensorchord/cloudnative-vectorchord:17
+  imageName: ghcr.io/tensorchord/cloudnative-vectorchord:17.5
   postgresql:
     shared_preload_libraries: # load vchord shared library
       - "vchord"
