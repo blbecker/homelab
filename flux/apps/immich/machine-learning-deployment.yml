@@ -42,6 +42,8 @@ spec:
           volumeMounts:
             - mountPath: /data
               name: immich-photos
+            - mountPath: /cache
+              name: immich-cache
 
           livenessProbe:
             tcpSocket:
@@ -66,3 +68,6 @@ spec:
         - name: immich-photos
           persistentVolumeClaim:
             claimName: immich-photos
+        - name: immich-cache
+          emptyDir:
+            sizeLimit: 10Gi
