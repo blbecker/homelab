@@ -36,7 +36,7 @@ spec:
             fsGroup: 2000
             fsGroupChangePolicy: "Always"
           ports:
-            - name: immich-machine-learning
+            - name: immich-ml
               containerPort: 3003
               protocol: TCP
           volumeMounts:
@@ -45,7 +45,7 @@ spec:
 
           livenessProbe:
             tcpSocket:
-              port: immich-machine-learning
+              port: immich-ml
             initialDelaySeconds: 10
             periodSeconds: 10
           # readinessProbe:

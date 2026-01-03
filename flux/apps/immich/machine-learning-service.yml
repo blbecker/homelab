@@ -8,7 +8,7 @@ spec:
   selector:
     app.kubernetes.io/name: immich-machine-learning
   ports:
-    - name: immich-machine-learning
+    - name: immich-ml
       port: 3003
-      targetPort: immich-machine-learning
+      targetPort: immich-ml
       protocol: TCP
