@@ -56,10 +56,10 @@ spec:
           #   timeoutSeconds: 5
           resources:
             requests:
-              memory: "512M"
+              memory: "2G"
               cpu: ".5"
             limits:
-              memory: "512M"
+              memory: "2G"
       volumes:
         - name: immich-photos
           persistentVolumeClaim:
