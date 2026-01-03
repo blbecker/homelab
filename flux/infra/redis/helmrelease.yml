@@ -13,5 +13,8 @@ spec:
   releaseName: redis
   values: # https://github.com/bitnami/charts/blob/main/bitnami/redis/values.yaml
     architecture: replication
+    auth:
+      enabled: false
+      sentinel: false
     global:
       storageClass: longhorn-no-replication
