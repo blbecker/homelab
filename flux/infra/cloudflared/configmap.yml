@@ -69,6 +69,11 @@ data:
       service: http://navidrome.navidrome.svc.cluster.local:4533
       originRequest:
         httpHostHeader: "navidrome.tartarus.us"
+
+    - hostname: immich.tartarus.us
+      service: http://immich-server.immich.svc.cluster.local:2283
+      originRequest:
+        httpHostHeader: "immich.tartarus.us"
         
     # This rule matches any traffic which didn't match a previous rule, and responds with HTTP 404.
     - service: http_status:404
