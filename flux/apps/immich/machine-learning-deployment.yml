@@ -7,11 +7,11 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: immich
+      app.kubernetes.io/name: immich-machine-learning
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: immich
+        app.kubernetes.io/name: immich-machine-learning
     spec:
       dnsConfig:
         options:
@@ -30,22 +30,24 @@ spec:
                 name: immich-configmap
             - secretRef:
                 name: immich-secrets
+            - name: IMMICH_PORT
+              value: "3003"
           podSecurityContext:
             fsGroup: 2000
             fsGroupChangePolicy: "Always"
-          # ports:
-          #   - name: immich
-          #     containerPort: 2283
-          #     protocol: TCP
+          ports:
+            - name: immich-machine-learning
+              containerPort: 3003
+              protocol: TCP
           volumeMounts:
             - mountPath: /data
               name: immich-photos
 
-          # livenessProbe:
-          #   tcpSocket:
-          #     port: immich
-          #   initialDelaySeconds: 10
-          #   periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: immich-machine-learning
+            initialDelaySeconds: 10
+            periodSeconds: 10
           # readinessProbe:
           #   httpGet:
           #     path: /xrpc/_health
