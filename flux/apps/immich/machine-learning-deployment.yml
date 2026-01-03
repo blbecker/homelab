@@ -25,13 +25,13 @@ spec:
           env:
             - name: TZ
               value: "America/Puerto_Rico"
+            - name: IMMICH_PORT
+              value: "3003"
           envFrom:
             - configMapRef:
                 name: immich-configmap
             - secretRef:
                 name: immich-secrets
-            - name: IMMICH_PORT
-              value: "3003"
           podSecurityContext:
             fsGroup: 2000
             fsGroupChangePolicy: "Always"
