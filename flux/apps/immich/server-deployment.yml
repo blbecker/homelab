@@ -57,8 +57,8 @@ spec:
               memory: "512M"
               cpu: ".5"
             limits:
-              memory: "512"
+              memory: "512M"
       volumes:
-        - name: photos
+        - name: immich-photos
           persistentVolumeClaim:
             claimName: immich-photos
