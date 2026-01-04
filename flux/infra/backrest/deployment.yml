@@ -61,6 +61,8 @@ spec:
               name: syncthing-data
             - mountPath: /mnt/retrogames
               name: retrogames-data
+            - mountPath: /mnt/immich-photos
+              name: immich-photos
             - mountPath: /cache
               name: backrest-cache
             - mountPath: /backrest-tmp
@@ -97,6 +99,9 @@ spec:
         - name: retrogames-data
           persistentVolumeClaim:
             claimName: retrogames-data
+        - name: immich-photos
+          persistentVolumeClaim:
+            claimName: immich-photos
         - name: backrest-cache
           emptyDir:
             sizeLimit: 10Gi
