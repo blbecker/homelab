@@ -59,10 +59,10 @@ spec:
           #   timeoutSeconds: 5
           resources:
             requests:
-              memory: "512M"
+              memory: "1G"
               cpu: ".25"
             limits:
-              memory: "512M"
+              memory: "1G"
               cpu: ".5"
       volumes:
         - name: multiscrobbler-config
