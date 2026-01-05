@@ -59,11 +59,11 @@ spec:
           #   timeoutSeconds: 5
           resources:
             requests:
-              memory: "100M"
-              cpu: ".1"
+              memory: "512M"
+              cpu: ".25"
             limits:
-              memory: "200M"
-              cpu: ".2"
+              memory: "512M"
+              cpu: ".5"
       volumes:
         - name: multiscrobbler-config
           persistentVolumeClaim:
