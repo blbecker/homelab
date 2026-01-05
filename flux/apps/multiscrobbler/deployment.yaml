@@ -46,10 +46,15 @@ spec:
             - mountPath: /config
               name: multiscrobbler-config
 
+          startupProbe:
+            tcpSocket:
+              port: multiscrobbler
+            periodSeconds: 10
+            failureThreshold: 30
           livenessProbe:
             tcpSocket:
               port: multiscrobbler
-            initialDelaySeconds: 30
+            initialDelaySeconds: 10
             periodSeconds: 10
           readinessProbe:
             httpGet:
