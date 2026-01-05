@@ -20,6 +20,8 @@ spec:
           - name: ndots
             value: "1"
       securityContext:
+        fsGroup: 2000
+        fsGroupChangePolicy: "Always"
         readOnlyRootFilesystem: true
       containers:
         - name: multiscrobbler
@@ -27,14 +29,15 @@ spec:
           env:
             - name: TZ
               value: "America/Puerto_Rico"
+            - name: PUID
+              value: "2000"
+            - name: PGID
+              value: "2000"
           envFrom:
             - configMapRef:
                 name: multiscrobbler-configmap
             - secretRef:
                 name: multiscrobbler-secrets
-          podSecurityContext:
-            fsGroup: 2000
-            fsGroupChangePolicy: "Always"
           ports:
             - name: multiscrobbler
               containerPort: 9078
