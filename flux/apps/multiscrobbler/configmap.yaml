@@ -4,4 +4,4 @@ metadata:
   name: multiscrobbler-configmap
   namespace: multiscrobbler
 data:
-  LOG_ENABLED: "false"
+  DEBUG_MODE: "true"
