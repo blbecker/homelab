@@ -21,7 +21,7 @@ spec:
         readOnlyRootFilesystem: true
       containers:
         - name: calibre
-          image: linuxserver/calibre:8.4.0
+          image: linuxserver/calibre:8.16.2
           env:
             - name: TZ
               value: "America/New_York"
