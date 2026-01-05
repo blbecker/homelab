@@ -46,11 +46,11 @@ spec:
           livenessProbe:
             tcpSocket:
               port: multiscrobbler
-            initialDelaySeconds: 10
+            initialDelaySeconds: 30
             periodSeconds: 10
           # readinessProbe:
           #   httpGet:
-          #     path: /xrpc/_health
+          #     path: /health
           #     port: multiscrobbler
           #   initialDelaySeconds: 10
           #   timeoutSeconds: 5
