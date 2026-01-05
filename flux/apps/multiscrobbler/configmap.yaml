@@ -4,5 +4,4 @@ metadata:
   name: multiscrobbler-configmap
   namespace: multiscrobbler
 data:
-  DEBUG_MODE: "true"
   CONFIG_DIR: /config/multiscrobber-config
