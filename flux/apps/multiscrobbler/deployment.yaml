@@ -39,6 +39,9 @@ spec:
             - name: multiscrobbler
               containerPort: 9078
               protocol: TCP
+          volumeMounts:
+            - mountPath: /config
+              name: multiscrobbler-config
 
           livenessProbe:
             tcpSocket:
@@ -58,3 +61,7 @@ spec:
             limits:
               memory: "200M"
               cpu: ".2"
+      volumes:
+        - name: multiscrobbler-config
+          persistentVolumeClaim:
+            claimName: multiscrobbler-config
