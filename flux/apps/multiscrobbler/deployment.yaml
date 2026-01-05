@@ -43,11 +43,11 @@ spec:
             - mountPath: /config
               name: multiscrobbler-config
 
-          livenessProbe:
-            tcpSocket:
-              port: multiscrobbler
-            initialDelaySeconds: 30
-            periodSeconds: 10
+          # livenessProbe:
+          #   tcpSocket:
+          #     port: multiscrobbler
+          #   initialDelaySeconds: 30
+          #   periodSeconds: 10
           # readinessProbe:
           #   httpGet:
           #     path: /health
