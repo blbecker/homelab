@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: multiscrobbler-configmap
+  namespace: multiscrobbler
+data:
+  LOG_ENABLED: "false"
