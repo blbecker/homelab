@@ -32,7 +32,7 @@ spec:
             - name: PGID
               value: "2000"
             - name: CLI_ARGS
-              value: "--config /configmaps/minetest.conf --gameid voxelibre"
+              value: "--config /configmaps/minetest.conf --gameid voxelibre --world the-shire"
           podSecurityContext:
             fsGroup: 2000
             fsGroupChangePolicy: "Always"
