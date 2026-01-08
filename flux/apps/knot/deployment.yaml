@@ -23,6 +23,18 @@ spec:
         fsGroup: 1000
         fsGroupChangePolicy: "Always"
         readOnlyRootFilesystem: true
+      initContainers:
+        - name: init-permissions
+          image: busybox
+          command:
+            [
+              "sh",
+              "-c",
+              "chmod 600 /knot-keys/ssh_host* && ls -altrh /knot-keys/",
+            ]
+          volumeMounts:
+            - mountPath: /knot-keys
+              name: knot-keys
       containers:
         - name: knot
           image: tngl/knot:v1.10.0-alpha
