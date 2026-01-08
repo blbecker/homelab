@@ -5,3 +5,4 @@ metadata:
   namespace: multiscrobbler
 data:
   CONFIG_DIR: /config/multiscrobber-config
+  BASE_URL: https://multiscrobbler.tartarus.us
