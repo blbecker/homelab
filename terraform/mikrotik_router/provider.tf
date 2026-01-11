@@ -14,7 +14,7 @@ terraform {
 
     acme = {
       source  = "vancluever/acme"
-      version = "~> 2.5.3"
+      version = "~> 2.41.0"
     }
 
     tls = {
