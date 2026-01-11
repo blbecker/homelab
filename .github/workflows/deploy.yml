@@ -30,7 +30,7 @@ jobs:
     # Set job outputs to values from filter step
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - uses: dorny/paths-filter@v3
         id: filter
@@ -52,7 +52,7 @@ jobs:
   gitleaks:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - uses: gitleaks/gitleaks-action@v2
@@ -68,7 +68,7 @@ jobs:
         - ${{ github.workspace }}:/data
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Run kube-conform on Kubernetes manifests
         run: |
@@ -125,7 +125,7 @@ jobs:
     # if: contains(github.event.pull_request.changed_files, 'terraform/')
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Install asdf and tools
         uses: asdf-vm/actions/install@v4
@@ -213,7 +213,7 @@ jobs:
     needs: terragrunt-plan
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Set artifact slug
         id: slug
