@@ -27,7 +27,7 @@ spec:
         readOnlyRootFilesystem: true
       containers:
         - name: syncthing
-          image: syncthing/syncthing:2.0.12
+          image: syncthing/syncthing:2.0.13
           env:
             - name: TZ
               value: "America/New_York"
