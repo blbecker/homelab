@@ -13,6 +13,7 @@ locals {
       tagged = [
         routeros_interface_bridge.bridge.name,
         routeros_interface_ethernet.wlan_port.name,
+        routeros_interface_ethernet.mgmt_port.name,
       ]
     }
     iot = {
@@ -25,6 +26,7 @@ locals {
       tagged = [
         routeros_interface_bridge.bridge.name,
         routeros_interface_ethernet.wlan_port.name,
+        routeros_interface_ethernet.mgmt_port.name,
       ]
     }
     mgmt = {
@@ -40,7 +42,7 @@ locals {
       untagged = [
         routeros_interface_ethernet.mgmt_port.name,
         routeros_interface_ethernet.wlan_port.name,
-        routeros_interface_ethernet.omada_controller_port.name
+        routeros_interface_ethernet.omada_controller_port.name,
       ]
       caps_manager = [
         local.omada_controller_ip,
@@ -56,6 +58,7 @@ locals {
       tagged = [
         routeros_interface_bridge.bridge.name,
         routeros_interface_ethernet.wlan_port.name,
+        routeros_interface_ethernet.mgmt_port.name,
       ]
     }
     ingress = {
@@ -68,6 +71,7 @@ locals {
       tagged = [
         routeros_interface_bridge.bridge.name,
         routeros_interface_ethernet.wlan_port.name,
+        routeros_interface_ethernet.mgmt_port.name,
       ]
     }
     blackhole = {
@@ -80,6 +84,7 @@ locals {
       tagged = [
         routeros_interface_bridge.bridge.name,
         routeros_interface_ethernet.wlan_port.name,
+        routeros_interface_ethernet.mgmt_port.name,
       ]
     }
   }
