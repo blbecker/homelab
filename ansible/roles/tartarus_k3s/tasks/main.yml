@@ -154,25 +154,24 @@
     enabled: true
     daemon-reload: true
   when: k3s_role == 'agent'
-
-- name: Add A records for k8s controllers
-  community.general.cloudflare_dns:
-    domain: tartarus.us
-    record: k8s
-    type: A
-    value: "{{ ansible_default_ipv4.address }}"
-    # comment: "Created by Ansible"
-    api_token: "{{ cloudflare_token }}"
-    state: present
-  when: k3s_role == 'server'
-
-- name: Remove cname records for non-k8s controllers
-  community.general.cloudflare_dns:
-    domain: tartarus.us
-    record: k8s
-    type: A
-    value: "{{ ansible_default_ipv4.address }}"
-    # comment: "Created by Ansible"
-    api_token: "{{ cloudflare_token }}"
-    state: absent
-  when: k3s_role != 'server'
+# - name: Add A records for k8s controllers
+#   community.general.cloudflare_dns:
+#     domain: tartarus.us
+#     record: k8s
+#     type: A
+#     value: "{{ ansible_default_ipv4.address }}"
+#     # comment: "Created by Ansible"
+#     api_token: "{{ cloudflare_token }}"
+#     state: present
+#   when: k3s_role == 'server'
+#
+# - name: Remove cname records for non-k8s controllers
+#   community.general.cloudflare_dns:
+#     domain: tartarus.us
+#     record: k8s
+#     type: A
+#     value: "{{ ansible_default_ipv4.address }}"
+#     # comment: "Created by Ansible"
+#     api_token: "{{ cloudflare_token }}"
+#     state: absent
+#   when: k3s_role != 'server'

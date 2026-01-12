@@ -1,8 +1,6 @@
 ---
-# - name: Update
-#   ansible.builtin.apt:
-#     state: latest
-#     update_cache: true
+- name: Include vars
+  ansible.builtin.include_vars: main.yml
 
 - name: Configure apt
   ansible.builtin.copy:
@@ -40,17 +38,26 @@
       - plocate
     state: present
     update_cache: true
-# - name: Create a group for my user
-#   ansible.builtin.group:
-#     name: blbecker
-#     gid: 1000
-#     state: present
 
-# - name: Create my user
-#   ansible.builtin.user:
-#     name: blbecker
-#     group: blbecker
-#     groups: sudo,blbecker
-#     shell: /bin/zsh
-#     append: true
-#     uid: 1000
+- name: Create a group for my user
+  ansible.builtin.group:
+    name: benjamin
+    gid: 1000
+    state: present
+
+- name: Create my user
+  ansible.builtin.user:
+    name: benjamin
+    group: benjamin
+    groups: sudo,benjamin
+    shell: /bin/zsh
+    append: true
+    uid: 1000
+
+- name: Configure my authorized keys
+  ansible.posix.authorized_key:
+    user: benjamin
+    state: present
+    key: "{{ item }}"
+  with_file:
+    - users/public_keys/tartarus.pub
