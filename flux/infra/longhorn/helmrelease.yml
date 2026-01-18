@@ -27,8 +27,7 @@ spec:
       jobEnabled: false
     service:
       ui:
-        type: LoadBalancer
-        # nodePort: ""
+        type: ClusterIP
       # manager:
       #   type: ClusterIP
       #   nodePort: ""
