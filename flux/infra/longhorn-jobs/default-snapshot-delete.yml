@@ -1,11 +1,11 @@
 apiVersion: longhorn.io/v1beta1
 kind: RecurringJob
 metadata:
-  name: default-snapshot-cleanup
+  name: default-snapshot-delete
   namespace: longhorn
 spec:
-  cron: "0 2 * * 4 "
-  task: "snapshot-cleanup"
+  cron: "0 2 * * 3 "
+  task: "snapshot-delete"
   groups:
     - default
   retain: 7
