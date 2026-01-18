@@ -4,7 +4,7 @@ metadata:
   name: default-snapshot-delete
   namespace: longhorn
 spec:
-  cron: "0 2 * * 3 "
+  cron: "0 2 * * 4 "
   task: "snapshot-delete"
   groups:
     - default
