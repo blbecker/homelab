@@ -23,7 +23,8 @@ spec:
     #   enabled: false
     #   # Available types: k3s, rke2, rke1
     #   type: "k3s"
-
+    preUpgradeChecker:
+      jobEnabled: false
     service:
       ui:
         type: LoadBalancer
