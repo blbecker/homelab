@@ -21,7 +21,7 @@ spec:
         readOnlyRootFilesystem: true
       containers:
         - name: immich
-          image: ghcr.io/immich-app/immich-server:v2.4.1
+          image: ghcr.io/immich-app/immich-server:v2.5.5
           env:
             - name: TZ
               value: "America/Puerto_Rico"
