@@ -23,7 +23,7 @@ spec:
         # fsGroupChangePolicy: "Always"
       containers:
         - name: actual
-          image: louislam/uptime-kuma:1.23.17-alpine
+          image: docker.io/actualbudget/actual-server:26.2.0-alpine
           imagePullPolicy: Always
           env:
             - name: TZ
@@ -36,7 +36,7 @@ spec:
               value: "/data"
           ports:
             - name: actual
-              containerPort: 3001
+              containerPort: 5006
               protocol: TCP
           volumeMounts:
             - mountPath: /data
