@@ -32,12 +32,14 @@ spec:
               value: "2000"
             - name: PGID
               value: "2000"
+            - name: ACTUAL_DATA_DIR
+              value: "/data"
           ports:
             - name: actual
               containerPort: 5006
               protocol: TCP
           volumeMounts:
-            - mountPath: /app/data
+            - mountPath: /data
               name: actual-config
           resources:
             requests:
