@@ -26,6 +26,11 @@ data:
         noTLSVerify: true
         httpHostHeader: "mealie.tartarus.us"
 
+    - hostname: actual.tartarus.us
+      service: http://actual.actual.svc.cluster.local:5006
+      originRequest:
+        httpHostHeader: "actual.tartarus.us"
+
     - hostname: bsky.tartarus.us
       service: http://bsky.bsky.svc.cluster.local:6767
       originRequest:
