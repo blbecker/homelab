@@ -28,12 +28,10 @@ spec:
           env:
             - name: TZ
               value: "America/New_York"
-            - name: PUID
-              value: "2000"
-            - name: PGID
-              value: "2000"
             - name: ACTUAL_DATA_DIR
               value: "/data"
+            - name: ACTUAL_PORT
+              value: "5006"
           ports:
             - name: actual
               containerPort: 5006
