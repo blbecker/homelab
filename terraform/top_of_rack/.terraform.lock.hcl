@@ -89,23 +89,3 @@ provider "registry.terraform.io/terraform-routeros/routeros" {
     "zh:fc7149b86dc039a2f078d3e7a8a7d1654ebcde5204191c0bffbed747d57a5019",
   ]
 }
-
-provider "registry.terraform.io/vancluever/acme" {
-  version     = "2.5.3"
-  constraints = "~> 2.5.3"
-  hashes = [
-    "h1:FxLX47w4e5t7VtOv6R2Tb5wiAwhhP1Ci8uc9wMuWoOU=",
-    "zh:10dabb8a772f5ad0c6c4779747fcebf75439214ce51fc9f51ed6d28b63d4f527",
-    "zh:17361bf37ffab7384276eadbb9f6f616fae7b46560eb0c04b5635bc8a2de2da2",
-    "zh:414be8c5601e0b5ccab970eb0eb15cf67d48bd1c573b2797865e3820d11343d8",
-    "zh:513e3b39c863f6b8b55ee1d1603c39be4c4ce560e4dbb3803ca695e88b82ff94",
-    "zh:623f64027f127017360b1d4ffc8f8591004ddbf33f6ca656adf1f680c1dbfa5e",
-    "zh:6535196e1f76d994da4e809360e74775f1d940b40826e6285512921d3f97c9dd",
-    "zh:7c08d97ab4945e7f7726efb5c0c25be4367d673fc6254f5b002445d2d48140f0",
-    "zh:7eed7e24d170e7ddd0fa960576d757062a34d0df2f51fe034c711035870bbbbe",
-    "zh:924fe604c9a53c7a5037a0dd0103612ecb7bad8f04ef4bedfef91dc8995c0ad0",
-    "zh:cf598943d2d2c856f1ec3ffef180acde0fd88d7f9c61564b886c8a06ba09521e",
-    "zh:d312266db532cd05c205d244740879b1561f3094b51b6a1f6a0e5610c9bd05b8",
-    "zh:df275efeb6581f11723e64b7e443cc47844234def53248c63ebf957eb7e5cf77",
-  ]
-}

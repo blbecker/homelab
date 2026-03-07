@@ -43,12 +43,12 @@ spec:
               port: cinny
             initialDelaySeconds: 10
             periodSeconds: 10
-          # readinessProbe:
-          #   httpGet:
-          #     path: /xrpc/_health
-          #     port: cinny
-          #   initialDelaySeconds: 10
-          #   timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /login/bckr.me
+              port: cinny
+            initialDelaySeconds: 10
+            timeoutSeconds: 5
           resources:
             requests:
               memory: "500M"

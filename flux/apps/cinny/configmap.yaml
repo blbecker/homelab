@@ -30,7 +30,7 @@ data:
           "#PrivSec.dev:arcticfoxes.net",
           "#disroot:aria-net.org"
         ],
-        "servers": [ "matrix.org", "mozilla.org", "unredacted.org" ]
+        "servers": [ "matrix.org", "mozilla.org", "unredacted.org", "matrixrooms.info" ]
       },
 
       "hashRouter": {
