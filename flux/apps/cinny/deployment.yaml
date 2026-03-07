@@ -25,7 +25,7 @@ spec:
         readOnlyRootFilesystem: true
       containers:
         - name: cinny
-          image: ghcr.io/bluesky-social/pds:0.4.204
+          image: ajbura/cinny:v4.10.5
           env:
             - name: TZ
               value: "America/New_York"
