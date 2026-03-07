@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: continuwuity
+  namespace: continuwuity
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: continuwuity
+  ports:
+    - name: continuwuity
+      port: 6167
+      targetPort: continuwuity
+      protocol: TCP

@@ -36,6 +36,11 @@ data:
       originRequest:
         httpHostHeader: "bsky.tartarus.us"
 
+    - hostname: continuwuity.tartarus.us
+      service: http://continuwuity.continuwuity.svc.cluster.local:6167
+      originRequest:
+        httpHostHeader: "continuwuity.tartarus.us"
+
     - hostname: knot.tartarus.us
       service: http://knot-web.knot.svc.cluster.local:5555
       originRequest:
