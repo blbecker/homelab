@@ -6,7 +6,7 @@ metadata:
 data:
   config.json: |
     {
-      "defaultHomeserver": 1,
+      "defaultHomeserver": 0,
       "homeserverList": [
         "bckr.me"
       ],
