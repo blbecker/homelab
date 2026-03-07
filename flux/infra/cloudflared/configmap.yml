@@ -36,6 +36,11 @@ data:
       originRequest:
         httpHostHeader: "bsky.tartarus.us"
 
+    - hostname: cinny.tartarus.us
+      service: http://cinny.cinny.svc.cluster.local:8080
+      originRequest:
+        httpHostHeader: "bsky.tartarus.us"
+
     - hostname: continuwuity.tartarus.us
       service: http://continuwuity.continuwuity.svc.cluster.local:6167
       originRequest:
