@@ -26,7 +26,7 @@ spec:
           image: ghcr.io/bluesky-social/pds:0.4.204
           env:
             - name: TZ
-              value: "America/New_York"
+              value: "America/Puerto_Rico"
           envFrom:
             - configMapRef:
                 name: bsky-configmap
