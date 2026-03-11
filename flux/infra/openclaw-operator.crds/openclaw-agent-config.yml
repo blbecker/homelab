@@ -6,6 +6,10 @@ metadata:
 data:
   config.json: |
     {
+      plugins: {
+        enabled: true,
+        allow: ["matrix"],
+      }, 
       channels: {
         matrix: {
           enabled: true,
