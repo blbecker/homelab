@@ -15,7 +15,12 @@ data:
           enabled: true,
           homeserver: "https://continuwuity.tartarus.us",
           accessToken: "${MATRIX_ACCESS_TOKEN}",
-          dm: { policy: "pairing" },
+          dm: { allowFrom: ["@benjamin:bckr.me"] },
+          groupPolicy: "allowlist",
+          groups: {
+            "!general:bckr.me": {allow: true},
+          },
+          groupAllowFrom: ["@benjamin:bckr.me"],
         },
       },
     }
