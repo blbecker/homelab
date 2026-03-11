@@ -4,6 +4,10 @@ metadata:
   name: openclaw-agent
   namespace: openclaw-operator
 spec:
+  image:
+    repository: gchr.io/blbecker/openclaw-matrix
+    tag: 4f15c8f
+    pullPolicy: Always
   config:
     configMapRef:
       name: openclaw-agent-config
