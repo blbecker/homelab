@@ -24,4 +24,14 @@ data:
           groupAllowFrom: ["@benjamin:bckr.me"],
         },
       },
+      agents: {
+        defaults: {
+          model: {
+            primary: "openrouter/anthropic/claude-sonnet-4.5"
+          },
+          models: {
+            "openrouter/anthropic/claude-sonnet-4.5": {}
+          }
+        }
+      }
     }
