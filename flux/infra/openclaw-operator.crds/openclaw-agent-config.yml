@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: openclaw-agent-config
+  namespace: openclaw-operator
+data:
+  config.json: |
+    {
+      channels: {
+        matrix: {
+          enabled: true,
+          homeserver: "https://continuwuity.tartarus.us",
+          accessToken: "${MATRIX_ACCESS_TOKEN}",
+          dm: { policy: "pairing" },
+        },
+      },
+    }

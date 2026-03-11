@@ -4,6 +4,10 @@ metadata:
   name: openclaw-agent
   namespace: openclaw-operator
 spec:
+  config:
+    configMapRef:
+      name: openclaw-agent-config
+      key: openclaw.json
   envFrom:
     - secretRef:
         name: openclaw-api-keys
