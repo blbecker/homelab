@@ -6,7 +6,7 @@ metadata:
 spec:
   image:
     repository: ghcr.io/blbecker/openclaw-matrix
-    tag: ae82e42
+    tag: 487d03c
     pullPolicy: Always
   config:
     configMapRef:
