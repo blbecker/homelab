@@ -17,6 +17,7 @@ data:
           accessToken: "${MATRIX_ACCESS_TOKEN}",
           dm: { allowFrom: ["@benjamin:bckr.me"] },
           groupPolicy: "allowlist",
+          encryption: true,
           groups: {
             "!general:bckr.me": {allow: true},
           },
