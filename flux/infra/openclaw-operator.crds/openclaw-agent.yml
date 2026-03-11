@@ -11,6 +11,8 @@ spec:
   envFrom:
     - secretRef:
         name: openclaw-api-keys
+  skills:
+    - "npm:@vector-im/matrix-bot-sdk"
   storage:
     persistence:
       enabled: true
