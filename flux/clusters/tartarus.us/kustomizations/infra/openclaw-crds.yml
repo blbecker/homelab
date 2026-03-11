@@ -15,7 +15,7 @@ spec:
     kind: GitRepository
     name: flux-system
   healthChecks:
-    - apiVersion: postgresql.cnpg.io/v1
+    - apiVersion: openclaw.rocks/v1alpha1
       kind: OpenClawInstance
       name: openclaw-agent
       namespace: openclaw-operator
