@@ -27,10 +27,10 @@ data:
       agents: {
         defaults: {
           model: {
-            primary: "openrouter/anthropic/claude-sonnet-4.5"
+            primary: "openrouter/deepseek/deepseek-v3.2"
           },
           models: {
-            "openrouter/anthropic/claude-sonnet-4.5": {}
+            "openrouter/deepseek/deepseek-v3.2": {}
           }
         }
       }
