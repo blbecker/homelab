@@ -1,0 +1,38 @@
+{
+  "plugins": {
+    "enabled": true,
+    "allow": ["matrix"]
+  },
+  "channels": {
+    "matrix": {
+      "enabled": true,
+      "homeserver": "https://continuwuity.tartarus.us",
+      "accessToken": "${MATRIX_ACCESS_TOKEN}",
+      "dm": { "allowFrom": ["@benjamin:bckr.me"] },
+      "groupPolicy": "allowlist",
+      "encryption": true,
+      "groups": {
+        "!general:bckr.me": { "allow": true }
+      },
+      "groupAllowFrom": ["@benjamin:bckr.me"]
+    }
+  },
+  "agents": {
+    "defaults": {
+      "model": {
+        "primary": "openrouter/deepseek/deepseek-v3.2"
+      },
+      "heartbeat": {
+        "every": "1h",
+        "target": "last",
+        "directPolicy": "allow",
+        "lightContext": true,
+        "activeHours": { "start": "10:00", "end": "23:00" },
+        "includeReasoning": false
+      },
+      "models": {
+        "openrouter/deepseek/deepseek-v3.2": {}
+      }
+    }
+  }
+}

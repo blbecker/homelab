@@ -20,3 +20,30 @@ spec:
       enabled: true
       size: 10Gi
       storageClass: longhorn
+  skills:
+    - github
+    - gog
+    - summarize
+  chromium:
+    enabled: true
+    image:
+      repository: ghcr.io/browserless/chromium
+      tag: "v2.0.0"
+    resources:
+      requests:
+        cpu: "250m"
+        memory: "512Mi"
+      limits:
+        cpu: "1000m"
+        memory: "2Gi"
+    # Pass extra flags to the Chromium process (appended to built-in anti-bot defaults)
+    extraArgs:
+      - "--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+    # Inject extra environment variables into the sidecar
+    extraEnv:
+      - name: DEFAULT_STEALTH
+        value: "true"
+    persistence:
+      enabled: true
+      storageClass: longhorn
+      size: "1Gi"
