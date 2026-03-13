@@ -6,7 +6,7 @@ metadata:
 spec:
   image:
     repository: ghcr.io/blbecker/openclaw-matrix
-    tag: 91f8d82
+    tag: "0851985"
   config:
     configMapRef:
       name: openclaw-agent-config
