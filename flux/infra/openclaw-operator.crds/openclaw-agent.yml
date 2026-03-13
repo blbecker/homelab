@@ -23,6 +23,7 @@ spec:
     - github
     - gog
     - summarize
+    - joargp/news-summary
   chromium:
     enabled: true
     image:
