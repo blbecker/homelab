@@ -23,7 +23,7 @@
         "primary": "openrouter/deepseek/deepseek-v3.2"
       },
       "heartbeat": {
-        "every": "1h",
+        "every": "6h",
         "target": "last",
         "directPolicy": "allow",
         "lightContext": true,
