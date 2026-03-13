@@ -1,0 +1,82 @@
+# Name of the tunnel you want to run
+tunnel: tartarus-home
+credentials-file: /etc/cloudflared/creds/credentials.json
+loglevel: warn
+
+# Serves the metrics server under /metrics and the readiness server under /ready
+metrics: 0.0.0.0:2000
+no-autoupdate: true
+
+ingress:
+  - hostname: mealie.tartarus.us
+    service: https://traefik.traefik.svc.cluster.local:443
+    originRequest:
+      noTLSVerify: true
+      httpHostHeader: "mealie.tartarus.us"
+
+  - hostname: actual.tartarus.us
+    service: http://actual.actual.svc.cluster.local:5006
+    originRequest:
+      httpHostHeader: "actual.tartarus.us"
+
+  - hostname: bsky.tartarus.us
+    service: http://bsky.bsky.svc.cluster.local:6767
+    originRequest:
+      httpHostHeader: "bsky.tartarus.us"
+
+  - hostname: cinny.tartarus.us
+    service: http://cinny.cinny.svc.cluster.local:8080
+    originRequest:
+      httpHostHeader: "bsky.tartarus.us"
+
+  - hostname: continuwuity.tartarus.us
+    service: http://continuwuity.continuwuity.svc.cluster.local:6167
+    originRequest:
+      httpHostHeader: "continuwuity.tartarus.us"
+
+  - hostname: knot.tartarus.us
+    service: http://knot-web.knot.svc.cluster.local:5555
+    originRequest:
+      httpHostHeader: "knot.tartarus.us"
+
+  - hostname: heimdall.tartarus.us
+    service: https://traefik.traefik.svc.cluster.local:443
+    originRequest:
+      noTLSVerify: true
+      httpHostHeader: "heimdall.tartarus.us"
+
+  - hostname: irc.tartarus.us
+    service: https://traefik.traefik.svc.cluster.local:443
+    originRequest:
+      noTLSVerify: true
+      httpHostHeader: "irc.tartarus.us"
+
+  - hostname: dashy.tartarus.us
+    service: https://traefik.traefik.svc.cluster.local:443
+    originRequest:
+      noTLSVerify: true
+      httpHostHeader: "dashy.tartarus.us"
+
+  - hostname: gotify.tartarus.us
+    service: https://traefik.traefik.svc.cluster.local:443
+    originRequest:
+      noTLSVerify: true
+      httpHostHeader: "gotify.tartarus.us"
+
+  - hostname: uptimekuma.tartarus.us
+    service: http://uptimekuma.uptimekuma.svc.cluster.local:3001
+    originRequest:
+      httpHostHeader: "uptimekuma.tartarus.us"
+
+  - hostname: navidrome.tartarus.us
+    service: http://navidrome.navidrome.svc.cluster.local:4533
+    originRequest:
+      httpHostHeader: "navidrome.tartarus.us"
+
+  - hostname: immich.tartarus.us
+    service: http://immich-server.immich.svc.cluster.local:2283
+    originRequest:
+      httpHostHeader: "immich.tartarus.us"
+
+  # This rule matches any traffic which didn't match a previous rule, and responds with HTTP 404.
+  - service: http_status:404
