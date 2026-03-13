@@ -3,4 +3,4 @@ attachment-cache-dir: "/var/cache/ntfy/attachments"
 behind-proxy: true
 auth-default-access: "deny-all"
 auth-access:
-  - "*:up*:w"
+  - "*:up*:wo"
