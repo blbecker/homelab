@@ -26,6 +26,8 @@ spec:
       containers:
         - name: ntfy
           image: binwiederhier/ntfy
+          args:
+            - serve
           env:
             - name: TZ
               value: "America/Puerto_Rico"
