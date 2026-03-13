@@ -8,4 +8,4 @@ resources:
 configMapGenerator:
   - name: ntfy-configmap
     files:
-      - notify-server.yaml
+      - server.yaml
