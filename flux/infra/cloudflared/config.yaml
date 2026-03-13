@@ -73,6 +73,11 @@ ingress:
     originRequest:
       httpHostHeader: "navidrome.tartarus.us"
 
+  - hostname: ntfy.tartarus.us
+    service: http://ntfy.ntfy.svc.cluster.local:8080
+    originRequest:
+      httpHostHeader: "ntfy.tartarus.us"
+
   - hostname: immich.tartarus.us
     service: http://immich-server.immich.svc.cluster.local:2283
     originRequest:
