@@ -42,6 +42,14 @@ spec:
         passwordSecret:
           name: gotify-pg-user-creds
 
+      - name: ntfy
+        ensure: present
+        comment: ntfy.sh notification server
+        login: true
+        superuser: false
+        passwordSecret:
+          name: ntfy-pg-user-creds
+
       - name: immich
         ensure: present
         comment: immich photo server
