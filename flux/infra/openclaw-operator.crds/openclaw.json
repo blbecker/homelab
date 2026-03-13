@@ -23,16 +23,31 @@
         "primary": "openrouter/deepseek/deepseek-v3.2"
       },
       "heartbeat": {
-        "every": "6h",
+        "every": "4h",
         "target": "last",
         "directPolicy": "allow",
         "lightContext": true,
         "activeHours": { "start": "10:00", "end": "23:00" },
+        "model": "openrouter/qwen/qwen3-235b-a22b-2507",
         "includeReasoning": false
       },
       "models": {
-        "openrouter/deepseek/deepseek-v3.2": {}
-      }
+        "openrouter/deepseek/deepseek-v3.2": { "alias": "main" },
+        "openrouter/google/gemini-3-flash": { "alias": "flash" },
+        "openrouter/deepseek/deepseek-v3.1": { "alias": "ds" },
+        "openrouter/qwen/qwen3-235b-a22b-2507": { "alias": "qwen" }
+      },
+      "subagents": {
+        "model": "openrouter/deepseek/deepseek-chat-v3.1",
+        "maxConcurrent": 1,
+        "archiveAfterMinutes": 60
+      },
+
+      "imageModel": {
+        "primary": "openrouter/google/gemini-3-flash"
+      },
+
+      "contextTokens": 200000
     }
   }
 }
