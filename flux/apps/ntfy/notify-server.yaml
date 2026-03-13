@@ -1,0 +1,3 @@
+base-url: https://ntfy.tartarus.us
+attachment-cache-dir: "/var/cache/ntfy/attachments"
+behind-proxy: true
