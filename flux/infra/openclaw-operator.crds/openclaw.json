@@ -35,11 +35,10 @@
         }
       },
       "heartbeat": {
-        "every": "4h",
+        "every": "1h",
         "target": "last",
         "directPolicy": "allow",
         "lightContext": true,
-        "activeHours": { "start": "10:00", "end": "23:00" },
         "model": "openrouter/qwen/qwen3-235b-a22b-2507",
         "includeReasoning": false
       },
