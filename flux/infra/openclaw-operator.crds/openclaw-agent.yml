@@ -6,7 +6,7 @@ metadata:
 spec:
   image:
     repository: ghcr.io/blbecker/openclaw-matrix
-    tag: "0851985"
+    tag: "0.1.13"
   config:
     configMapRef:
       name: openclaw-agent-config
@@ -24,6 +24,15 @@ spec:
     - gog
     - summarize
     - joargp/news-summary
+  extraVolumes:
+    - name: secret-files
+      configMapRef:
+        name: openclaw-agent-secret-files
+  extraVolumeMounts:
+    - mountPath: /home/openclaw/.config/ntfy/client.yml
+      subPath: client.yml
+      name: secret-files
+
   chromium:
     enabled: true
     image:
