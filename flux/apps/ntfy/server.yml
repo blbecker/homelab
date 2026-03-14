@@ -4,3 +4,6 @@ behind-proxy: true
 auth-default-access: "deny-all"
 auth-access:
   - "*:up*:wo"
+  - "uptimekuma:uptimekuma:wo"
+  - "openclaw:openclaw:wo"
+  - "apprise:apprise:wo"
