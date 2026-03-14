@@ -49,12 +49,12 @@ spec:
               port: ntfy
             initialDelaySeconds: 10
             periodSeconds: 10
-          # readinessProbe:
-          #   httpGet:
-          #     path: /login/bckr.me
-          #     port: ntfy
-          #   initialDelaySeconds: 10
-          #   timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /v1/health
+              port: ntfy
+            initialDelaySeconds: 10
+            timeoutSeconds: 5
           resources:
             requests:
               memory: "500M"
