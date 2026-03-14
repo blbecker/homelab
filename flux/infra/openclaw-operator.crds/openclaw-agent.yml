@@ -27,7 +27,7 @@ spec:
   extraVolumes:
     - name: secret-files
       secret:
-        name: openclaw-agent-secret-files
+        secretName: openclaw-agent-secret-files
   extraVolumeMounts:
     - mountPath: /home/openclaw/.config/ntfy/client.yml
       subPath: client.yml
