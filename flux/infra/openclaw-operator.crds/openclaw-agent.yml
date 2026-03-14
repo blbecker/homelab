@@ -32,6 +32,7 @@ spec:
     - mountPath: /home/openclaw/.config/ntfy/client.yml
       subPath: client.yml
       name: secret-files
+      readOnly: true
 
   chromium:
     enabled: true
