@@ -26,7 +26,7 @@ spec:
     - joargp/news-summary
   extraVolumes:
     - name: secret-files
-      configMap:
+      secret:
         name: openclaw-agent-secret-files
   extraVolumeMounts:
     - mountPath: /home/openclaw/.config/ntfy/client.yml
