@@ -3,6 +3,17 @@
     "enabled": true,
     "allow": ["matrix"]
   },
+  "hooks": {
+    "internal": {
+      "enabled": true,
+      "entries": {
+        "boot-md": { "enabled": true },
+        "bootstrap-extra-files": { "enabled": true },
+        "session-memory": { "enabled": true },
+        "command-logger": { "enabled": true }
+      }
+    }
+  },
   "channels": {
     "matrix": {
       "enabled": true,
