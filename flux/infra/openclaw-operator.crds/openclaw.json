@@ -26,6 +26,14 @@
           "openrouter/qwen/qwen3-235b-a22b-2507"
         ]
       },
+      "memorySearch": {
+        "provider": "openai",
+        "model": "qwen/qwen3-embedding-8b",
+        "remote": {
+          "baseUrl": "https://openrouter.ai/api/v1/",
+          "apiKey": "${OPENROUTER_API_KEY}"
+        }
+      },
       "heartbeat": {
         "every": "4h",
         "target": "last",
