@@ -33,7 +33,7 @@
       "model": {
         "primary": "openrouter/deepseek/deepseek-v3.2",
         "fallbacks": [
-          "openrouter/deepseek/deepseek-v3.1",
+          "openrouter/deepseek/deepseek-chat-v3.1",
           "openrouter/qwen/qwen3-235b-a22b-2507"
         ]
       },
