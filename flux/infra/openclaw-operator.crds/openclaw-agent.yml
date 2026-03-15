@@ -24,6 +24,9 @@ spec:
     - gog
     - summarize
     - joargp/news-summary
+    - adboio/agentmail
+  runtimeDeps:
+    python: true # Installs Python 3.12 + uv
   extraVolumes:
     - name: secret-files
       secret:
