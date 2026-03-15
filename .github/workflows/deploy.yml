@@ -70,16 +70,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
 
-      # - name: Run kube-conform on Kubernetes manifests
-      #   run: |
-      #     /kubeconform -summary -ignore-missing-schemas -output json /data/flux/
-      - name: Validate Kubernetes manifests with kubeconform
+      - name: Run kube-conform on Kubernetes manifests
         run: |
-          set -euo pipefail
-
-          grep -rl --include='*.yml' --include='*.yaml' '^apiVersion:' . \
-            | xargs grep -l '^kind:' \
-            | xargs -r kubeconform -summary -output json
+          /kubeconform -summary -ignore-missing-schemas -output json /data/flux/
 
   # We've got some work to do before kube score will pass
   #
