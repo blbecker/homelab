@@ -36,10 +36,10 @@ spec:
       readOnly: true
   resources:
     requests:
-      cpu: 2
+      cpu: "2"
       memory: 4Gi
     limits:
-      cpu: 4
+      cpu: "4"
       memory: 5Gi
   chromium:
     enabled: true
