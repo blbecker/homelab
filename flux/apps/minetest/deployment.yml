@@ -23,7 +23,7 @@ spec:
         readOnlyRootFilesystem: true
       containers:
         - name: minetest
-          image: linuxserver/luanti:5.15.0
+          image: linuxserver/luanti:5.15.1
           env:
             - name: TZ
               value: "America/New_York"
