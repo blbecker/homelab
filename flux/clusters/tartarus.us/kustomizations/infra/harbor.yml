@@ -7,8 +7,6 @@ spec:
   interval: 15m
   path: flux/infra/harbor
   prune: true
-  dependsOn:
-    - name: harbor
   timeout: 2m0s
   retryInterval: 2m0s
   sourceRef:
