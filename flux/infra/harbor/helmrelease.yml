@@ -1,0 +1,43 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: harbor
+  namespace: harbor
+spec:
+  chart:
+    spec:
+      chart: harbor
+      version: 1.X.X
+      sourceRef:
+        kind: HelmRepository
+        name: harbor
+        namespace: flux-system
+  interval: 15m
+  timeout: 5m
+  releaseName: harbor
+  values:
+    externalURL: https://harbor.tartarus.us
+    expose:
+      type: clusterIP
+    existingSecretAdminPassword: harbor
+    existingSecretAdminPasswordKey: adminPassword
+    database:
+      type: external
+      external:
+        host: main-rw.cloudnative-pg.svc.cluster.local
+        port: 5432
+        username: harbor
+        coreDatabase: harbor
+        existingSecret: harbor
+      # database.external.sslmode:
+    redis:
+      type: external
+      external:
+        addr: redis.master.redis.svc.cluster.local
+        # sentinelMasterSet: The name of the set of Redis instances to monitor
+        # coreDatabaseIndex: The database index for core 	0
+        # jobserviceDatabaseIndex: The database index for jobservice 	1
+        # registryDatabaseIndex: The database index for registry 	2
+        # trivyAdapterIndex: The database index for trivy adapter 	5
+        # harborDatabaseIndex: The database index for harbor miscellaneous business logic 	0
+        # cacheLayerDatabaseIndex:
