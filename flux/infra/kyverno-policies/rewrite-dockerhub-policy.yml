@@ -9,10 +9,10 @@ spec:
 
   matchConstraints:
     resourceRules:
-      - apiGroups: [""]
+      - apiGroups: ["apps"]
         apiVersions: ["v1"]
         operations: ["CREATE", "UPDATE"]
-        resources: ["pods"]
+        resources: ["deployments"]
 
   mutations:
     - patchType: ApplyConfiguration
@@ -20,38 +20,46 @@ spec:
         expression: >
           Object{
             spec: Object.spec{
+              template: Object.spec.template{
+                spec: Object.spec.template.spec{
 
-              containers:
-                object.spec.containers.map(c,
-                  Object.spec.containers{
-                    name: c.name,
-                    image:
-                      c.image.startsWith("docker.io/") ?
-                      "harbor.tartarus.us/dockerhub-proxy/" + c.image.substring(10) :
-                      c.image
-                  }
-                ),
+                  containers:
+                    object.spec.template.spec.containers.map(c,
+                      Object.spec.template.spec.containers{
+                        name: c.name,
+                        image:
+                          c.image.startsWith("docker.io/") ?
+                          "harbor.tartarus.us/dockerhub-proxy/" + c.image.substring(10) :
+                          c.image
+                      }
+                    ),
 
-              initContainers:
-                object.spec.initContainers.map(c,
-                  Object.spec.initContainers{
-                    name: c.name,
-                    image:
-                      c.image.startsWith("docker.io/") ?
-                      "harbor.tartarus.us/dockerhub-proxy/" + c.image.substring(10) :
-                      c.image
-                  }
-                ),
+                  initContainers:
+                    has(object.spec.template.spec.initContainers) ?
+                    object.spec.template.spec.initContainers.map(c,
+                      Object.spec.template.spec.initContainers{
+                        name: c.name,
+                        image:
+                          c.image.startsWith("docker.io/") ?
+                          "harbor.tartarus.us/dockerhub-proxy/" + c.image.substring(10) :
+                          c.image
+                      }
+                    )
+                    : [],
 
-              ephemeralContainers:
-                object.spec.ephemeralContainers.map(c,
-                  Object.spec.ephemeralContainers{
-                    name: c.name,
-                    image:
-                      c.image.startsWith("docker.io/") ?
-                      "harbor.tartarus.us/dockerhub-proxy/" + c.image.substring(10) :
-                      c.image
-                  }
-                )
+                  ephemeralContainers:
+                    has(object.spec.template.spec.ephemeralContainers) ?
+                    object.spec.template.spec.ephemeralContainers.map(c,
+                      Object.spec.template.spec.ephemeralContainers{
+                        name: c.name,
+                        image:
+                          c.image.startsWith("docker.io/") ?
+                          "harbor.tartarus.us/dockerhub-proxy/" + c.image.substring(10) :
+                          c.image
+                      }
+                    )
+                    : []
+                }
+              }
             }
           }
