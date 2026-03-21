@@ -45,3 +45,19 @@ spec:
         # trivyAdapterIndex: The database index for trivy adapter 	5
         # harborDatabaseIndex: The database index for harbor miscellaneous business logic 	0
         # cacheLayerDatabaseIndex:
+    persistence:
+      enabled: Enable the data persistence or not 	true
+      resourcePolicy: Setting it to keep to avoid removing PVCs during a helm delete operation. Leaving it empty will delete PVCs after the chart deleted. Does not affect PVCs created for internal database and redis components. 	keep
+      imageChartStorage:
+        type: filesystem
+      persistentVolumeClaim:
+        trivy:
+          existingClaim: harbor-data
+          subPath: trivy
+        registry:
+          existingClaim: harbor-data
+          subPath: registry
+        jobservice:
+          jobLog:
+            existingClaim: harbor-data
+            subPath: jobservice/
