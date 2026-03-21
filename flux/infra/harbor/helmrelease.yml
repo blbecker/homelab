@@ -20,7 +20,9 @@ spec:
     expose:
       type: clusterIP
       tls:
-        certSource: none
+        certSource: auto
+      auto:
+        commonName: harbor.tartarus.us
     existingSecretAdminPassword: harbor
     existingSecretAdminPasswordKey: adminPassword
     database:
