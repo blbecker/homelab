@@ -14,5 +14,6 @@ spec:
         namespace: flux-system
   interval: 15m
   timeout: 5m
+  crds: CreateReplace
   releaseName: kyverno
   values:
