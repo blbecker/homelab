@@ -47,16 +47,16 @@ spec:
         # cacheLayerDatabaseIndex:
     persistence:
       enabled: Enable the data persistence or not 	true
-      resourcePolicy: Setting it to keep to avoid removing PVCs during a helm delete operation. Leaving it empty will delete PVCs after the chart deleted. Does not affect PVCs created for internal database and redis components. 	keep
+      # resourcePolicy: Setting it to keep to avoid removing PVCs during a helm delete operation. Leaving it empty will delete PVCs after the chart deleted. Does not affect PVCs created for internal database and redis components. 	keep
       imageChartStorage:
         type: filesystem
       persistentVolumeClaim:
         trivy:
           existingClaim: harbor-data
-          subPath: trivy
+          subPath: trivy/
         registry:
           existingClaim: harbor-data
-          subPath: registry
+          subPath: registry/
         jobservice:
           jobLog:
             existingClaim: harbor-data
