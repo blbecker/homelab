@@ -1,0 +1,78 @@
+apiVersion: policies.kyverno.io/v1
+kind: MutatingPolicy
+metadata:
+  name: rewrite-dockerhub-to-harbor
+  namespace: harbor
+spec:
+  evaluation:
+    admission:
+      enabled: true
+    mutateExisting:
+      enabled: false
+
+  matchConstraints:
+    resourceRules:
+      - apiGroups: [""]
+        apiVersions: ["v1"]
+        operations: ["CREATE", "UPDATE"]
+        resources: ["pods"]
+
+  mutations:
+    - patchType: ApplyConfiguration
+      applyConfiguration:
+        expression: >
+          Object{
+            spec: Object.spec{
+
+              containers:
+                has(object.spec.containers) ?
+                object.spec.containers.map(c,
+                  Object.spec.containers{
+                    name: c.name,
+                    image: rewriteImage(c.image)
+                  }
+                ) : null,
+
+              initContainers:
+                has(object.spec.initContainers) ?
+                object.spec.initContainers.map(c,
+                  Object.spec.initContainers{
+                    name: c.name,
+                    image: rewriteImage(c.image)
+                  }
+                ) : null,
+
+              ephemeralContainers:
+                has(object.spec.ephemeralContainers) ?
+                object.spec.ephemeralContainers.map(c,
+                  Object.spec.ephemeralContainers{
+                    name: c.name,
+                    image: rewriteImage(c.image)
+                  }
+                ) : null
+            }
+          }
+
+  # CEL helper via variables (Kyverno CEL libraries)
+  variables:
+    - name: rewriteImage
+      expression: >
+        image,
+        (
+          # Detect if image already has registry
+          parts := image.split("/"),
+          hasRegistry := parts.size() > 1 &&
+                         (parts[0].contains(".") || parts[0].contains(":")),
+
+          normalized :=
+            parts.size() == 1 ?
+              "docker.io/library/" + image :
+            hasRegistry ?
+              image :
+              "docker.io/" + image,
+
+          normalized.startsWith("docker.io/") ?
+            "harbor.tartarus.us/dockerhub-proxy/" +
+            normalized.substring(10) :
+            image
+        )
