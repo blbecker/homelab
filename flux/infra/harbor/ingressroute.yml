@@ -9,6 +9,7 @@ metadata:
     kubernetes.io/ingress.class: traefik
 spec:
   entryPoints:
+    - web
     - websecure
   routes:
     - match: Host(`harbor.tartarus.us`)
@@ -16,12 +17,9 @@ spec:
       services:
         - name: harbor
           kind: Service
-          port: 32400
-          scheme: https
-          serversTransport: harbor-web
+          port: http
       middlewares:
         - name: https-redirect-middleware
           namespace: harbor
-
   tls:
     secretName: letsencrypt-wildcard-cert-tartarus.us-prod
