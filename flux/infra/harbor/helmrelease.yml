@@ -19,6 +19,8 @@ spec:
     externalURL: https://harbor.tartarus.us
     expose:
       type: clusterIP
+      tls:
+        certSource: none
     existingSecretAdminPassword: harbor
     existingSecretAdminPasswordKey: adminPassword
     database:
