@@ -41,6 +41,13 @@ spec:
         superuser: false
         passwordSecret:
           name: gotify-pg-user-creds
+      - name: harbor
+        ensure: present
+        comment: Harbor
+        login: true
+        superuser: false
+        passwordSecret:
+          name: harbor-pg-user-creds
 
       - name: ntfy
         ensure: present
