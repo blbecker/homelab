@@ -16,7 +16,7 @@ spec:
   timeout: 5m
   install:
     crds: CreateReplace
-  update:
+  upgrade:
     crds: CreateReplace
   releaseName: kyverno
   values:
