@@ -37,7 +37,7 @@ spec:
     redis:
       type: external
       external:
-        addr: redis.master.redis.svc.cluster.local
+        addr: redis-master.redis.svc.cluster.local
         # sentinelMasterSet: The name of the set of Redis instances to monitor
         # coreDatabaseIndex: The database index for core 	0
         # jobserviceDatabaseIndex: The database index for jobservice 	1
