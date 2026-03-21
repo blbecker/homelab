@@ -21,8 +21,8 @@ spec:
       type: clusterIP
       tls:
         certSource: auto
-      auto:
-        commonName: harbor.tartarus.us
+        auto:
+          commonName: harbor.tartarus.us
     existingSecretAdminPassword: harbor
     existingSecretAdminPasswordKey: adminPassword
     database:
