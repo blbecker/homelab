@@ -23,7 +23,7 @@ spec:
         readOnlyRootFilesystem: true
       containers:
         - name: mealie
-          image: ghcr.io/mealie-recipes/mealie:v1.0.0-RC2
+          image: ghcr.io/mealie-recipes/mealie:v3.13.1
           env:
             - name: TZ
               value: "America/New_York"
