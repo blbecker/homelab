@@ -21,14 +21,6 @@ spec:
           Object{
             spec: Object.spec{
               template: Object.spec.template{
-                metadata: Object.spec.template.metadata{
-                  labels: Object.spec.template.metadata.labels{
-                    originalRegistry:
-                      object.spec.template.spec.containers.size() > 0 ?
-                      image(object.spec.template.spec.containers[0].image).registry() :
-                      "none"
-                  }
-                },
                 spec: Object.spec.template.spec{
                   containers:
                     object.spec.template.spec.containers.map(c,
