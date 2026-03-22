@@ -28,7 +28,7 @@ spec:
                         name: c.name,
                         image:
                           c.image.startsWith("docker.io/") ?
-                          "harbor.tartarus.us/dockerhub_proxy/" + c.image.substring(11) :
+                          "harbor.tartarus.us/dockerhub_proxy/" + c.image.substring(10) :
                           c.image
                       }
                     )
