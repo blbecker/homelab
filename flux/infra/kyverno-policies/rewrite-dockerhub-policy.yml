@@ -27,10 +27,19 @@ spec:
                       Object.spec.template.spec.containers{
                         name: c.name,
                         image:
-                          c.image.startsWith("docker.io/") ?
-                          "harbor.tartarus.us/dockerhub_proxy/" + c.image.substring(10) :
-                          c.image.startsWith("ghcr.io/") ?
-                          "harbor.tartarus.us/github_proxy/" + c.image.substring(8) :
+                          c.image.startsWith("harbor.tartarus.us/") ?
+                          c.image :
+
+                          image(c.image).registry() == "index.docker.io" ?
+                          "harbor.tartarus.us/dockerhub_proxy/" +
+                          image(c.image).repository() + ":" +
+                          image(c.image).identifier() :
+
+                          image(c.image).registry() == "ghcr.io" ?
+                          "harbor.tartarus.us/ghcr_proxy/" +
+                          image(c.image).repository() + ":" +
+                          image(c.image).identifier() :
+
                           c.image
                       }
                     )
