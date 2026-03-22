@@ -14,8 +14,9 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  healthChecks:
-    - apiVersion: policies.kyverno.io/v1
-      kind: MutatingPolicy
-      name: rewrite-deployments-to-harbor
-      namespace: kyverno
+    # FIXME: This isn't working yet; think I need a CEL statement for the checks
+  # healthChecks:
+  #   - apiVersion: policies.kyverno.io/v1
+  #     kind: MutatingPolicy
+  #     name: rewrite-deployments-to-harbor
+  #     namespace: kyverno
