@@ -20,16 +20,19 @@ spec:
         expression: >
           Object{
             spec: Object.spec{
-              containers:
-                has(object.spec.containers) ?
-                object.spec.containers.map(c,
-                  Object.spec.containers{
-                    name: c.name,
-                    image:
-                      c.image.startsWith("docker.io/") ?
-                      "harbor.tartarus.us/dockerhub_proxy/" + c.image.substring(11) :
-                      c.image
-                  }
-                ) : []
+              template: Object.spec.template{
+                spec: Object.spec.template.spec{
+                  containers:
+                    object.spec.template.spec.containers.map(c,
+                      Object.spec.template.spec.containers{
+                        name: c.name,
+                        image:
+                          c.image.startsWith("docker.io/") ?
+                          "harbor.tartarus.us/dockerhub_proxy/" + c.image.substring(11) :
+                          c.image
+                      }
+                    )
+                }
+              }
             }
           }
