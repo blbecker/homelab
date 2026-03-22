@@ -29,6 +29,8 @@ spec:
                         image:
                           c.image.startsWith("docker.io/") ?
                           "harbor.tartarus.us/dockerhub_proxy/" + c.image.substring(10) :
+                          c.image.startsWith("ghcr.io/") ?
+                          "harbor.tartarus.us/github_proxy/" + c.image.substring(8) :
                           c.image
                       }
                     )
