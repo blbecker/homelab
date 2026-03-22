@@ -15,7 +15,7 @@ spec:
     kind: GitRepository
     name: flux-system
   healthChecks:
-    - apiVersion: longhorn.io/v1beta1
+    - apiVersion: longhorn.io/v1beta2
       kind: RecurringJob
       name: default-daily-backup
       namespace: longhorn
