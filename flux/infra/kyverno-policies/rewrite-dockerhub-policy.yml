@@ -23,7 +23,7 @@ spec:
               template: Object.spec.template{
                 metadata: Object.spec.template.metadata{
                   labels: Object.spec.template.metadata.labels{
-                    "original-registry":
+                    originalRegistry:
                       object.spec.template.spec.containers.size() > 0 ?
                       image(object.spec.template.spec.containers[0].image).registry() :
                       "none"
@@ -38,7 +38,7 @@ spec:
                           c.image.startsWith("harbor.tartarus.us/") ?
                           c.image :
 
-                          image(c.image).registry() == "docker.io" ?
+                          image(c.image).registry() == "index.docker.io" ?
                           "harbor.tartarus.us/dockerhub_proxy/" +
                           image(c.image).repository() + ":" +
                           image(c.image).identifier() :
