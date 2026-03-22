@@ -52,12 +52,12 @@ spec:
         type: filesystem
       persistentVolumeClaim:
         trivy:
-          existingClaim: harbor-data
+          existingClaim: harbor-qnap
           subPath: trivy/
         registry:
-          existingClaim: harbor-data
+          existingClaim: harbor-qnap
           subPath: registry/
         jobservice:
           jobLog:
-            existingClaim: harbor-data
+            existingClaim: harbor-qnap
             subPath: jobservice/
