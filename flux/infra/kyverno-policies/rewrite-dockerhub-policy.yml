@@ -36,7 +36,7 @@ spec:
                           image(c.image).identifier() :
 
                           image(c.image).registry() == "ghcr.io" ?
-                          "harbor.tartarus.us/ghcr_proxy/" +
+                          "harbor.tartarus.us/github_proxy/" +
                           image(c.image).repository() + ":" +
                           image(c.image).identifier() :
 
