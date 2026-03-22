@@ -17,5 +17,5 @@ spec:
   healthChecks:
     - apiVersion: policies.kyverno.io/v1
       kind: MutatingPolicy
-      name: rewrite-dockerhub-to-harbor
+      name: rewrite-deployments-to-harbor
       namespace: kyverno

@@ -1,7 +1,7 @@
 apiVersion: policies.kyverno.io/v1
 kind: MutatingPolicy
 metadata:
-  name: rewrite-dockerhub-to-harbor
+  name: rewrite-deployments-to-harbor
 spec:
   evaluation:
     admission:
