@@ -23,7 +23,7 @@ spec:
         readOnlyRootFilesystem: true
       containers:
         - name: ntfy
-          image: binwiederhier/ntfy
+          image: docker.io/binwiederhier/ntfy
           args:
             - serve
           env:

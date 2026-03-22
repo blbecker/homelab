@@ -25,7 +25,7 @@ spec:
         readOnlyRootFilesystem: true
       initContainers:
         - name: init-permissions
-          image: busybox
+          image: docker.io/busybox
           command:
             [
               "sh",
@@ -37,7 +37,7 @@ spec:
               name: knot-keys
       containers:
         - name: knot
-          image: tngl/knot:v1.10.0-alpha
+          image: docker.io/tngl/knot:v1.10.0-alpha
           env:
             - name: TZ
               value: "America/Puerto_Rico"

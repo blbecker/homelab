@@ -27,7 +27,7 @@ spec:
             - SETGID
       containers:
         - name: cloudflare-ddns
-          image: favonia/cloudflare-ddns:1.15.1
+          image: docker.io/favonia/cloudflare-ddns:1.15.1
           env:
             - name: TZ
               value: "America/Puerto_Rico"

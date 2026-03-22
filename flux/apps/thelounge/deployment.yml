@@ -23,7 +23,7 @@ spec:
         readOnlyRootFilesystem: true
       containers:
         - name: thelounge
-          image: linuxserver/thelounge:4.4.3
+          image: docker.io/linuxserver/thelounge:4.4.3
           env:
             - name: TZ
               value: "America/Puerto_Rico"

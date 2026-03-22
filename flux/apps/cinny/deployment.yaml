@@ -25,7 +25,7 @@ spec:
         readOnlyRootFilesystem: true
       containers:
         - name: cinny
-          image: ajbura/cinny:v4.10.5
+          image: docker.io/ajbura/cinny:v4.10.5
           env:
             - name: TZ
               value: "America/Puerto_Rico"
