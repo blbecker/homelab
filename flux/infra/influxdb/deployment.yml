@@ -23,7 +23,7 @@ spec:
           imagePullPolicy: Always
           env:
             - name: TZ
-              value: "America/New_York"
+              value: "America/Puerto_Rico"
             - name: DOCKER_INFLUXDB_INIT_MODE
               value: setup
             - name: DOCKER_INFLUXDB_INIT_USERNAME

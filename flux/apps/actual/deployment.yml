@@ -27,7 +27,7 @@ spec:
           imagePullPolicy: Always
           env:
             - name: TZ
-              value: "America/New_York"
+              value: "America/Puerto_Rico"
             - name: ACTUAL_DATA_DIR
               value: "/data"
             - name: ACTUAL_PORT

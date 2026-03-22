@@ -26,7 +26,7 @@ spec:
           image: prom/snmp-exporter:v0.30.1
           env:
             - name: TZ
-              value: "America/New_York"
+              value: "America/Puerto_Rico"
           podSecurityContext:
             fsGroup: 2000
             fsGroupChangePolicy: "Always"

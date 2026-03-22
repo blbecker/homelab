@@ -30,7 +30,7 @@ spec:
           image: favonia/cloudflare-ddns:1.15.1
           env:
             - name: TZ
-              value: "America/New_York"
+              value: "America/Puerto_Rico"
             - name: PUID
               value: "3000"
             - name: PGID

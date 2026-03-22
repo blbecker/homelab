@@ -30,7 +30,7 @@ spec:
                 name: gotify-secrets
           env:
             - name: TZ
-              value: "America/New_York"
+              value: "America/Puerto_Rico"
             - name: UID
               value: "2000"
             - name: GID

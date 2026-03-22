@@ -28,7 +28,7 @@ spec:
           image: ghcr.io/warp-tech/warpgate:0.19.1
           env:
             - name: TZ
-              value: "America/New_York"
+              value: "America/Puerto_Rico"
           ports:
             - name: warpgate-http
               containerPort: 8888

@@ -40,7 +40,7 @@ spec:
           image: tngl/knot:v1.10.0-alpha
           env:
             - name: TZ
-              value: "America/New_York"
+              value: "America/Puerto_Rico"
           envFrom:
             - configMapRef:
                 name: knot-configmap
