@@ -17,8 +17,8 @@ spec:
         - name: plex
           kind: Service
           port: 32400
-          # scheme: https
-          # serversTransport: plex-web
+          scheme: https
+          serversTransport: plex-web
       middlewares:
         - name: https-redirect-middleware
           namespace: plex
