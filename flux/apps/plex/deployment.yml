@@ -79,6 +79,9 @@ spec:
               name: plex-transcode
             - mountPath: /config/Library/Application Support/Plex Media Server/Cache
               name: plex-cache
+            - mountPath: /tls
+              name: tls-cert
+              readOnly: true
           readinessProbe:
             httpGet:
               path: /identity
@@ -118,3 +121,6 @@ spec:
         - name: plex-cache
           emptyDir:
             sizeLimit: 30Gi
+        - name: tls-cert
+          secret:
+            secretName: letsencrypt-wildcard-cert-tartarus.us-prod
