@@ -83,7 +83,7 @@ spec:
             httpGet:
               path: /identity
               port: pms
-              scheme: HTTPS
+              # scheme: HTTPS
             initialDelaySeconds: 30
             timeoutSeconds: 5
           livenessProbe:
