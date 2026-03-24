@@ -79,13 +79,13 @@ spec:
               name: plex-transcode
             - mountPath: /config/Library/Application Support/Plex Media Server/Cache
               name: plex-cache
-          readinessProbe:
-            httpGet:
-              path: /identity
-              port: pms
-              # scheme: HTTPS
-            initialDelaySeconds: 30
-            timeoutSeconds: 5
+          # readinessProbe:
+          #   httpGet:
+          #     path: /identity
+          #     port: pms
+          #     # scheme: HTTPS
+          #   initialDelaySeconds: 30
+          #   timeoutSeconds: 5
           livenessProbe:
             tcpSocket:
               port: pms
