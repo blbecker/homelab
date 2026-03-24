@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: jellyfin
+  namespace: jellyfin
+spec:
+  type: LoadBalancer
+  selector:
+    app.kubernetes.io/name: jellyfin
+  # loadBalancerIP: 192.168.40.70
+  ports:
+    - name: web
+      port: 8096
+      targetPort: web
+      protocol: TCP
+    - name: discov
+      port: 7359
+      targetPort: discov
+      protocol: UDP
