@@ -42,8 +42,7 @@ spec:
       cpu: "4"
       memory: 5Gi
   chromium:
-    # enabled: true
-    enabled: false
+    enabled: true
     image:
       repository: ghcr.io/browserless/chromium
       tag: "v2.44.0"
