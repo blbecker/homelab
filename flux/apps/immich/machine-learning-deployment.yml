@@ -23,7 +23,7 @@ spec:
         readOnlyRootFilesystem: true
       containers:
         - name: immich
-          image: ghcr.io/immich-app/immich-machine-learning:v2.6.1-openvino
+          image: ghcr.io/immich-app/immich-machine-learning:v2.6.3-openvino
           env:
             - name: TZ
               value: "America/Puerto_Rico"
