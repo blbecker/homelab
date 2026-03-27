@@ -47,7 +47,7 @@
       retries: 40
       delay: 30
       when:
-        - reboot_required_file.stat.exists == true
+        - reboot_required_file.stat.exists
         - k3s_role is defined and k3s_role in ['agent','server']
 
     - name: Reboot the server (if required).
@@ -56,7 +56,7 @@
         pre_reboot_delay: 60
         post_reboot_delay: 120
       when:
-        - reboot_required_file.stat.exists == true
+        - reboot_required_file.stat.exists
         - k3s_role is defined and k3s_role in ['agent','server']
 
     - name: Mark node as schedulable.
@@ -66,7 +66,7 @@
         kubeconfig: "{{ kubeconfig }}"
         name: "{{ ansible_hostname }}"
       when:
-        - reboot_required_file.stat.exists == true
+        - reboot_required_file.stat.exists
         - k3s_role is defined and k3s_role in ['agent','server']
 
     - name: Remove dependencies that are no longer required.
