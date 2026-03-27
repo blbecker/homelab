@@ -51,6 +51,14 @@ pre-commit:
         ejson e terraform/secrets.tfvars.ejson && \
         dotenvx encrypt
 
+    ansible-lint:
+      root: "ansible/"
+      glob: "*.{yml,yaml}"
+      run: ansible-lint --exclude '**/tests/*' --exclude '**/secrets.yml'
+output:
+  - failure
+  - summary
+
     # gitleaks:
     #   run: docker run -v $(pwd):/path zricethezav/gitleaks:latest protect --staged --verbose --source="/path"
     # kubeconform:
