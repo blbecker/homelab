@@ -93,24 +93,24 @@ jobs:
   #         /data/scripts/do-kube-score.sh --ignore-test container-ephemeral-storage-request-and-limit --ignore-test container-security-context-user-group-id --ignore-test pod-networkpolicy --ignore-test container-security-context-readonlyrootfilesystem --output-format human
 
   # Job to lint Ansible playbooks in "ansible" directory
-  # ansible-lint:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout repository
-  #       uses: actions/checkout@v4
-  #
-  #     - name: Set up Python
-  #       uses: actions/setup-python@v5
-  #       with:
-  #         python-version: '3.x'
-  #
-  #     - name: Install ansible and ansible-lint
-  #       run: |
-  #         pip install ansible ansible-lint
-  #
-  #     - name: Run ansible-lint
-  #       run: |
-  #         ansible-lint ansible/
+  ansible-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install ansible and ansible-lint
+        run: |
+          pip install ansible ansible-lint
+
+      - name: Run ansible-lint
+        run: |
+          ansible-lint ansible/
 
   # terragrunt-plan:
   #   needs: changes

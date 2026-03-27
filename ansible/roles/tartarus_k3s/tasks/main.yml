@@ -8,7 +8,7 @@
   no_log: true
 
 - name: "Ansible | Print multiple variable"
-  debug:
+  ansible.builtin.debug:
     msg: |
       The color is {{ k8sColor }}
 
