@@ -1,5 +1,7 @@
 # Homelab Flux
 
+[![Deploy](https://github.com/blbecker/homelab/actions/workflows/deploy.yml/badge.svg)](https://github.com/blbecker/homelab/actions/workflows/deploy.yml)
+
 Flux-enabled kubernetes deployment of my homelab.
 
 [Detailed docs](https://blbecker.github.io/homelab-flux/)
