@@ -5,5 +5,5 @@ This is the ansible automation to manage the lower-level configuration of the ku
 ## Running
 
 ```bash
-dotenvx run -- ansible-playbook -i hosts.yml site.yml --ask-become-pass
+dotenvx run -- ansible-playbook -i inventory/hosts.yml site.yml --ask-become-pass
 ```
