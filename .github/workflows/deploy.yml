@@ -106,6 +106,31 @@ jobs:
           python_version: "3.14"
           working_directory: "ansible"
 
+  tflint:
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - uses: actions/checkout@v4
+        name: Checkout source code
+
+      - uses: terraform-linters/setup-tflint@v6
+        name: Setup TFLint
+        with:
+          tflint_version: v0.60.0
+          cache: true
+
+      - name: Show version
+        run: tflint --version
+
+      - name: Init TFLint
+        run: tflint --init
+        env:
+          # https://github.com/terraform-linters/tflint/blob/master/docs/user-guide/plugins.md#avoiding-rate-limiting
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: Run TFLint
+        run: tflint --chdir terraform/ -f compact --recursive
+
   git-tag:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
@@ -116,6 +141,7 @@ jobs:
       - gitleaks
       - kube-conform
       - ansible-lint
+      - tflint
     steps:
       - name: Checkout code
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
