@@ -97,7 +97,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Run ansible-lint
         uses: ansible/ansible-lint@main # or vX.X.X version
         with:
@@ -110,7 +110,7 @@ jobs:
     runs-on: "ubuntu-latest"
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         name: Checkout source code
 
       - uses: terraform-linters/setup-tflint@v6
