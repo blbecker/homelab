@@ -28,7 +28,7 @@
 
     - name: Decode base64 encoded kubeconfig
       # Be aware that the content of kubeconfig will be shown in logs
-      set_fact:
+      ansible.builtin.set_fact:
         kubeconfig: "{{ kubeconfig_content['content'] | b64decode | from_yaml }}"
 
     - name: Drain node

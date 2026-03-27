@@ -37,7 +37,7 @@
     - public_keys/ansible.pub
 
 - name: Configure sudo for ansible user
-  copy:
+  ansible.builtin.copy:
     dest: /etc/sudoers.d/ansible
     content: |
       ansible ALL=(ALL) NOPASSWD:ALL
