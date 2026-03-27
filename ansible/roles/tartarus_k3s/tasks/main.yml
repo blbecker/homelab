@@ -68,8 +68,10 @@
   environment:
     INSTALL_K3S_SKIP_START: "true"
     K3S_TOKEN: "{{ k3s_token }}"
-    INSTALL_K3S_VERSION: "{{ k3s_version }}"
+    INSTALL_K3S_VERSION: "{{ tartarus_k3s_k3s_version }}"
   when: k3s_role == 'server'
+  register: tartarus_k3s_download_server_bin
+  changed_when: tartarus_k3s_download_server_bin.rc != 0
 
 - name: Download K3s binary (agent)
   ansible.builtin.command:
@@ -78,8 +80,10 @@
     INSTALL_K3S_SKIP_START: "true"
     K3S_TOKEN: "{{ k3s_token }}"
     K3S_URL: "https://k8s.tartarus.us:6443"
-    INSTALL_K3S_VERSION: "{{ k3s_version }}"
+    INSTALL_K3S_VERSION: "{{ tartarus_k3s_k3s_version }}"
   when: k3s_role == 'agent'
+  register: tartarus_k3s_download_agent_bin
+  changed_when: tartarus_k3s_download_agent_bin.rc != 0
 
 - name: Install longhorn dependencies
   ansible.builtin.apt:

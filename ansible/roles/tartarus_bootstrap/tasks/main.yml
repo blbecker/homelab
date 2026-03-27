@@ -24,7 +24,7 @@
     password: "!"
     comment: "Ansible management user"
     uid: 9999
-  register: user
+  register: tartarus_bootstrap_user
 
 - name: Set ansibles ssh public key
   tags:
@@ -48,7 +48,7 @@
 
 - name: Create a destination for ansible's kubeconfig
   ansible.builtin.file:
-    path: "{{ user.home }}/.kube"
+    path: "{{ tartarus_bootstrap_user.home }}/.kube"
     owner: ansible
     group: ansible
     mode: "0600"
@@ -65,5 +65,5 @@
 #     value: "{{ ansible_default_ipv4.address }}"
 #     solo: true
 #     # comment: "Created by Ansible"
-#     api_token: "{{ cloudflare_token }}"
+#     api_token: "{{ tartarus_bootstrap_cloudflare_token }}"
 #     state: present
