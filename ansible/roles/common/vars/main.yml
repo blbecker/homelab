@@ -1,6 +1,6 @@
 ---
 # vars file for common
-users:
+common_users:
   benjamin:
     pub_keys:
       - ssh-rsa

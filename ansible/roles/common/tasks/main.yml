@@ -60,4 +60,4 @@
     state: present
     key: "{{ item }}"
   with_file:
-    - users/public_keys/tartarus.pub
+    - common_users/public_keys/tartarus.pub
