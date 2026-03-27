@@ -101,7 +101,7 @@ jobs:
       - name: Run ansible-lint
         uses: ansible/ansible-lint@main # or vX.X.X version
         with:
-          args: "--exclude '**/tests/**'"
+          args: "--exclude '**/tests/**' --exclude '**/secrets.yml'"
           setup_python: "true"
           python_version: "3.14"
           working_directory: "ansible"
