@@ -41,6 +41,10 @@ pre-commit:
       glob: "*.{tf,tfvars,tftest.hcl}"
       run: terraform fmt terraform {staged_files}
 
+    tflint:
+      glob: "*.{tf,tfvars,tftest.hcl}"
+      run: tflint --chdir terraform --recursive
+
     prettier:
       glob: "*.{js,md,yml,yaml,json}"
       run: prettier {staged_files} --ignore-unknown --write
