@@ -4,7 +4,7 @@
 
 Flux-enabled kubernetes deployment of my homelab.
 
-[Detailed docs](https://blbecker.github.io/homelab-flux/)
+[Detailed docs](https://blbecker.github.io/homelab/)
 
 Bootstrap Command: `flux bootstrap github --token-auth=false --owner blbecker --repository homelab --branch main --path=flux/clusters/tartarus.us`
 
