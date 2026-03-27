@@ -100,9 +100,8 @@ jobs:
         uses: actions/checkout@v4
       - name: Run ansible-lint
         uses: ansible/ansible-lint@main # or vX.X.X version
-        # optional (see below):
         with:
-          args: "--exclude '**/tests/**"
+          args: "--exclude '**/tests/**'"
           setup_python: "true"
           python_version: "3.14"
           working_directory: "ansible"
