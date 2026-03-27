@@ -1,4 +1,4 @@
-# Homelab Flux
+# Homelab
 
 [![Deploy](https://github.com/blbecker/homelab/actions/workflows/deploy.yml/badge.svg)](https://github.com/blbecker/homelab/actions/workflows/deploy.yml)
 
