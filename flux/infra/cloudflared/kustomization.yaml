@@ -6,4 +6,4 @@ resources:
 configMapGenerator:
   - name: cloudflared
     files:
-      - config.yaml
+      - files/config.yaml

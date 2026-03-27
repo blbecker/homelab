@@ -6,6 +6,6 @@ resources:
 configMapGenerator:
   - name: openclaw-agent-config
     files:
-      - openclaw.json
+      - files/openclaw.json
 generatorOptions:
   disableNameSuffixHash: true

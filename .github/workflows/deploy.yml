@@ -72,7 +72,7 @@ jobs:
 
       - name: Run kube-conform on Kubernetes manifests
         run: |
-          /kubeconform -summary -ignore-missing-schemas -output json /data/flux/
+          /kubeconform -summary -ignore-missing-schemas -ignore-filename-pattern '/files/' -output json /data/flux/
 
   # We've got some work to do before kube score will pass
   #

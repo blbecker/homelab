@@ -8,4 +8,4 @@ resources:
 configMapGenerator:
   - name: ntfy-configmap
     files:
-      - server.yml
+      - files/server.yml
