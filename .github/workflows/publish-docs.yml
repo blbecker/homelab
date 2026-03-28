@@ -22,7 +22,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      HUGO_VERSION: 0.128.0
+      HUGO_VERSION: 0.159.1
 
     steps:
       - name: Setup Hugo
@@ -44,12 +44,12 @@ jobs:
         uses: actions/configure-pages@v5
 
       - name: Install Node dependencies
-        working-directory: docs
+        working-directory: docs/site
         run: |
           [[ -f package-lock.json || -f npm-shrinkwrap.json ]] && npm ci || true
 
       - name: Build with Hugo
-        working-directory: docs
+        working-directory: docs/site
         env:
           HUGO_CACHEDIR: ${{ runner.temp }}/hugo_cache
           HUGO_ENVIRONMENT: production
