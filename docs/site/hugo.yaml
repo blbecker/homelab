@@ -1,0 +1,11 @@
+baseURL: https://blbecker.github.io/homelab/
+languageCode: en-us
+title: Homelab Documentation Site
+enableEmoji: true
+params:
+  editURL:
+    enable: true
+    base: "https://github.com/blbecker/homelab/edit/main/docs/site/content"
+module:
+  imports:
+    - path: github.com/imfing/hextra
