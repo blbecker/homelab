@@ -6,6 +6,22 @@ params:
   editURL:
     enable: true
     base: "https://github.com/blbecker/homelab/edit/main/docs/site/content"
+
+menu:
+  main:
+    - name: Documentation
+      pageRef: /docs
+      weight: 1
+    - name: Ideas
+      pageRef: /ideas
+      weight: 2
+    - name: Personal Site
+      url: "https://bckr.me"
+      # params:
+      #   icon: person-circle
+
 module:
   imports:
     - path: github.com/imfing/hextra
+    - path: github.com/hugomods/icons/vendors/bootstrap
+    - path: github.com/hugomods/icons/vendors/font-awesome
