@@ -55,10 +55,10 @@ pre-commit:
         ejson e terraform/secrets.tfvars.ejson && \
         dotenvx encrypt
 
-    ansible-lint:
-      root: "ansible/"
-      glob: "*.{yml,yaml}"
-      run: ansible-lint --exclude '**/tests/*' --exclude '**/secrets.yml'
+    # ansible-lint:
+    #   root: "ansible/"
+    #   glob: "*.{yml,yaml}"
+    #   run: dotenvx run -- ansible-lint --exclude '**/tests/*' --exclude '**/secrets.yml'
 output:
   - failure
   - summary

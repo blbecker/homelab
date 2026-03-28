@@ -54,10 +54,9 @@
     append: true
     uid: 1000
 
-- name: Configure my authorized keys
+- name: Configure authorized keys
   ansible.posix.authorized_key:
-    user: benjamin
+    user: "{{ item.0.name }}"
+    key: "{{ item.1 }}"
     state: present
-    key: "{{ item }}"
-  with_file:
-    - common_users/public_keys/tartarus.pub
+  loop: "{{ common_users | subelements('pub_keys') }}"

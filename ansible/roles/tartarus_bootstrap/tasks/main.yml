@@ -56,7 +56,7 @@
 - name: Configure kubectl
   ansible.builtin.copy:
     src: ansible_kubecfg.yaml
-    dest: "{{ user.home }}/.kube/config"
+    dest: "{{ tartarus_bootstrap_user.home }}/.kube/config"
 # - name: Create an A record for this host
 #   community.general.cloudflare_dns:
 #     domain: tartarus.us
