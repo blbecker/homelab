@@ -19,11 +19,17 @@ spec:
         options:
           - name: ndots
             value: "1"
+      automountServiceAccountToken: false
       securityContext:
+        fsGroup: 20000
+        fsGroupChangePolicy: "Always"
         readOnlyRootFilesystem: true
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: minetest
           image: docker.io/linuxserver/luanti:5.15.1
+          imagePullPolicy: Always
           env:
             - name: TZ
               value: "America/Puerto_Rico"
@@ -33,9 +39,14 @@ spec:
               value: "2000"
             - name: CLI_ARGS
               value: "--config /configmaps/minetest.conf --gameid voxelibre"
-          podSecurityContext:
-            fsGroup: 2000
-            fsGroupChangePolicy: "Always"
+          securityContext:
+            runAsUser: 20000
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+                - NET_RAW
           ports:
             - name: minetest
               containerPort: 30000
@@ -45,16 +56,16 @@ spec:
               name: minetest-data
             - name: minetest-configmap
               mountPath: /configmaps
-          # livenessProbe:
-          #   tcpSocket:
-          #     port: minetest
-          #   initialDelaySeconds: 10
-          #   periodSeconds: 10
-          # readinessProbe:
-          #   tcpSocket:
-          #     port: minetest
-          #   initialDelaySeconds: 10
-          #   periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: minetest
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          readinessProbe:
+            tcpSocket:
+              port: minetest
+            initialDelaySeconds: 10
+            periodSeconds: 10
           resources:
             requests:
               memory: "1.5G"
