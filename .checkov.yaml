@@ -3,7 +3,9 @@ branch: master
 compact: true
 custom-tool-name: Checkov
 directory:
-  - /project
+  - .
+skip-path:
+  - "flux-system"
 evaluate-variables: true
 external-modules-download-path: .external_modules
 hard-fail-on:
@@ -16,6 +18,4 @@ skip-check:
   - CKV_K8S_43
   - CKV_SECRET_6
   - CKV2_K8S_6
-skip-path:
-  - flux-system
 summary-position: top
