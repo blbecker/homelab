@@ -17,13 +17,17 @@ spec:
         options:
           - name: ndots
             value: "1"
+      automountServiceAccountToken: false
       securityContext:
-        fsGroup: 2000
+        fsGroup: 20000
         fsGroupChangePolicy: "Always"
         readOnlyRootFilesystem: true
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: ntfy
-          image: docker.io/binwiederhier/ntfy
+          image: binwiederhier/ntfy:v2.20
+          imagePullPolicy: Always
           args:
             - serve
           env:
@@ -43,6 +47,14 @@ spec:
               name: config
             - mountPath: /var/cache/ntfy/attachments
               name: attachments
+          securityContext:
+            runAsUser: 20000
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+                - NET_RAW
 
           livenessProbe:
             tcpSocket:
