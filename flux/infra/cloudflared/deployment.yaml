@@ -14,9 +14,17 @@ spec:
       labels:
         app: cloudflared
     spec:
+      automountServiceAccountToken: false
+      securityContext:
+        fsGroup: 20000
+        fsGroupChangePolicy: "Always"
+        readOnlyRootFilesystem: true
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: cloudflared
           image: docker.io/cloudflare/cloudflared:2026.3.0
+          imagePullPolicy: Always
           args:
             - tunnel
             # Points cloudflared to the config file, which configures what
@@ -26,21 +34,23 @@ spec:
             - /etc/cloudflared/config/config.yaml
             - run
           securityContext:
+            runAsUser: 20000
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
             capabilities:
               drop:
                 - ALL
                 - NET_RAW
-              add:
-                - SETUID
-                - SETGID
           livenessProbe:
+            tcpSocket:
+              port: 2000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          readinessProbe:
             httpGet:
-              # Cloudflared has a /ready endpoint which returns 200 if and only if
-              # it has an active connection to the edge.
               path: /ready
               port: 2000
             failureThreshold: 1
-            initialDelaySeconds: 10
             periodSeconds: 10
           resources:
             requests:
