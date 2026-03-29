@@ -3,3 +3,5 @@
 # .ansible-lint
 
 profile: moderate
+warn_list:
+  - yaml[line-length]
