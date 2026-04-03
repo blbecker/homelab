@@ -13,7 +13,7 @@ spec:
       key: openclaw.json
   envFrom:
     - secretRef:
-        name: openclaw-api-keys
+        name: openclaw-agent-claw-keys
   storage:
     persistence:
       enabled: true
@@ -28,7 +28,7 @@ spec:
   extraVolumes:
     - name: secret-files
       secret:
-        secretName: openclaw-agent-secret-files
+        secretName: openclaw-agent-claw-secret-files
   extraVolumeMounts:
     - mountPath: /home/openclaw/.config/ntfy/client.yml
       subPath: client.yml
