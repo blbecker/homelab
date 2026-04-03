@@ -72,10 +72,6 @@
         "archiveAfterMinutes": 60
       },
 
-      "imageGenerationModel": {
-        "primary": "openrouter/google/gemini-2.5-flash-image"
-      },
-
       "contextTokens": 200000
     }
   }
