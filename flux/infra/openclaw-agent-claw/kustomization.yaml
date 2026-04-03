@@ -6,6 +6,7 @@ resources:
   - ingressroute.yaml
   - https-redirect-middleware.yml
   - reflect-prod-cert.yml
+  - syncthing-pvc.yml
 configMapGenerator:
   - name: openclaw-agent-config
     files:

@@ -29,7 +29,14 @@ spec:
     - name: secret-files
       secret:
         secretName: openclaw-agent-claw-secret-files
+    - name: obsidian
+      persistentVolumeClaim:
+        claimName: syncthing-pvc
   extraVolumeMounts:
+    - mountPath: /mnt/syncthing/obsidian
+      name: obsidian
+      subPath: obsidian
+      readOnly: true
     - mountPath: /home/openclaw/.config/ntfy/client.yml
       subPath: client.yml
       name: secret-files
