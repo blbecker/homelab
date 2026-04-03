@@ -1,7 +1,7 @@
 apiVersion: openclaw.rocks/v1alpha1
 kind: OpenClawInstance
 metadata:
-  name: openclaw-agent
+  name: dot
   namespace: openclaw-agent-dot
 spec:
   image:
