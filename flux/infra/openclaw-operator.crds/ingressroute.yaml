@@ -1,0 +1,25 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: openclaw-agent-gateway
+  namespace: openclaw-operator
+  annotations:
+    switchboard.borchero.com/ignore: "all"
+    external-dns.alpha.kubernetes.io/target: traefik.tartarus.us
+    kubernetes.io/ingress.class: traefik
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`openclaw.tartarus.us`)
+      kind: Rule
+      services:
+        - name: openclaw-agent
+          kind: Service
+          port: 18790
+      middlewares:
+        - name: https-redirect-middleware
+          namespace: openclaw-operator
+
+  tls:
+    secretName: letsencrypt-wildcard-cert-tartarus.us-prod
