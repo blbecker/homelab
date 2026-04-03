@@ -1,0 +1,82 @@
+{
+  "plugins": {
+    "enabled": true,
+    "allow": ["matrix"]
+  },
+  "hooks": {
+    "internal": {
+      "enabled": true,
+      "entries": {
+        "boot-md": { "enabled": true },
+        "bootstrap-extra-files": { "enabled": true },
+        "session-memory": { "enabled": true },
+        "command-logger": { "enabled": true }
+      }
+    }
+  },
+  "channels": {
+    "matrix": {
+      "enabled": true,
+      "homeserver": "https://continuwuity.tartarus.us",
+      "accessToken": "${MATRIX_ACCESS_TOKEN}",
+      "dm": { "allowFrom": ["@benjamin:bckr.me"] },
+      "deviceName": "OpenClaw Gateway",
+      "groupPolicy": "allowlist",
+      "encryption": true,
+      "groups": {
+        "#general:bckr.me": { "requireMention": true }
+      },
+      "groupAllowFrom": ["@benjamin:bckr.me"],
+
+      "autoJoin": "allowlist",
+      "autoJoinAllowlist": ["#general:bckr.me"],
+      "threadReplies": "inbound",
+      "replyToMode": "off",
+      "streaming": "off"
+    }
+  },
+  "agents": {
+    "defaults": {
+      "model": {
+        "primary": "openrouter/deepseek/deepseek-v3.2",
+        "fallbacks": [
+          "openrouter/deepseek/deepseek-chat-v3.1",
+          "openrouter/qwen/qwen3.5-9b"
+        ]
+      },
+      "memorySearch": {
+        "provider": "openai",
+        "model": "qwen/qwen3-embedding-8b",
+        "remote": {
+          "baseUrl": "https://openrouter.ai/api/v1/",
+          "apiKey": "${OPENROUTER_API_KEY}"
+        }
+      },
+      "heartbeat": {
+        "every": "1h",
+        "target": "last",
+        "directPolicy": "allow",
+        "lightContext": true,
+        "model": "openrouter/qwen/qwen3.5-9b",
+        "includeReasoning": false
+      },
+      "models": {
+        "openrouter/deepseek/deepseek-v3.2": { "alias": "main" },
+        "openrouter/google/gemini-3-flash": { "alias": "flash" },
+        "openrouter/deepseek/deepseek-chat-v3.1": { "alias": "chat" },
+        "openrouter/qwen/qwen3.5-9b": { "alias": "qwen" }
+      },
+      "subagents": {
+        "model": "openrouter/deepseek/deepseek-v3.2",
+        "maxConcurrent": 4,
+        "archiveAfterMinutes": 60
+      },
+
+      "imageModel": {
+        "primary": "openrouter/google/gemini-2.5-flash-image"
+      },
+
+      "contextTokens": 200000
+    }
+  }
+}

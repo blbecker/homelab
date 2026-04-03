@@ -1,0 +1,63 @@
+apiVersion: openclaw.rocks/v1alpha1
+kind: OpenClawInstance
+metadata:
+  name: openclaw-agent
+  namespace: openclaw-agent-dot
+spec:
+  image:
+    repository: ghcr.io/blbecker/openclaw-matrix
+    tag: "0.1.31"
+  config:
+    configMapRef:
+      name: openclaw-agent-config
+      key: openclaw.json
+  envFrom:
+    - secretRef:
+        name: openclaw-agent-dot-keys
+  storage:
+    persistence:
+      enabled: true
+      size: 10Gi
+      storageClass: longhorn
+  skills:
+    - github
+    - gog
+    - summarize
+    - joargp/news-summary
+    - adboio/agentmail
+  extraVolumes:
+    - name: secret-files
+      secret:
+        secretName: openclaw-agent-dot-secret-files
+  extraVolumeMounts:
+    - mountPath: /home/openclaw/.config/ntfy/client.yml
+      subPath: client.yml
+      name: secret-files
+      readOnly: true
+  resources:
+    requests:
+      cpu: "1"
+      memory: 4Gi
+    limits:
+      cpu: "4"
+      memory: 5Gi
+  chromium:
+    enabled: true
+    resources:
+      requests:
+        cpu: "250m"
+        memory: "512Mi"
+      limits:
+        cpu: "1000m"
+        memory: "2Gi"
+    # Pass extra flags to the Chromium process (appended to built-in anti-bot defaults)
+    extraArgs:
+      - "--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+    # Inject extra environment variables into the sidecar
+    extraEnv:
+      - name: DEFAULT_STEALTH
+        value: "true"
+    persistence:
+      enabled: true
+      storageClass: longhorn
+      size: "1Gi"
