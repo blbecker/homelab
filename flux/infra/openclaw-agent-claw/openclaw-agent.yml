@@ -31,7 +31,7 @@ spec:
         secretName: openclaw-agent-claw-secret-files
     - name: obsidian
       persistentVolumeClaim:
-        claimName: syncthing-pvc
+        claimName: syncthing-data
   extraVolumeMounts:
     - mountPath: /mnt/syncthing/obsidian
       name: obsidian
