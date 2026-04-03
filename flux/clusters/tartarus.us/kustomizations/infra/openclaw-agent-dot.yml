@@ -18,5 +18,5 @@ spec:
   healthChecks:
     - apiVersion: openclaw.rocks/v1alpha1
       kind: OpenClawInstance
-      name: openclaw-agent-dot
+      name: dot
       namespace: openclaw-agent-dot
