@@ -3,6 +3,9 @@ kind: Kustomization
 namespace: openclaw-operator
 resources:
   - ./openclaw-agent.yml
+  - ingressroute.yaml
+  - https-redirect-middleware.yml
+  - reflect-prod-cert.yml
 configMapGenerator:
   - name: openclaw-agent-config
     files:
