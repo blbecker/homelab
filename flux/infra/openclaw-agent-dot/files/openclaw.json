@@ -19,7 +19,7 @@
       "enabled": true,
       "homeserver": "https://continuwuity.tartarus.us",
       "accessToken": "${MATRIX_ACCESS_TOKEN}",
-      "dm": { "allowFrom": ["@benjamin:bckr.me", "@rachel:bckr.me"] },
+      "dm": { "allowFrom": ["@rachel:bckr.me"] },
       "deviceName": "OpenClaw Gateway",
 
       "groupPolicy": "allowlist",
@@ -27,7 +27,7 @@
       "groups": {
         "#general:bckr.me": { "requireMention": true }
       },
-      "groupAllowFrom": ["@benjamin:bckr.me", "@rachel:bckr.me"],
+      "groupAllowFrom": ["@rachel:bckr.me"],
 
       "autoJoin": "allowlist",
       "autoJoinAllowlist": ["#general:bckr.me"],
