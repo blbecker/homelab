@@ -4,6 +4,7 @@
     "allow": ["matrix", "brave"],
     "entries": {
       "brave": {
+        "enabled": true,
         "config": {
           "webSearch": {
             "apiKey": "${BRAVE_API_TOKEN}",
