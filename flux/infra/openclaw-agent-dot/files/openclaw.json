@@ -27,7 +27,7 @@
       "groups": {
         "#general:bckr.me": { "requireMention": true },
         "#FamilyRoom:bckr.me": { "requireMention": true },
-        "#cac:bckr.me": { "requireMention": false }
+        "#CAC:bckr.me": { "requireMention": false }
       },
       "groupAllowFrom": ["@rachel:bckr.me"],
 
@@ -35,7 +35,7 @@
       "autoJoinAllowlist": [
         "#general:bckr.me",
         "#FamilyRoom:bckr.me",
-        "#cac:bckr.me"
+        "#CAC:bckr.me"
       ],
       "threadReplies": "inbound",
       "replyToMode": "off",
