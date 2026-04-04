@@ -27,6 +27,8 @@
       "groups": {
         "#general:bckr.me": { "requireMention": true },
         "#FamilyRoom:bckr.me": { "requireMention": true },
+        "#GraceLutheranChurch:bckr.me": { "requireMention": false },
+        "#SoundHealing:bckr.me": { "requireMention": false },
         "#CAC:bckr.me": { "requireMention": false }
       },
       "groupAllowFrom": ["@rachel:bckr.me"],
@@ -35,6 +37,8 @@
       "autoJoinAllowlist": [
         "#general:bckr.me",
         "#FamilyRoom:bckr.me",
+        "#GraceLutheranChurch:bckr.me",
+        "#SoundHealing:bckr.me",
         "#CAC:bckr.me"
       ],
       "threadReplies": "inbound",
