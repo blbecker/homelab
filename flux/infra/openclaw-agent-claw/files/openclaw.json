@@ -24,12 +24,13 @@
       "groupPolicy": "allowlist",
       "encryption": true,
       "groups": {
-        "#general:bckr.me": { "requireMention": true }
+        "#general:bckr.me": { "requireMention": true },
+        "#FamilyRoom:bckr.me": { "requireMention": true }
       },
       "groupAllowFrom": ["@benjamin:bckr.me"],
 
       "autoJoin": "allowlist",
-      "autoJoinAllowlist": ["#general:bckr.me"],
+      "autoJoinAllowlist": ["#general:bckr.me", "#FamilyRoom:bckr.me"],
       "threadReplies": "inbound",
       "replyToMode": "off",
       "streaming": "off"

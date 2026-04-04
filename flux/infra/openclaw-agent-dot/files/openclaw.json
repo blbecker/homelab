@@ -25,12 +25,18 @@
       "groupPolicy": "allowlist",
       "encryption": true,
       "groups": {
-        "#general:bckr.me": { "requireMention": true }
+        "#general:bckr.me": { "requireMention": true },
+        "#FamilyRoom:bckr.me": { "requireMention": true },
+        "#cac:bckr.me": { "requireMention": false }
       },
       "groupAllowFrom": ["@rachel:bckr.me"],
 
       "autoJoin": "allowlist",
-      "autoJoinAllowlist": ["#general:bckr.me"],
+      "autoJoinAllowlist": [
+        "#general:bckr.me",
+        "#FamilyRoom:bckr.me",
+        "#cac:bckr.me"
+      ],
       "threadReplies": "inbound",
       "replyToMode": "off",
       "streaming": "off"
