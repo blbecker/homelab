@@ -1,7 +1,27 @@
 {
   "plugins": {
     "enabled": true,
-    "allow": ["matrix"]
+    "allow": ["matrix", "brave"],
+    "entries": {
+      "brave": {
+        "enabled": true,
+        "config": {
+          "webSearch": {
+            "apiKey": "${BRAVE_API_TOKEN}",
+            "mode": "web"
+          }
+        }
+      }
+    }
+  },
+  "tools": {
+    "web": {
+      "search": {
+        "provider": "brave",
+        "maxResults": 5,
+        "timeoutSeconds": 30
+      }
+    }
   },
   "hooks": {
     "internal": {
