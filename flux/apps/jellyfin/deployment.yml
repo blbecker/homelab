@@ -24,7 +24,7 @@ spec:
         readOnlyRootFilesystem: true
       containers:
         - name: jellyfin
-          image: jellyfin/jellyfin:10.11.7
+          image: jellyfin/jellyfin:10.11.8
           imagePullPolicy: Always
           env:
             - name: TZ
