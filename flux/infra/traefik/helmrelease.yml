@@ -40,8 +40,8 @@ spec:
         enabled: true
 
     additionalArguments:
-      # - "--entrypoints.web.address=:80"
-      # - "--entrypoints.websecure.address=:443"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
       - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
       - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
       - "--entrypoints.web.forwardedHeaders.trustedIPs=10.0.0.0/8"
