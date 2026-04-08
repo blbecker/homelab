@@ -35,7 +35,7 @@ spec:
 
     logs:
       general:
-        level: WARN
+        level: INFO
       access:
         enabled: true
 
