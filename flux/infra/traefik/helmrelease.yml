@@ -24,9 +24,15 @@ spec:
       default:
         defaultCertificate:
           secretName: letsencrypt-wildcard-cert-tartarus.us-prod
-    provider:
+
+    providers:
       kubernetesGateway:
         enabled: true
+    gatewayClass:
+      enabled: false
+    gateway:
+      enabled: false
+
     logs:
       general:
         level: WARN
@@ -41,11 +47,3 @@ spec:
 
     service:
       loadBalancerIP: 192.168.40.84
-
-    ingressRoute:
-      dashboard:
-        enabled: true
-        matchRule: Host(`traefik.tartarus.us`)
-        entryPoints: ["websecure"]
-        tls:
-          secretName: letsencrypt-wildcard-cert-tartarus.us-prod
