@@ -20,7 +20,7 @@ spec:
         intel.feature.node.kubernetes.io/gpu: "true"
       securityContext:
         fsGroup: 2000
-        fsGroupChangePolicy: "Always"
+        fsGroupChangePolicy: "OnRootMismatch"
         readOnlyRootFilesystem: true
       containers:
         - name: jellyfin
