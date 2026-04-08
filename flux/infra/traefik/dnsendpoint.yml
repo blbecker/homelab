@@ -1,0 +1,12 @@
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: traefik-external-dns
+  namespace: traefik
+spec:
+  endpoints:
+    - dnsName: traefik.tartarus.us
+      recordTTL: 300
+      recordType: A
+      targets:
+        - 192.168.40.84
