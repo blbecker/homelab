@@ -3,6 +3,8 @@ kind: Gateway
 metadata:
   name: main-gateway
   namespace: traefik
+  annotations:
+    external-dns.alpha.kubernetes.io/target: "traefik.tartarus.us"
 spec:
   gatewayClassName: traefik
 
