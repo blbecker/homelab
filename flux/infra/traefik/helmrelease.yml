@@ -24,9 +24,12 @@ spec:
       default:
         defaultCertificate:
           secretName: letsencrypt-wildcard-cert-tartarus.us-prod
+    provider:
+      kubernetesGateway:
+        enabled: true
     logs:
       general:
-        level: DEBUG
+        level: WARN
       access:
         enabled: true
 
