@@ -7,7 +7,7 @@ spec:
   chart:
     spec:
       chart: traefik
-      version: 39.0.7
+      version: 23.X.X
       sourceRef:
         kind: HelmRepository
         name: traefik
@@ -20,6 +20,10 @@ spec:
     crds: CreateReplace
   releaseName: traefik
   values: # https://github.com/traefik/traefik-helm-chart/blob/master/traefik/values.yaml
+    tlsStore:
+      default:
+        defaultCertificate:
+          secretName: letsencrypt-wildcard-cert-tartarus.us-prod
     logs:
       general:
         level: DEBUG
@@ -34,3 +38,11 @@ spec:
 
     service:
       loadBalancerIP: 192.168.40.84
+
+    ingressRoute:
+      dashboard:
+        enabled: true
+        matchRule: Host(`traefik.tartarus.us`)
+        entryPoints: ["websecure"]
+        tls:
+          secretName: letsencrypt-wildcard-cert-tartarus.us-prod
