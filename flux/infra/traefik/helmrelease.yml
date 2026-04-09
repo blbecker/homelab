@@ -39,18 +39,5 @@ spec:
       access:
         enabled: true
 
-    ports:
-      web:
-        port: 8000
-        expose:
-          default: true
-        exposedPort: 80
-
-      websecure:
-        port: 443
-        expose:
-          default: true
-        exposedPort: 443
-
     service:
       loadBalancerIP: 192.168.40.84
