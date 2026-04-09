@@ -79,7 +79,8 @@
         "directPolicy": "allow",
         "lightContext": true,
         "model": "openrouter/qwen/qwen3.5-9b",
-        "includeReasoning": false
+        "includeReasoning": true,
+        "isolatedSession": true
       },
       "models": {
         "openrouter/deepseek/deepseek-v3.2": { "alias": "main" },
