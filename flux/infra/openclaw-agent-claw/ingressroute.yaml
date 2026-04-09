@@ -16,7 +16,7 @@ spec:
       services:
         - name: openclaw-agent
           kind: Service
-          port: 18790
+          port: 18789
       middlewares:
         - name: https-redirect-middleware
           namespace: openclaw-operator
