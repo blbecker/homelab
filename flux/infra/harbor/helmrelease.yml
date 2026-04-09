@@ -23,6 +23,8 @@ spec:
         certSource: auto
         auto:
           commonName: harbor.tartarus.us
+        annotations:
+          - traefik.ingress.kubernetes.io/service.serverstransport: harbor-harbor-web@kubernetescrd
     existingSecretAdminPassword: harbor
     existingSecretAdminPasswordKey: adminPassword
     database:
