@@ -9,9 +9,8 @@ no-autoupdate: true
 
 ingress:
   - hostname: mealie.tartarus.us
-    service: https://mealie.mealie.svc.cluster.local:9000
+    service: http://mealie.mealie.svc.cluster.local:9000
     originRequest:
-      noTLSVerify: true
       httpHostHeader: "mealie.tartarus.us"
 
   - hostname: actual.tartarus.us
