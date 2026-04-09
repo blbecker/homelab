@@ -1,0 +1,17 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: multiscrobbler-web-route
+  namespace: multiscrobbler
+spec:
+  parentRefs:
+    - name: main-gateway
+      namespace: traefik
+
+  hostnames:
+    - multiscrobbler.tartarus.us
+
+  rules:
+    - backendRefs:
+        - name: multiscrobbler
+          port: 9078
