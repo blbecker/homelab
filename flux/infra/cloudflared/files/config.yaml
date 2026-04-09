@@ -9,7 +9,7 @@ no-autoupdate: true
 
 ingress:
   - hostname: mealie.tartarus.us
-    service: https://traefik.traefik.svc.cluster.local:443
+    service: https://mealie.mealie.svc.cluster.local:9000
     originRequest:
       noTLSVerify: true
       httpHostHeader: "mealie.tartarus.us"
