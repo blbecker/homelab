@@ -38,28 +38,14 @@ ingress:
     originRequest:
       httpHostHeader: "knot.tartarus.us"
 
-  - hostname: heimdall.tartarus.us
-    service: https://traefik.traefik.svc.cluster.local:443
-    originRequest:
-      noTLSVerify: true
-      httpHostHeader: "heimdall.tartarus.us"
-
   - hostname: irc.tartarus.us
-    service: https://traefik.traefik.svc.cluster.local:443
+    service: http://thelounge.thelounge.svc.cluster.local:9000
     originRequest:
-      noTLSVerify: true
       httpHostHeader: "irc.tartarus.us"
 
-  - hostname: dashy.tartarus.us
-    service: https://traefik.traefik.svc.cluster.local:443
-    originRequest:
-      noTLSVerify: true
-      httpHostHeader: "dashy.tartarus.us"
-
   - hostname: gotify.tartarus.us
-    service: https://traefik.traefik.svc.cluster.local:443
+    service: http://gotify.gotify.svc.cluster.local:80
     originRequest:
-      noTLSVerify: true
       httpHostHeader: "gotify.tartarus.us"
 
   - hostname: uptimekuma.tartarus.us
