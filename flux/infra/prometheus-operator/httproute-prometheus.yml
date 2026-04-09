@@ -1,0 +1,17 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: prometheus-web-route
+  namespace: prometheus-operator
+spec:
+  parentRefs:
+    - name: main-gateway
+      namespace: traefik
+
+  hostnames:
+    - prometheus.tartarus.us
+
+  rules:
+    - backendRefs:
+        - name: prometheus-operator-kube-p-prometheus
+          port: 9090
