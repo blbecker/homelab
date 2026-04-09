@@ -1,0 +1,17 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: plex-web-route
+  namespace: plex
+spec:
+  parentRefs:
+    - name: main-gateway
+      namespace: traefik
+
+  hostnames:
+    - plex.tartarus.us
+
+  rules:
+    - backendRefs:
+        - name: plex
+          port: 32400
