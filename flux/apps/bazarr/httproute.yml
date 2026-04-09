@@ -1,0 +1,17 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: bazarr-web-route
+  namespace: bazarr
+spec:
+  parentRefs:
+    - name: main-gateway
+      namespace: traefik
+
+  hostnames:
+    - bazarr.tartarus.us
+
+  rules:
+    - backendRefs:
+        - name: bazarr
+          port: 6767
