@@ -14,7 +14,7 @@ spec:
     - match: Host(`openclaw-dot.tartarus.us`)
       kind: Rule
       services:
-        - name: openclaw-agent
+        - name: dot
           kind: Service
           port: 18790
       middlewares:
