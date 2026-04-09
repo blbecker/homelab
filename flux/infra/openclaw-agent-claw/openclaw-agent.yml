@@ -27,6 +27,9 @@ spec:
     - summarize
     - joargp/news-summary
     - adboio/agentmail
+  gateway:
+    controlUiOrigins:
+      - "https://openclaw.tartarus.us"
   extraVolumes:
     - name: secret-files
       secret:
