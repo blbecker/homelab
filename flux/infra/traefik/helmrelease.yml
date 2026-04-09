@@ -45,10 +45,6 @@ spec:
         expose:
           default: true
         exposedPort: 80
-        redirections:
-          entryPoint:
-            to: websecure
-            scheme: https
 
       websecure:
         port: 443
