@@ -51,8 +51,6 @@ spec:
         expose:
           default: true
         exposedPort: 443
-        tls:
-          enabled: true
 
     service:
       loadBalancerIP: 192.168.40.84
