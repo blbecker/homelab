@@ -20,11 +20,9 @@ spec:
     expose:
       type: clusterIP
       tls:
-        certSource: auto
-        auto:
-          commonName: harbor.tartarus.us
-        annotations:
-          traefik.ingress.kubernetes.io/service.serverstransport: harbor-harbor-web@kubernetescrd
+        certSource: secret
+        secret:
+          secretName: harbor-cert
     existingSecretAdminPassword: harbor
     existingSecretAdminPasswordKey: adminPassword
     database:
