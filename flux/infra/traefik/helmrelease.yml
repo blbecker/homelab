@@ -41,7 +41,7 @@ spec:
 
     ports:
       web:
-        port: 8080
+        port: 80
         expose:
           default: true
         exposedPort: 80
@@ -51,7 +51,7 @@ spec:
             scheme: https
 
       websecure:
-        port: 8443
+        port: 443
         expose:
           default: true
         exposedPort: 443
