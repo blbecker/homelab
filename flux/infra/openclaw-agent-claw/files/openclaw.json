@@ -79,7 +79,7 @@
         "directPolicy": "allow",
         "lightContext": true,
         "model": "openrouter/qwen/qwen3.5-9b",
-        "includeReasoning": true,
+        "includeReasoning": false,
         "isolatedSession": true
       },
       "models": {
