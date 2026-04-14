@@ -7,7 +7,7 @@ spec:
   chart:
     spec:
       chart: switchboard
-      version: 0.6.X
+      version: 0.6.8
       sourceRef:
         kind: HelmRepository
         name: switchboard
