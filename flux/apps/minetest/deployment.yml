@@ -23,7 +23,7 @@ spec:
         readOnlyRootFilesystem: true
       containers:
         - name: minetest
-          image: docker.io/linuxserver/luanti:5.15.1
+          image: docker.io/linuxserver/luanti:5.15.2
           env:
             - name: TZ
               value: "America/Puerto_Rico"
