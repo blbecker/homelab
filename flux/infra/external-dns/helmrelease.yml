@@ -7,10 +7,10 @@ spec:
   chart:
     spec:
       chart: external-dns
-      version: 6.X.X
+      version: 1.20.0
       sourceRef:
         kind: HelmRepository
-        name: bitnami
+        name: external-dns
         namespace: flux-system
   interval: 15m
   timeout: 5m
