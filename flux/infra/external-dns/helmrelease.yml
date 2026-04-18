@@ -20,10 +20,14 @@ spec:
   upgrade:
     crds: CreateReplace
   values:
-    provider: cloudflare
-    cloudflare:
-      secretName: cloudflare-api-token
-      proxied: false
+    provider:
+      name: cloudflare
+    env:
+      - name: CF_API_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: cloudflare-api-token
+            key: cloudflare_api_token
     crd:
       create: true
     sources:
