@@ -7,7 +7,7 @@ spec:
   chart:
     spec:
       chart: kube-prometheus-stack
-      version: 67.X.X
+      version: 83.6.0
       sourceRef:
         kind: HelmRepository
         name: prometheus-community
@@ -15,6 +15,10 @@ spec:
   interval: 15m
   timeout: 5m
   releaseName: prometheus-operator
+  install:
+    crds: CreateReplace
+  upgrade:
+    crds: CreateReplace
 
   values:
     grafana:
