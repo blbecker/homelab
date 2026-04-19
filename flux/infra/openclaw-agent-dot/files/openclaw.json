@@ -1,9 +1,4 @@
 {
-  "gateway": {
-    "auth": {
-      "mode": "none"
-    }
-  },
   "plugins": {
     "enabled": true,
     "allow": ["matrix", "brave"],
