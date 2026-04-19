@@ -23,6 +23,7 @@ spec:
       storageClass: longhorn
   plugins:
     - brave
+    - device
   skills:
     - github
     - gog
