@@ -1,4 +1,9 @@
 {
+  "gateway": {
+    "controlUi": {
+      "allowInsecureAuth": true
+    }
+  },
   "plugins": {
     "enabled": true,
     "allow": ["matrix", "brave"],
