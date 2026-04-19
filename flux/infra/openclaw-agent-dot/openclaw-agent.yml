@@ -7,6 +7,8 @@ spec:
   image:
     repository: ghcr.io/blbecker/openclaw-matrix
     tag: "0.1.46"
+  gateway:
+    existingSecret: openclaw-agent-dot-gw-token
   config:
     configMapRef:
       name: openclaw-agent-config
