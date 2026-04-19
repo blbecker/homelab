@@ -10,4 +10,4 @@ spec:
     operation: copy
   url: oci://ghcr.io/openclaw-rocks/charts/openclaw-operator
   ref:
-    semver: ">=0.24.0"
+    semver: "0.28.0"
