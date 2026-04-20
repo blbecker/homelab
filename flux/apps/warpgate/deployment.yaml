@@ -25,7 +25,7 @@ spec:
         readOnlyRootFilesystem: true
       containers:
         - name: warpgate
-          image: ghcr.io/warp-tech/warpgate:0.21.1
+          image: ghcr.io/warp-tech/warpgate:0.23.0
           env:
             - name: TZ
               value: "America/Puerto_Rico"
