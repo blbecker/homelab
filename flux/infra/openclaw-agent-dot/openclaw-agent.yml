@@ -33,11 +33,16 @@ spec:
     - name: secret-files
       secret:
         secretName: openclaw-agent-dot-secret-files
+    - name: gog-config
+      persistentVolumeClaim:
+        claimName: gog-config
   extraVolumeMounts:
     - mountPath: /home/openclaw/.config/ntfy/client.yml
       subPath: client.yml
       name: secret-files
       readOnly: true
+    - mountPath: /home/openclaw/.config/gogcli
+      name: gog-config
   resources:
     requests:
       cpu: "1"

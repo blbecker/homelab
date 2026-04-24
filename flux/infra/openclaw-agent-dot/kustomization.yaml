@@ -3,8 +3,9 @@ kind: Kustomization
 namespace: openclaw-agent-dot
 resources:
   - ./openclaw-agent.yml
-  - ingressroute.yaml
+  - gog-config-pvc.yml
   - https-redirect-middleware.yml
+  - ingressroute.yaml
   - reflect-prod-cert.yml
 configMapGenerator:
   - name: openclaw-agent-config
