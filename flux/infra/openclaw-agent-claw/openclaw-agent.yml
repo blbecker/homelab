@@ -37,11 +37,16 @@ spec:
     - name: obsidian
       persistentVolumeClaim:
         claimName: syncthing-data
+    - name: gog-config
+      persistentVolumeClaim:
+        claimName: gog-config
   extraVolumeMounts:
     - mountPath: /mnt/syncthing/obsidian
       name: obsidian
       subPath: obsidian
       readOnly: true
+    - mountPath: /home/openclaw/.config/gogcli
+      name: gog-config
     - mountPath: /home/openclaw/.config/ntfy/client.yml
       subPath: client.yml
       name: secret-files
