@@ -72,7 +72,7 @@
         "primary": "openrouter/deepseek/deepseek-v3.2",
         "fallbacks": [
           "openrouter/deepseek/deepseek-chat-v3.1",
-          "openrouter/qwen/qwen3.5-9b"
+          "openrouter/qwen/qwen3.5-flash-02-23"
         ]
       },
       "memorySearch": {
@@ -88,25 +88,25 @@
         "target": "last",
         "directPolicy": "allow",
         "lightContext": true,
-        "model": "openrouter/qwen/qwen3.5-9b",
+        "model": "openrouter/qwen/qwen3.5-flash-02-23",
         "includeReasoning": false
+      },
+      "imageModel": {
+        "primary": "openrouter/qwen/qwen3.5-flash-02-23"
+      },
+      "imageGenerationModel": {
+        "primary": "openrouter/google/gemini-3.1-flash-image-preview"
       },
       "models": {
         "openrouter/deepseek/deepseek-v3.2": { "alias": "main" },
         "openrouter/google/gemini-3-flash": { "alias": "flash" },
-        "openrouter/deepseek/deepseek-chat-v3.1": { "alias": "chat" },
         "openrouter/qwen/qwen3.5-9b": { "alias": "qwen" }
       },
       "subagents": {
-        "model": "openrouter/deepseek/deepseek-v3.2",
+        "model": "openrouter/deepseek/deepseek-v4-flash",
         "maxConcurrent": 4,
         "archiveAfterMinutes": 60
       },
-
-      "imageGenerationModel": {
-        "primary": "openrouter/google/gemini-2.5-flash-image"
-      },
-
       "contextTokens": 200000
     }
   }
