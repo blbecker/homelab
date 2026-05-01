@@ -1,10 +1,10 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "flux": {
-    "fileMatch": ["flux/.+\\.(yml|yaml)$"]
+    "managerFilePatterns": ["/flux/.+\\.(yml|yaml)$/"]
   },
   "kubernetes": {
-    "fileMatch": [".+\\.(yml|yaml)$"]
+    "managerFilePatterns": ["/.+\\.(yml|yaml)$/"]
   },
   "packageRules": [
     {
@@ -20,8 +20,8 @@
       "allowedVersions": "<=5.0.0"
     },
     {
-      "matchPackagePatterns": [".*fluxcd.*", "HelmRepository", "HelmRelease"],
-      "enabled": false
+      "enabled": false,
+      "matchPackageNames": ["/.*fluxcd.*/", "/HelmRepository/", "/HelmRelease/"]
     }
   ],
   "dependencyDashboard": true
