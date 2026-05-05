@@ -97,7 +97,7 @@
         "maxConcurrent": 4,
         "archiveAfterMinutes": 60
       },
-      "contextTokens": 200000
+      "contextTokens": 150000
     }
   }
 }
