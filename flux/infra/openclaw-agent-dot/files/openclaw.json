@@ -107,7 +107,10 @@
         "maxConcurrent": 4,
         "archiveAfterMinutes": 60
       },
-      "contextTokens": 150000
+      "contextTokens": 150000,
+      "compaction": {
+        "reserveTokensFloor": 25000
+      }
     }
   }
 }
