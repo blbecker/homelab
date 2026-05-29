@@ -3,8 +3,10 @@ kind: PersistentVolumeClaim
 metadata:
   name: wordpress-data
   namespace: wordpress
+  annotations:
+    nfs.io/storage-path: "media"
 spec:
-  storageClassName: longhorn
+  storageClassName: qnap-fixed-name-nfs-client
   accessModes:
     - ReadWriteOnce
   resources:
