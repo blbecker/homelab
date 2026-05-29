@@ -5,7 +5,7 @@ metadata:
   namespace: wordpress
 spec:
   parentRefs:
-    - name: main-gateway
+    - name: wordpress-gateway
       namespace: traefik
 
   hostnames:
