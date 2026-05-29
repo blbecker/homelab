@@ -21,6 +21,7 @@ spec:
       existingClaim: wordpress-data
     service:
       type: ClusterIP
+    wordpressConfigureCache: true
     memcached:
       enabled: true
     mariadb:
