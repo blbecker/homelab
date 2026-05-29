@@ -11,6 +11,7 @@ spec:
   hostnames:
     - wordpress.tartarus.us
     - test-site.wordpress.tartarus.us
+    - heer2serve.wordpress.tartarus.us
   rules:
     - backendRefs:
         - name: wordpress
