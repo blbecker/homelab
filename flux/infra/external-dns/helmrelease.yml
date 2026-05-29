@@ -33,3 +33,4 @@ spec:
     sources:
       - crd
       - traefik-proxy
+      - gateway-httproute
