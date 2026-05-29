@@ -10,7 +10,7 @@ spec:
 
   hostnames:
     - wordpress.tartarus.us
-
+    - test-site.wordpress.tartarus.us
   rules:
     - backendRefs:
         - name: wordpress
