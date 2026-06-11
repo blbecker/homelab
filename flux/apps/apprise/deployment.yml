@@ -26,7 +26,7 @@ spec:
         readOnlyRootFilesystem: true
       containers:
         - name: apprise
-          image: docker.io/linuxserver/apprise-api:1.4.1
+          image: docker.io/linuxserver/apprise-api:1.5.0
           env:
             - name: TZ
               value: "America/Puerto_Rico"
