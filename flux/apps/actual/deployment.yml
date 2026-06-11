@@ -23,7 +23,7 @@ spec:
         # fsGroupChangePolicy: "Always"
       containers:
         - name: actual
-          image: docker.io/actualbudget/actual-server:26.5.2-alpine
+          image: docker.io/actualbudget/actual-server:26.6.0-alpine
           imagePullPolicy: Always
           env:
             - name: TZ
