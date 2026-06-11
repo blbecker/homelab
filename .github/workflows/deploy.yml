@@ -62,7 +62,7 @@ jobs:
   kube-conform:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/yannh/kubeconform:v0.7.0-alpine
+      image: ghcr.io/yannh/kubeconform:v0.8.0-alpine
       volumes:
         # Mount the host directory into the container
         - ${{ github.workspace }}:/data
