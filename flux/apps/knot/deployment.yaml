@@ -37,7 +37,7 @@ spec:
               name: knot-keys
       containers:
         - name: knot
-          image: docker.io/tngl/knot:v1.10.0-alpha
+          image: atcr.io/tangled.org/knot:v1.14.1-alpha
           env:
             - name: TZ
               value: "America/Puerto_Rico"
