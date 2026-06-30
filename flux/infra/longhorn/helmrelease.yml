@@ -70,7 +70,7 @@ spec:
       defaultDataPath: /mnt/longhorn
       defaultDataLocality: best-effort
       #   replicaSoftAntiAffinity: ~
-      replicaAutoBalance: least-effort
+      replicaAutoBalance: best-effort
       #   storageOverProvisioningPercentage: ~
       #   storageMinimalAvailablePercentage: ~
       #   storageReservedPercentageForDefaultDisk: ~
