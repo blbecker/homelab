@@ -42,11 +42,10 @@ spec:
             - mountPath: /config
               name: thelounge-config
           livenessProbe:
-            httpGet:
-              path: /
+            tcpSocket:
               port: thelounge
             initialDelaySeconds: 10
-            timeoutSeconds: 10
+            periodSeconds: 10
           readinessProbe:
             httpGet:
               path: /
