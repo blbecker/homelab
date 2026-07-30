@@ -25,7 +25,7 @@ spec:
         readOnlyRootFilesystem: true
       containers:
         - name: multiscrobbler
-          image: docker.io/foxxmd/multi-scrobbler:0.14.1
+          image: docker.io/foxxmd/multi-scrobbler:0.15.0
           env:
             - name: TZ
               value: "America/Puerto_Rico"
