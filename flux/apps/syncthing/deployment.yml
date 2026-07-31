@@ -27,7 +27,7 @@ spec:
         readOnlyRootFilesystem: true
       containers:
         - name: syncthing
-          image: docker.io/syncthing/syncthing:2.1.1
+          image: docker.io/syncthing/syncthing:2.1.2
           env:
             - name: TZ
               value: "America/Puerto_Rico"
