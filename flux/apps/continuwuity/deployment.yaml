@@ -25,7 +25,7 @@ spec:
         readOnlyRootFilesystem: true
       containers:
         - name: continuwuity
-          image: forgejo.ellis.link/continuwuation/continuwuity:v0.5.10-maxperf
+          image: forgejo.ellis.link/continuwuation/continuwuity:v26.7.2-maxperf
           env:
             - name: TZ
               value: "America/Puerto_Rico"
