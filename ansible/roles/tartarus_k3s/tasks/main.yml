@@ -158,6 +158,15 @@
     enabled: true
     daemon-reload: true
   when: k3s_role == 'agent'
+
+- name: Prune unused k3s images weekly
+  ansible.builtin.cron:
+    name: "k3s image prune"
+    user: root
+    minute: "0"
+    hour: "3"
+    weekday: "0" # Sunday
+    job: "/usr/local/bin/k3s crictl rmi --prune >/var/log/k3s-image-prune.log 2>&1"
 # - name: Add A records for k8s controllers
 #   community.general.cloudflare_dns:
 #     domain: tartarus.us
