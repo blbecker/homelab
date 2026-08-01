@@ -25,7 +25,7 @@ spec:
             value: "1"
       containers:
         - name: cloudflare-ddns
-          image: docker.io/favonia/cloudflare-ddns:1.16.2
+          image: docker.io/favonia/cloudflare-ddns:1.17.0
           securityContext:
             capabilities:
               drop:
