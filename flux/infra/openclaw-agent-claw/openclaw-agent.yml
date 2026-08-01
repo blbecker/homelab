@@ -8,6 +8,7 @@ spec:
     repository: ghcr.io/blbecker/openclaw-matrix
     tag: "0.1.52"
   config:
+    mergeMode: merge
     configMapRef:
       name: openclaw-agent-config
       key: openclaw.json
