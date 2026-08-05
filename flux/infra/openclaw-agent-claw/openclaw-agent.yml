@@ -6,7 +6,7 @@ metadata:
 spec:
   image:
     repository: ghcr.io/blbecker/openclaw-matrix
-    tag: "0.1.53"
+    tag: "0.1.54"
   config:
     mergeMode: overwrite
     configMapRef:
