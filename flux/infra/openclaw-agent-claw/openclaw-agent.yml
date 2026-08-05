@@ -29,7 +29,7 @@ spec:
     - joargp/news-summary
     - adboio/agentmail
   gateway:
-    enabled: false
+    # enabled: false
     controlUiOrigins:
       - "https://openclaw.tartarus.us"
   extraVolumes:
