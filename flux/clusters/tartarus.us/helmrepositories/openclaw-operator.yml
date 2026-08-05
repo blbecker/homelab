@@ -8,6 +8,6 @@ spec:
   layerSelector:
     mediaType: "application/vnd.cncf.helm.chart.content.v1.tar+gzip"
     operation: copy
-  url: oci://ghcr.io/openclaw-rocks/charts/openclaw-operator
+  url: oci://ghcr.io/paperclipinc/charts/openclaw-operator
   ref:
     semver: "0.38.3"
