@@ -73,16 +73,6 @@
           "apiKey": "${OPENROUTER_API_KEY}"
         }
       },
-      "mediaModels": {
-        "image": {
-          "primary": "openrouter/google/gemini-3.1-flash-image-preview",
-          "timeoutMs": 180000
-        },
-        "music": {
-          "primary": "openrouter/google/lyria-3-pro-preview",
-          "timeoutMs": 180000
-        }
-      },
       "heartbeat": {
         "every": "1h",
         "target": "last",
