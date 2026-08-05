@@ -66,7 +66,7 @@
         ]
       },
       "memorySearch": {
-        "provider": "openai",
+        "provider": "openai-compatible",
         "model": "qwen/qwen3-embedding-8b",
         "remote": {
           "baseUrl": "https://openrouter.ai/api/v1/",
