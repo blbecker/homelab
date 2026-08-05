@@ -14,10 +14,6 @@
       }
     }
   },
-  "gateway": {
-    "mode": "remote",
-    "allowedOrigins": ["*"]
-  },
   "tools": {
     "web": {
       "search": {
