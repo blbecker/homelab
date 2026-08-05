@@ -41,6 +41,7 @@
     "matrix": {
       "enabled": true,
       "homeserver": "https://continuwuity.tartarus.us",
+      "accessToken": "${MATRIX_ACCESS_TOKEN}",
       "dm": { "allowFrom": ["@benjamin:bckr.me"] },
       "deviceName": "OpenClaw Gateway",
       "groupPolicy": "allowlist",
