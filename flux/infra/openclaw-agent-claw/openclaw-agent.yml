@@ -20,8 +20,8 @@ spec:
       enabled: true
       size: 10Gi
       storageClass: longhorn
-  plugins:
-    - brave
+  # plugins:
+  #   - brave
   skills:
     - github
     - gog
