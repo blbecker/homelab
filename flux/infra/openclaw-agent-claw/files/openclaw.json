@@ -66,11 +66,21 @@
         ]
       },
       "memorySearch": {
-        "provider": "openai",
+        "provider": "openai-compatible",
         "model": "qwen/qwen3-embedding-8b",
         "remote": {
           "baseUrl": "https://openrouter.ai/api/v1/",
           "apiKey": "${OPENROUTER_API_KEY}"
+        }
+      },
+      "mediaModels": {
+        "image": {
+          "primary": "openrouter/google/gemini-3.1-flash-image-preview",
+          "timeoutMs": 180000
+        },
+        "music": {
+          "primary": "openrouter/google/lyria-3-pro-preview",
+          "timeoutMs": 180000
         }
       },
       "heartbeat": {
@@ -81,12 +91,6 @@
         "model": "openrouter/qwen/qwen3.5-flash-02-23",
         "includeReasoning": false,
         "isolatedSession": true
-      },
-      "imageModel": {
-        "primary": "openrouter/qwen/qwen3.5-flash-02-23"
-      },
-      "imageGenerationModel": {
-        "primary": "openrouter/google/gemini-3.1-flash-image-preview"
       },
       "models": {
         "openrouter/deepseek/deepseek-v3.2": { "alias": "main" },
