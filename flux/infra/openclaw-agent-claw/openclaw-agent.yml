@@ -22,6 +22,11 @@ spec:
       storageClass: longhorn
   # plugins:
   #   - brave
+  security:
+    containerSecurityContext:
+      capabilities:
+        drop: ["ALL"]
+        add: ["FOWNER"]
   skills:
     - github
     - gog
