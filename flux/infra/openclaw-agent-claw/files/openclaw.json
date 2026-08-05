@@ -14,9 +14,6 @@
       }
     }
   },
-  "gateway": {
-    "mode": "local"
-  },
   "tools": {
     "web": {
       "search": {
