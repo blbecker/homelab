@@ -15,6 +15,9 @@
     }
   },
   "tools": {
+    "exec": {
+      "mode": "full"
+    },
     "web": {
       "search": {
         "provider": "brave",
