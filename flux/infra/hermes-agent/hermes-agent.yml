@@ -1,0 +1,64 @@
+apiVersion: agents.hermeum.app/v1alpha1
+kind: HermesAgent
+metadata:
+  name: hermes
+spec:
+  hermes:
+    skills: # optional; omit if no skills are needed
+      - identifier: official/finance/stocks # required; skill path or HTTP(S) URL to a SKILL.md
+        category: finance # optional; category folder to install into
+        name: stocks # optional; overrides the skill name from SKILL.md frontmatter
+        force: false #
+      - identifier: optional-skills/email/agentmail
+        category: email
+        name: agentmail
+        force: false
+    config:
+      raw: # optional; omit if no custom config.yml is needed
+        tool_loop_guardrails:
+          warnings_enabled: true # inject warnings into tool results (default: true)
+          hard_stop_enabled: true # also BLOCK the call past the hard-stop threshold (default: false)
+        mcp_servers:
+          agentmail:
+            command: "npx"
+            args: ["-y", "agentmail-mcp"]
+            env:
+              AGENTMAIL_API_KEY: "${env:AGENTMAIL_API_KEY}"
+        matrix:
+          require_mention: true # Require @mention in rooms (default: true)
+          allowed_users: # Matrix users allowed to trigger agent turns
+            - "@benjamin:bckr.me"
+          allowed_rooms: # Matrix rooms allowed to trigger agent turns
+            - "!general:bckr.me"
+          ignore_user_patterns: # Bridge/appservice ghost users to ignore
+            - "^@telegram_"
+            - "^@whatsapp_"
+          process_notices: false # Ignore m.notice by default
+          session_scope: room # auto|room|thread; room is recommended for project rooms
+          auto_thread: true # Auto-create threads for responses (default: true)
+          dm_mention_threads: true # Create thread when @mentioned in DM (default: false)
+          max_message_length: 16000 # Outbound chunk size in chars (default: 16000, max: 65535)
+        model:
+          provider: openrouter
+          default: deepseek/deepseek-v3.2
+        auxiliary:
+          title:
+            provider: openrouter
+            model: ~google/gemini-flash-latest
+          vision:
+            provider: openrouter
+            model: ~google/gemini-flash-latest
+          compression:
+            provider: openrouter
+            model: ~google/gemini-flash-latest
+    envFrom:
+      - secretRef:
+          name: hermes-agent-secrets
+      - configMapRef:
+          name: hermes-agent-config
+    storage:
+      persistence:
+        enabled: true
+        size: 10Gi # optional; defaults to 10Gi
+        storageClassName: longhorn # optional; omit to use the cluster default StorageClass
+    initChownData: true # optional; defaults to false

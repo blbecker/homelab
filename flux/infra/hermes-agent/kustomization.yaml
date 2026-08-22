@@ -1,0 +1,11 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: hermes-agent
+resources:
+  # - gog-config-pvc.yml
+  # - https-redirect-middleware.yml
+  # - ingressroute.yaml
+  - hermes-agent.yml
+  - hermes-agent-config.yml
+  # - reflect-prod-cert.yml
+  # - syncthing-pvc.yml
