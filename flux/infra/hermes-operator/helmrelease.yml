@@ -1,0 +1,14 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: hermes-operator
+  namespace: hermes-operator
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: hermes-operator
+    namespace: flux-system
+  interval: 5m
+  timeout: 5m
+  releaseName: hermes-operator
+  values: # https://artifacthub.io/packages/helm/openclaw-operator/openclaw-operator?modal=values
