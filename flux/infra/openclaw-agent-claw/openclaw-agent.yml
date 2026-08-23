@@ -4,6 +4,7 @@ metadata:
   name: openclaw-agent
   namespace: openclaw-operator
 spec:
+  suspended: true
   image:
     repository: ghcr.io/blbecker/openclaw-matrix
     tag: "0.1.53"
