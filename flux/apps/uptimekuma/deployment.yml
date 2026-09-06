@@ -23,7 +23,7 @@ spec:
         # fsGroupChangePolicy: "Always"
       containers:
         - name: uptimekuma
-          image: docker.io/louislam/uptime-kuma:2.5.0-slim
+          image: docker.io/louislam/uptime-kuma:2.5.3-slim
           imagePullPolicy: Always
           env:
             - name: TZ
