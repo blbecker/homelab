@@ -13,7 +13,7 @@ spec:
 
   storage:
     storageClass: longhorn-no-replication
-    size: 20Gi
+    size: 5Gi
 
   walStorage:
     storageClass: longhorn-no-replication
