@@ -17,7 +17,7 @@ spec:
 
   walStorage:
     storageClass: longhorn-no-replication
-    size: 10Gi
+    size: 3Gi
 
   # see https://cloudnative-pg.io/documentation/1.22/kubernetes_upgrade/
   nodeMaintenanceWindow:
@@ -30,14 +30,6 @@ spec:
 
   managed:
     roles:
-      - name: awx
-        ensure: present
-        comment: Ansible AWX (Tower)
-        login: true
-        superuser: false
-        passwordSecret:
-          name: awx-pg-user-creds
-
       - name: gotify
         ensure: present
         comment: Gotify notification server
@@ -45,6 +37,7 @@ spec:
         superuser: false
         passwordSecret:
           name: gotify-pg-user-creds
+
       - name: harbor
         ensure: present
         comment: Harbor
