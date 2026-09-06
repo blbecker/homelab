@@ -6,3 +6,7 @@ metadata:
 data:
   CONFIG_DIR: /config/multiscrobber-config
   BASE_URL: https://multiscrobbler.tartarus.us
+  TEALFM_ID: benjamin.bckr.tealfm
+  TEALFM_NAME: Benjamin's TealFM
+  SUBSONIC_ID: navidrome.tartarus.us
+  SUBSONIC_NAME: Navidrome
