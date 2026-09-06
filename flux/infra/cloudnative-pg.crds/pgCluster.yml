@@ -19,6 +19,10 @@ spec:
     storageClass: longhorn-no-replication
     size: 10Gi
 
+  # see https://cloudnative-pg.io/documentation/1.22/kubernetes_upgrade/
+  nodeMaintenanceWindow:
+    reusePVC: false # rebuild from other replica instead
+
   affinity:
     enablePodAntiAffinity: true
     topologyKey: kubernetes.io/hostname
