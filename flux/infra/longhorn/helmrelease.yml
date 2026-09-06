@@ -78,28 +78,28 @@ spec:
       #   defaultReplicaCount: ~
       #   defaultLonghornStaticStorageClass: ~
       backupstorePollInterval: 0
-    #   failedBackupTTL: ~
-    #   restoreVolumeRecurringJobs: ~
-    #   recurringSuccessfulJobsHistoryLimit: ~
-    #   recurringFailedJobsHistoryLimit: ~
-    #   supportBundleFailedHistoryLimit: ~
-    #   taintToleration: ~
-    #   systemManagedComponentsNodeSelector: ~
-    #   priorityClass: ~
-    #   autoSalvage: ~
-    #   autoDeletePodWhenVolumeDetachedUnexpectedly: ~
-    #   disableSchedulingOnCordonedNode: ~
-    #   replicaZoneSoftAntiAffinity: ~
-    #   nodeDownPodDeletionPolicy: ~
-    #   nodeDrainPolicy: ~
-    #   replicaReplenishmentWaitInterval: ~
-    #   concurrentReplicaRebuildPerNodeLimit: ~
-    #   concurrentVolumeBackupRestorePerNodeLimit: ~
-    #   disableRevisionCounter: ~
-    #   systemManagedPodsImagePullPolicy: ~
-    #   allowVolumeCreationWithDegradedAvailability: ~
-    #   autoCleanupSystemGeneratedSnapshot: ~
-    #   concurrentAutomaticEngineUpgradePerNodeLimit: ~
+      #   failedBackupTTL: ~
+      #   restoreVolumeRecurringJobs: ~
+      #   recurringSuccessfulJobsHistoryLimit: ~
+      #   recurringFailedJobsHistoryLimit: ~
+      #   supportBundleFailedHistoryLimit: ~
+      #   taintToleration: ~
+      #   systemManagedComponentsNodeSelector: ~
+      #   priorityClass: ~
+      #   autoSalvage: ~
+      #   autoDeletePodWhenVolumeDetachedUnexpectedly: ~
+      #   disableSchedulingOnCordonedNode: ~
+      #   replicaZoneSoftAntiAffinity: ~
+      #   nodeDownPodDeletionPolicy: ~
+      #   nodeDrainPolicy: ~
+      #   replicaReplenishmentWaitInterval: ~
+      #   concurrentReplicaRebuildPerNodeLimit: ~
+      #   concurrentVolumeBackupRestorePerNodeLimit: ~
+      #   disableRevisionCounter: ~
+      #   systemManagedPodsImagePullPolicy: ~
+      #   allowVolumeCreationWithDegradedAvailability: ~
+      #   autoCleanupSystemGeneratedSnapshot: ~
+      concurrentAutomaticEngineUpgradePerNodeLimit: 3
     #   backingImageCleanupWaitInterval: ~
     #   backingImageRecoveryWaitInterval: ~
     #   guaranteedInstanceManagerCPU: ~
