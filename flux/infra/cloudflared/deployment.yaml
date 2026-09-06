@@ -5,34 +5,45 @@ metadata:
   name: cloudflared
   namespace: cloudflared
 spec:
+  replicas: 2
+
   selector:
     matchLabels:
       app: cloudflared
-  replicas: 1
+
   template:
     metadata:
       labels:
         app: cloudflared
+
     spec:
       automountServiceAccountToken: false
+
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  app: cloudflared
+              topologyKey: kubernetes.io/hostname
+
       securityContext:
         fsGroup: 20000
         fsGroupChangePolicy: "Always"
         readOnlyRootFilesystem: true
         seccompProfile:
           type: RuntimeDefault
+
       containers:
         - name: cloudflared
-          image: docker.io/cloudflare/cloudflared:2026.7.3
-          imagePullPolicy: Always
+          image: docker.io/cloudflare/cloudflared:2026.8.3
+          imagePullPolicy: IfNotPresent
           args:
             - tunnel
-            # Points cloudflared to the config file, which configures what
-            # cloudflared will actually do. This file is created by a ConfigMap
-            # below.
             - --config
             - /etc/cloudflared/config/config.yaml
             - run
+
           securityContext:
             runAsUser: 20000
             readOnlyRootFilesystem: true
@@ -41,39 +52,40 @@ spec:
               drop:
                 - ALL
                 - NET_RAW
+
           livenessProbe:
             tcpSocket:
               port: 2000
             initialDelaySeconds: 10
             periodSeconds: 10
+
           readinessProbe:
             httpGet:
               path: /ready
               port: 2000
             failureThreshold: 1
             periodSeconds: 10
+
           resources:
             requests:
-              memory: "100M"
-              cpu: ".25"
+              cpu: 100m
+              memory: 64Mi
             limits:
-              memory: "100M"
-              cpu: ".25"
+              cpu: 500m
+              memory: 256Mi
+
           volumeMounts:
             - name: config
               mountPath: /etc/cloudflared/config
               readOnly: true
-            # Each tunnel has an associated "credentials file" which authorizes machines
-            # to run the tunnel. cloudflared will read this file from its local filesystem,
-            # and it'll be stored in a k8s secret.
             - name: creds
               mountPath: /etc/cloudflared/creds
               readOnly: true
+
       volumes:
         - name: creds
           secret:
             secretName: cloudflare-tunnel-json
-        # Create a config.yaml file from the ConfigMap below.
         - name: config
           configMap:
             name: cloudflared
