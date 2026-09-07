@@ -9,7 +9,7 @@ no-autoupdate: true
 
 ingress:
   - hostname: authentik.tartarus.us
-    service: http://authentik.gotify.svc.cluster.local:9443
+    service: http://authentik.authentik.svc.cluster.local:9000
     originRequest:
       httpHostHeader: "authentik.tartarus.us"
 
