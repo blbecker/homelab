@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: authentik-custom-templates
+  annotations:
+    nfs.io/storage-path: "authentik/custom-templates"
+spec:
+  storageClassName: qnap-fixed-name-nfs-client
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 5Gi
