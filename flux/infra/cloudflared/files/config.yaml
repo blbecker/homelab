@@ -73,5 +73,11 @@ ingress:
     originRequest:
       httpHostHeader: "immich.tartarus.us"
 
+  - hostname: pds.tartarus.us
+    service: http://tranquil-pds.tranquil-pds.svc.cluster.local:3000
+
+  - hostname: "*.pds.tartarus.us"
+    service: http://tranquil-pds.tranquil-pds.svc.cluster.local:3000
+
   # This rule matches any traffic which didn't match a previous rule, and responds with HTTP 404.
   - service: http_status:404

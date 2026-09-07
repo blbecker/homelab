@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tranquil-pds
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: tranquil-pds
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: tranquil-pds
+    spec:
+      imagePullSecrets:
+        - name: atcr-registry
+      dnsConfig:
+        options:
+          - name: ndots
+            value: "1"
+      securityContext:
+        readOnlyRootFilesystem: true
+        fsGroup: 2000
+        fsGroupChangePolicy: "Always"
+      containers:
+        - name: tranquil-pds
+          image: atcr.io/tranquil.farm/tranquil-pds:latest
+          imagePullPolicy: Always
+          env:
+            - name: TZ
+              value: "America/Puerto_Rico"
+          envFrom:
+            - secretRef:
+                name: tranquil-pds-secrets
+          ports:
+            - name: tranquil-pds
+              containerPort: 3000
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /etc/tranquil-pds/
+              readOnly: true
+              name: config
+            - mountPath: /var/lib/tranquil-pds/store
+              name: tranquil-pds-store
+            - mountPath: /var/lib/tranquil-pds/blobs
+              name: tranquil-pds-blobs
+
+          livenessProbe:
+            tcpSocket:
+              port: tranquil-pds
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /xrpc/_health
+              port: tranquil-pds
+            initialDelaySeconds: 10
+            timeoutSeconds: 5
+          resources:
+            requests:
+              memory: "512M"
+              cpu: ".5"
+            limits:
+              memory: "1G"
+              cpu: "1"
+      volumes:
+        - name: tranquil-pds-store
+          persistentVolumeClaim:
+            claimName: tranquil-pds-store
+        - name: tranquil-pds-blobs
+          persistentVolumeClaim:
+            claimName: tranquil-pds-blobs
+        - name: config
+          configMap:
+            name: tranquil-pds-config
