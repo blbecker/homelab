@@ -69,3 +69,11 @@ spec:
         superuser: true
         passwordSecret:
           name: immich-pg-user-creds
+
+      - name: tranquil-pds
+        ensure: present
+        comment: tranquil-pds server
+        login: true
+        superuser: false
+        passwordSecret:
+          name: tranquil-pds-pg-user-creds

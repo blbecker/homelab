@@ -1,0 +1,10 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: tranquil-pds
+  namespace: cloudnative-pg
+spec:
+  name: tranquil-pds
+  owner: tranquil-pds
+  cluster:
+    name: main
