@@ -26,16 +26,20 @@ spec:
         readOnlyRootFilesystem: true
       containers:
         - name: apprise
-          image: docker.io/linuxserver/apprise-api:1.5.4
+          image: docker.io/caronc/apprise:v1.5.4
           env:
             - name: TZ
               value: "America/Puerto_Rico"
-            - name: UID
+            - name: PUID
               value: "2000"
-            - name: GID
+            - name: PGID
               value: "2000"
             - name: APPRISE_ATTACH_SIZE
               value: "15"
+            - name: APPRISE_WORKER_COUNT
+              value: "1"
+            - name: APPRISE_DEFAULT_THEME
+              value: dark
           podSecurityContext:
             fsGroup: 2000
             fsGroupChangePolicy: "Always"
