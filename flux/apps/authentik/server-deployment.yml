@@ -47,17 +47,18 @@ spec:
               name: authentik-data
             - mountPath: /templates
               name: authentik-custom-templates
-          # livenessProbe:
-          #   tcpSocket:
-          #     port: authentik-http
-          #   initialDelaySeconds: 10
-          #   periodSeconds: 5
-          # readinessProbe:
-          #   httpGet:
-          #     path: /
-          #     port: authentik-http
-          #   initialDelaySeconds: 10
-          #   timeoutSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /health/live/
+              port: authentik-http
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /health/ready/
+              port: authentik-http
+            initialDelaySeconds: 10
+            timeoutSeconds: 5
           resources:
             requests:
               memory: "512M"
