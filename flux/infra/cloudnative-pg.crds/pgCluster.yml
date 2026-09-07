@@ -30,6 +30,14 @@ spec:
 
   managed:
     roles:
+      - name: authentik
+        ensure: present
+        comment: Authentik server
+        login: true
+        superuser: false
+        passwordSecret:
+          name: authentik-pg-user-creds
+
       - name: gotify
         ensure: present
         comment: Gotify notification server
