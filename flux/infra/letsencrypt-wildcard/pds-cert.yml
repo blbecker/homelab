@@ -1,0 +1,14 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: letsencrypt-pds-cert-tartarus.us-prod
+  namespace: traefik
+spec:
+  # secretName doesn't have to match the certificate name, but it may as well, for simplicity!
+  secretName: letsencrypt-pds-cert-tartarus.us-prod
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  dnsNames:
+    - "pds.tartarus.us"
+    - "*.pds.tartarus.us"
