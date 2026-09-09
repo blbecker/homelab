@@ -23,7 +23,7 @@ spec:
         readOnlyRootFilesystem: true
       containers:
         - name: authentik-server
-          image: ghcr.io/goauthentik/server:2026.8.1
+          image: ghcr.io/goauthentik/server:2026.8.2
           args:
             - server
           envFrom:
