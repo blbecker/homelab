@@ -17,7 +17,7 @@ spec:
 
   walStorage:
     storageClass: longhorn-no-replication
-    size: 3Gi
+    size: 5Gi
 
   # see https://cloudnative-pg.io/documentation/1.22/kubernetes_upgrade/
   nodeMaintenanceWindow:
