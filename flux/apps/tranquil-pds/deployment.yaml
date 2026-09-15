@@ -24,7 +24,7 @@ spec:
         fsGroupChangePolicy: "Always"
       containers:
         - name: tranquil-pds
-          image: harbor.tartarus.us/tartarus/tranquil-pds:latest
+          image: harbor.tartarus.us/atcr_proxy/tranquil.farm/tranquil-pds:latest
           # imagePullPolicy: Always
           env:
             - name: TZ
