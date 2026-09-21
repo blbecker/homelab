@@ -27,7 +27,7 @@ spec:
         readOnlyRootFilesystem: true
       containers:
         - name: navidrome
-          image: docker.io/deluan/navidrome:0.64.0
+          image: docker.io/deluan/navidrome:0.64.1
           env:
             - name: TZ
               value: America/Puerto_Rico
