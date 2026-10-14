@@ -4,7 +4,7 @@ metadata:
   name: hermes
 spec:
   hermes:
-    image: ghcr.io/blbecker/hermes-agent:0.0.5
+    image: ghcr.io/blbecker/hermes-agent:0.0.6
     skills: # optional; omit if no skills are needed
       - identifier: official/finance/stocks # required; skill path or HTTP(S) URL to a SKILL.md
         category: finance # optional; category folder to install into
@@ -14,6 +14,7 @@ spec:
         category: email
         name: agentmail
         force: false
+      - identifier: optional-skills/creative/meme-generation
     config:
       raw: # optional; omit if no custom config.yml is needed
         tool_loop_guardrails:
