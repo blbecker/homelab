@@ -10,4 +10,4 @@ spec:
     operation: copy
   url: oci://ghcr.io/hermeum/charts/hermes-agent-operator
   ref:
-    semver: "0.5.1"
+    semver: "0.5.5"
