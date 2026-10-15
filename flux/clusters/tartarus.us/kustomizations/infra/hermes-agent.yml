@@ -15,7 +15,11 @@ spec:
     kind: GitRepository
     name: flux-system
   healthChecks:
-    - apiVersion: helm.toolkit.fluxcd.io/v2
+    - apiVersion: agents.hermeum.app/v1alpha1
       kind: HermesAgent
       name: hermes
+      namespace: hermes-agent
+    - apiVersion: apps/v1
+      kind: Deployment
+      name: openviking
       namespace: hermes-agent
