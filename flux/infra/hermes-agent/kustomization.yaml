@@ -9,3 +9,8 @@ resources:
   - hermes-agent-config.yml
   # - reflect-prod-cert.yml
   # - syncthing-pvc.yml
+  - openviking/openviking-pvc.yml
+  - openviking/openviking-secret.yml
+  - openviking/deployment.yml
+  - openviking/service.yml
+  - openviking/httproute.yml
