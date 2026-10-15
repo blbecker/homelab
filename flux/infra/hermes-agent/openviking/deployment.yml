@@ -18,54 +18,71 @@ spec:
       securityContext:
         readOnlyRootFilesystem: false
       containers:
-        - name: openviking
-          image: ghcr.io/volcengine/openviking:latest
-          imagePullPolicy: Always
-          env:
-            - name: OPENVIKING_CONFIG_FILE
-              value: /app/.openviking/ov.conf
-            - name: OPENVIKING_WITH_BOT
-              value: "1"
-          securityContext:
-            readOnlyRootFilesystem: false
-          ports:
-            - name: http
-              containerPort: 1933
-              protocol: TCP
-          volumeMounts:
-            - mountPath: /app/.openviking/ov.conf
-              name: config
-              subPath: ov.conf
-            - mountPath: /app/.openviking/data
-              name: data
-          readinessProbe:
-            httpGet:
-              path: /ready
-              port: http
-            initialDelaySeconds: 10
-            timeoutSeconds: 5
-            periodSeconds: 10
-          livenessProbe:
-            httpGet:
-              path: /health
-              port: http
-            initialDelaySeconds: 30
-            timeoutSeconds: 5
-            periodSeconds: 10
-          resources:
-            requests:
-              memory: 2Gi
-              cpu: "1"
-            limits:
-              memory: 4Gi
-              cpu: "2"
-      volumes:
+      - name: openviking
+        image: ghcr.io/volcengine/openviking:latest
+        imagePullPolicy: Always
+        env:
+        - name: OPENVIKING_WITH_BOT
+          value: '1'
+        - name: OPENVIKING_CONFIG_FILE
+          value: /config/ov.conf
+        securityContext:
+          readOnlyRootFilesystem: false
+        ports:
+        - name: http
+          containerPort: 1933
+          protocol: TCP
+        volumeMounts:
         - name: config
-          secret:
-            secretName: openviking-config
-            items:
-              - key: ov.conf
-                path: ov.conf
+          mountPath: /config
+          readOnly: true
         - name: data
-          persistentVolumeClaim:
-            claimName: openviking-data
+          mountPath: /app/.openviking/data
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: http
+          initialDelaySeconds: 10
+          timeoutSeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
+          periodSeconds: 10
+        resources:
+          requests:
+            memory: 2Gi
+            cpu: '1'
+          limits:
+            memory: 4Gi
+            cpu: '2'
+      initContainers:
+      - name: config-subst
+        image: alpine:latest
+        command:
+        - /bin/sh
+        - -c
+        args:
+        - apk add --no-cache gettext && envsubst < /config-template/ov.conf.json >
+          /config/ov.conf
+        volumeMounts:
+        - name: config-template
+          mountPath: /config-template
+          readOnly: true
+        - name: config
+          mountPath: /config
+      volumes:
+      - name: config-template
+        configMap:
+          name: openviking-config
+      - name: config
+        emptyDir: {}
+      - name: data
+        persistentVolumeClaim:
+          claimName: openviking-data
+      envFrom:
+      - secretRef:
+          name: openviking-secrets
