@@ -15,6 +15,10 @@ spec:
         name: agentmail
         force: false
       - identifier: optional-skills/creative/meme-generation
+    plugins: # install OpenViking memory plugin
+      - identifier: volcengine/OpenViking/examples/hermes-plugin
+        ref: 9f150ece247ad683494ab172d738023bd6dc6170
+        enable: true
     config:
       raw: # optional; omit if no custom config.yml is needed
         tool_loop_guardrails:
@@ -53,6 +57,8 @@ spec:
           compression:
             provider: openrouter
             model: ~google/gemini-flash-latest
+        memory:
+          provider: openviking
     envFrom:
       - secretRef:
           name: hermes-agent-secrets

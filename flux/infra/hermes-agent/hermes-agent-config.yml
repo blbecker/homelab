@@ -5,3 +5,4 @@ metadata:
   namespace: hermes-agent
 data:
   MATRIX_HOMESERVER: https://continuwuity.tartarus.us
+  OPENVIKING_ENDPOINT: http://openviking:1933
