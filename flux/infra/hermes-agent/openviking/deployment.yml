@@ -74,6 +74,9 @@ spec:
           readOnly: true
         - name: config
           mountPath: /config
+        envFrom:
+        - secretRef:
+            name: openviking-secrets
       volumes:
       - name: config-template
         configMap:
@@ -83,6 +86,3 @@ spec:
       - name: data
         persistentVolumeClaim:
           claimName: openviking-data
-      envFrom:
-      - secretRef:
-          name: openviking-secrets
