@@ -25,6 +25,7 @@ spec:
           allowed_users: # Matrix users allowed to trigger agent turns
             - "@benjamin:bckr.me"
             - "@rachel:bckr.me"
+            - "@hermes:bckr.me"
           allowed_rooms: # Matrix rooms allowed to trigger agent turns
             - "!pPbitgBXikMSkv4_UXFXC7o3CBvSVWoYWxIkbEdwglM"
             - "!X2Z1wtZlmeMIBFDN2a:bckr.me"
