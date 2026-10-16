@@ -7,3 +7,5 @@ data:
   MATRIX_HOMESERVER: https://continuwuity.tartarus.us
   OPENVIKING_ENDPOINT: http://openviking:1933
   MATRIX_E2EE_MODE: required
+  GOOGLE_WORKSPACE_CLI_CREDENTIALS_FILE: /opt/data/.config/gws/credentials.json
+
