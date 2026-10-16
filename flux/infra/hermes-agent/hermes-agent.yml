@@ -15,6 +15,7 @@ spec:
         name: agentmail
         force: false
       - identifier: optional-skills/creative/meme-generation
+      - identifier: productivity/google-workspace
     plugins: # install OpenViking memory plugin
       - identifier: openviking
         enable: true
