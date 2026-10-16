@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hermes-agent-config
+  namespace: hermes-agent
+data:
+  MATRIX_HOMESERVER: https://continuwuity.tartarus.us
+  OPENVIKING_ENDPOINT: http://openviking.hermes-agent.svc.cluster.local:1933
+  MATRIX_E2EE_MODE: required
