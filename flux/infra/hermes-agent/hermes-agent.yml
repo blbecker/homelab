@@ -18,6 +18,7 @@ spec:
     plugins: # install OpenViking memory plugin
       - identifier: openviking
         enable: true
+      - identifier: rabilrbl/hermes-brave-search-plugin
     config:
       raw: # optional; omit if no custom config.yml is needed
         tool_loop_guardrails:
