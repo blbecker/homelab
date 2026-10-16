@@ -26,10 +26,8 @@ spec:
             - "@benjamin:bckr.me"
             - "@rachel:bckr.me"
           allowed_rooms: # Matrix rooms allowed to trigger agent turns
-            - "!general:bckr.me"
-            - "!FamilyRoom:bckr.me"
-            - "#general:bckr.me"
-            - "#FamilyRoom:bckr.me"
+            - "!pPbitgBXikMSkv4_UXFXC7o3CBvSVWoYWxIkbEdwglM"
+            - "!X2Z1wtZlmeMIBFDN2a:bckr.me"
           ignore_user_patterns: # Bridge/appservice ghost users to ignore
             - "^@telegram_"
             - "^@whatsapp_"
