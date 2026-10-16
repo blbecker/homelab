@@ -29,6 +29,10 @@ spec:
             args: ["-y", "agentmail-mcp"]
             env:
               AGENTMAIL_API_KEY: "${env:AGENTMAIL_API_KEY}"
+          openweathermap:
+            url: "https://mcp.openweathermap.org/mcp"
+            headers:
+              Authorization: "Bearer ${env:OPENWEATHERMAP_DATA_KEY}"
         matrix:
           require_mention: true # Require @mention in rooms (default: true)
           allowed_users: # Matrix users allowed to trigger agent turns
