@@ -66,6 +66,13 @@ spec:
             model: ~google/gemini-flash-latest
         memory:
           provider: openviking
+        image_gen:
+          provider: openrouter
+          model: bytedance-seed/seedream-4.5
+          openrouter:
+            resolution: 2K        # model-dependent: 1K / 2K / 4K
+            quality: high         # gpt-image models
+            output_format: png
     envFrom:
       - secretRef:
           name: hermes-agent-secrets
