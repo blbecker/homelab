@@ -23,7 +23,7 @@ spec:
         readOnlyRootFilesystem: true
       containers:
         - name: bazarr
-          image: docker.io/linuxserver/bazarr:1.6.1
+          image: docker.io/linuxserver/bazarr:1.6.2
           env:
             - name: TZ
               value: "America/Puerto_Rico"
