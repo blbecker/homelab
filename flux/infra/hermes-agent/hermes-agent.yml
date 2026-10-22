@@ -3,6 +3,13 @@ kind: HermesAgent
 metadata:
   name: hermes
 spec:
+  security:
+    rbac:
+      createServiceAccount: false 
+      serviceAccountName: hermes-agent
+  networking:
+    service:
+      type: ClusterIP                # optional; ClusterIP (default) | LoadBalancer | NodePort
   hermes:
     image: ghcr.io/blbecker/hermes-agent:0.0.13
     skills: # optional; omit if no skills are needed
@@ -78,10 +85,6 @@ spec:
           name: hermes-agent-secrets
       - configMapRef:
           name: hermes-agent-config
-    security:
-      rbac:
-        createServiceAccount: false 
-        serviceAccountName: hermes-agent
     storage:
       persistence:
         enabled: true

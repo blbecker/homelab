@@ -2,7 +2,8 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: hermes-agent
 resources:
-  - hermes-agent.yml
   - hermes-agent-config.yml
-  - serviceaccount.yaml
+  - hermes-agent.yml
+  - httproute.yml
   - openviking
+  - serviceaccount.yaml

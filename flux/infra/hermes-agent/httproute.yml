@@ -1,0 +1,17 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: hermes-agent-web-route
+  namespace: hermes-agent
+spec:
+  parentRefs:
+    - name: main-gateway
+      namespace: traefik
+
+  hostnames:
+    - hermes-agent.tartarus.us
+
+  rules:
+    - backendRefs:
+        - name: hermes-agent
+          port: 8642
