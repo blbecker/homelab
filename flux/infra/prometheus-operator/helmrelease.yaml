@@ -23,3 +23,7 @@ spec:
   values:
     grafana:
       enabled: true
+      grafana.ini:
+        server:
+          root_url: https://grafana.tartarus.us
+        
