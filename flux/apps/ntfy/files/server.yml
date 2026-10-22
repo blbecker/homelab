@@ -7,3 +7,4 @@ auth-access:
   - "uptimekuma:uptimekuma:wo"
   - "openclaw:openclaw:wo"
   - "apprise:apprise:wo"
+  - "desktopAnsible:alerts:wo"
