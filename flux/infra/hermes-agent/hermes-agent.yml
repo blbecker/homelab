@@ -11,7 +11,7 @@ spec:
     service:
       type: ClusterIP                # optional; ClusterIP (default) | LoadBalancer | NodePort
   hermes:
-    image: ghcr.io/blbecker/hermes-agent:0.0.13
+    image: ghcr.io/blbecker/hermes-agent:0.0.20
     skills: # optional; omit if no skills are needed
       - identifier: official/finance/stocks # required; skill path or HTTP(S) URL to a SKILL.md
         category: finance # optional; category folder to install into
