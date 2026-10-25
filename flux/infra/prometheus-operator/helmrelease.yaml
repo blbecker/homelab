@@ -23,7 +23,19 @@ spec:
   values:
     grafana:
       enabled: true
+      envFromSecret: grafana-secrets
       grafana.ini:
         server:
           root_url: https://grafana.tartarus.us
-        
+        auth:
+          generic_oath:
+            enabled: true
+            client_id: 5QsTVKSfWg7Xq4zfpIWZ7G6LTFwbcBkBUMVwLzkU
+            auth_url: https://authentik.tartarus.us/application/o/authorize/
+            api_url: https://authentik.tartarus.us/application/o/userinfo/
+            token_url: https://authentik.tartarus.us/application/o/token/
+            allow_assign_grafana_admin: true
+            allow_sign_up: true
+            scopes: openid email profile entitlements
+            role_attribute_path: contains(entitlements[*], 'GrafanaAdmin') && 'GrafanaAdmin' || contains(entitlements[*], 'Admin') && 'Admin' || contains(entitlements[*], 'Editor') && 'Editor' || 'Viewer'
+            role_attribute_strict: true
