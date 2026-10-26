@@ -15,5 +15,9 @@ spec:
   healthChecks:
     - apiVersion: apps/v1
       kind: Deployment
-      name: influxdb
+      name: influxdb-api
+      namespace: influxdb
+    - apiVersion: apps/v1
+      kind: Deployment
+      name: influxdb-web
       namespace: influxdb

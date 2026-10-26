@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: influxdb-api
+  namespace: influxdb
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: influxdb-api
+  ports:
+    - name: influxdb-api
+      port: 8181
+      targetPort: influxdb-api
+      protocol: TCP

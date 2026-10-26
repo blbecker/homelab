@@ -1,0 +1,19 @@
+
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: influxdb-api-route
+  namespace: influxdb
+spec:
+  parentRefs:
+    - name: main-gateway
+      namespace: traefik
+
+  hostnames:
+    - influxdb.tartarus.us
+
+  rules:
+
+    - backendRefs:
+      - name: influxdb-api
+        port: 8181

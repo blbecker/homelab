@@ -1,14 +1,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: influxdb
+  name: influxdb-web
   namespace: influxdb
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   selector:
-    app.kubernetes.io/name: influxdb
+    app.kubernetes.io/name: influxdb-web
   ports:
     - name: influxdb-web
-      port: 8086
+      port: 8080
       targetPort: influxdb-web
       protocol: TCP

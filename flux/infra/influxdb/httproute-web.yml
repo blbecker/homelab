@@ -1,3 +1,4 @@
+
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
@@ -9,9 +10,10 @@ spec:
       namespace: traefik
 
   hostnames:
-    - influxdb.tartarus.us
+    - influxdb-explorer.tartarus.us
 
   rules:
+
     - backendRefs:
-        - name: influxdb
-          port: 8086
+      - name: influxdb-web
+        port: 8080

@@ -1,0 +1,6 @@
+    {
+      "DEFAULT_INFLUX_SERVER": "http://influxdb-api.influxdb.svc.cluster.local:8181",
+      "DEFAULT_INFLUX_DATABASE": "smarthome_monitoring",
+      "DEFAULT_API_TOKEN": "${INFLUXDB_API_TOKEN}",
+      "DEFAULT_SERVER_NAME": "InfluxDB"
+    }

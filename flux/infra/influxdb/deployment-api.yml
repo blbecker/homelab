@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: influxdb
+  name: influxdb-api
   namespace: influxdb
 spec:
   replicas: 1
@@ -9,14 +9,30 @@ spec:
     type: Recreate
   selector:
     matchLabels:
-      app.kubernetes.io/name: influxdb
+      app.kubernetes.io/name: influxdb-api
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: influxdb
+        app.kubernetes.io/name: influxdb-api
     spec:
       securityContext:
-        readOnlyRootFilesystem: false
+        fsGroup: 1500
+        fsGroupChangePolicy: Always
+      initContainers:
+        - name: init-volume-permissions
+          image: busybox:1.37
+          imagePullPolicy: IfNotPresent
+          command:
+            - sh
+            - -c
+            - chown -R 1500:1500 /var/lib/influxdb3
+          securityContext:
+            runAsUser: 0
+            runAsGroup: 0
+            allowPrivilegeEscalation: false
+          volumeMounts:
+            - name: influxdb-data
+              mountPath: /var/lib/influxdb3
       containers:
         - name: influxdb
           image: influxdb:3.12.1-core
@@ -28,8 +44,6 @@ spec:
               value: setup
             - name: INFLUXDB3_NODE_ID
               value: influxdb
-            - name: INFLUXDB3_HTTP_BIND_ADDR
-              value: 0.0.0.0:8086
             - name: DOCKER_INFLUXDB_INIT_USERNAME
               valueFrom:
                 secretKeyRef:
@@ -46,21 +60,15 @@ spec:
               value: default
           securityContext:
             readOnlyRootFilesystem: false
-            fsGroup: 2000
-            fsGroupChangePolicy: "Always"
+            runAsUser: 1500
+            runAsGroup: 1500
           ports:
-            - name: influxdb-web
-              containerPort: 8086
+            - name: influxdb-api
+              containerPort: 8181
               protocol: TCP
           volumeMounts:
-            - mountPath: /var/lib/influxdb2
+            - mountPath: /var/lib/influxdb3
               name: influxdb-data
-         # readinessProbe:
-         #   httpGet:
-         #     path: /health
-         #     port: influxdb-web
-         #   initialDelaySeconds: 61
-         #   timeoutSeconds: 5
           resources:
             requests:
               memory: "250M"
@@ -72,7 +80,6 @@ spec:
         options:
           - name: ndots
             value: "1"
-
       volumes:
         - name: influxdb-data
           persistentVolumeClaim:

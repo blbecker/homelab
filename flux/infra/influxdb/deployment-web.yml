@@ -1,0 +1,85 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: influxdb-web
+  namespace: influxdb
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: influxdb-web
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: influxdb-web
+    spec:
+      securityContext:
+        readOnlyRootFilesystem: false
+
+      initContainers:
+        - name: config-subst
+          image: alpine:3.22
+          imagePullPolicy: IfNotPresent
+          command:
+            - /bin/sh
+            - -ec
+          args:
+            - |
+              apk add --no-cache gettext
+              envsubst '${INFLUXDB_API_TOKEN}' \
+                < /config-template/config.json \
+                > /config/config.json
+              chmod 0444 /config/config.json
+          envFrom:
+            - secretRef:
+                name: influxdb-web-secrets
+          volumeMounts:
+            - name: config-template
+              mountPath: /config-template
+              readOnly: true
+            - name: config
+              mountPath: /config
+
+      containers:
+        - name: influxdb
+          image: influxdata/influxdb3-ui:1.11.0
+          imagePullPolicy: Always
+          args:
+            - --mode=admin
+          env:
+            - name: TZ
+              value: America/Puerto_Rico
+          securityContext:
+            readOnlyRootFilesystem: false
+          ports:
+            - name: influxdb-web
+              containerPort: 8080
+              protocol: TCP
+          volumeMounts:
+            - name: config
+              mountPath: /app-root/config
+              readOnly: true
+          resources:
+            requests:
+              memory: 250M
+              cpu: 250m
+            limits:
+              memory: 2G
+              cpu: "2"
+
+      volumes:
+        - name: config-template
+          configMap:
+            name: influxdb-explorer-config
+            items:
+              - key: config.json
+                path: config.json
+        - name: config
+          emptyDir: {}
+
+      dnsConfig:
+        options:
+          - name: ndots
+            value: "1"
