@@ -38,3 +38,18 @@ spec:
           scopes: openid email profile entitlements
           role_attribute_path: contains(entitlements[*], 'GrafanaAdmin') && 'GrafanaAdmin' || contains(entitlements[*], 'Admin') && 'Admin' || contains(entitlements[*], 'Editor') && 'Editor' || 'Viewer'
           role_attribute_strict: true
+      datasources:
+        datasources.yaml:
+          apiVersion: 1
+          datasources:
+            - name: InfluxDB 
+              type: influxdb
+              access: proxy
+              url: http://influxdb-api.influxdb.svc.cluster.local:8181
+              jsonData:
+                version: SQL
+                dbName: smarthome_monitoring
+                httpMode: POST
+                insecureGrpc: true
+              secureJsonData:
+                token: '${INFLUXDB3_AUTH_TOKEN}'
