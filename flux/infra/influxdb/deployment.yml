@@ -28,7 +28,7 @@ spec:
               value: setup
             - name: INFLUXDB3_NODE_ID
               value: influxdb
-            - name: INFLUXDB3_HTTP_BIND_ADDRESS
+            - name: INFLUXDB3_HTTP_BIND_ADDR
               value: 0.0.0.0:8086
             - name: DOCKER_INFLUXDB_INIT_USERNAME
               valueFrom:
