@@ -19,7 +19,7 @@ spec:
         readOnlyRootFilesystem: false
       containers:
         - name: influxdb
-          image: docker.io/influxdb:2.9.1
+          image: influxdb:3.10.3-core
           imagePullPolicy: Always
           env:
             - name: TZ
