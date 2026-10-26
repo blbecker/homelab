@@ -53,12 +53,12 @@ spec:
           volumeMounts:
             - mountPath: /var/lib/influxdb2
               name: influxdb-data
-          readinessProbe:
-            httpGet:
-              path: /health
-              port: influxdb-web
-            initialDelaySeconds: 61
-            timeoutSeconds: 5
+         # readinessProbe:
+         #   httpGet:
+         #     path: /health
+         #     port: influxdb-web
+         #   initialDelaySeconds: 61
+         #   timeoutSeconds: 5
           resources:
             requests:
               memory: "250M"
