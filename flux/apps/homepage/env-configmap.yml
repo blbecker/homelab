@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: homepage-env
+  namespace: homepage
+  labels:
+    app.kubernetes.io/name: homepage
+data:
+  HOMEPAGE_OIDC_ISSUER: https://authentik.tartarus.us/application/o/homepage/
+  HOMEPAGE_OIDC_CLIENT_ID: QsYF6Zelq7UMhOV53HK3XUCPqhjBaUyEgVv8s0vY
+  HOMEPAGE_OIDC_NAME: Authentik
+  HOMEPAGE_AUTH_ENABLED: "true"
+  HOMEPAGE_EXTERNAL_URL: https://homepage.tartarus.us
