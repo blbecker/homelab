@@ -1,0 +1,20 @@
+- openmeteo:
+    units: imperial 
+    cache: 10
+
+- kubernetes:
+    cluster:
+      # Shows cluster-wide statistics
+      show: true
+      # Shows the aggregate CPU stats
+      cpu: true
+      # Shows the aggregate memory stats
+      memory: true
+    nodes:
+      # Shows node-specific statistics
+      show: false
+
+- search:
+    provider: duckduckgo
+    target: _blank
+

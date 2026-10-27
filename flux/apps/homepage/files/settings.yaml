@@ -1,0 +1,11 @@
+---
+layout:
+  Media:
+    style: row 
+    columns: 4
+  Infra:
+    style: row
+    columns: 4
+#  providers:
+#    longhorn:
+#      url: https://longhorn.my.network

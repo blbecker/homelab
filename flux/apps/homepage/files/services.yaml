@@ -1,0 +1,109 @@
+---
+- Media:
+  - Bazarr:
+      href: https://bazarr.tartarus.us
+      description: Subtitle retrieval
+      widget:
+        type: bazarr
+        url: https://bazarr.tartarus.us
+        key: {{HOMEPAGE_VAR_BAZARR_KEY}}
+  - Sonarr:
+      href: https://sonarr.tartarus.us
+      description: TV Show Downloads
+      widget:
+        type: sonarr
+        url: https://sonarr.tartarus.us
+        key: {{HOMEPAGE_VAR_SONARR_KEY}}
+  - Radarr: 
+      href: https://radarr.tartarus.us
+      description: Movie Downloads
+      widget:
+        type: radarr
+        url: https://radarr.tartarus.us
+        key: {{HOMEPAGE_VAR_RADARR_KEY}}
+  - Lidarr: 
+      href: https://lidarr.tartarus.us 
+      description: Music Downloads
+      widget:
+        type: lidarr
+        url: https://lidarr.tartarus.us
+        key: {{HOMEPAGE_VAR_LIDARR_KEY}}
+- Services:
+  - Immich:
+      href: https://immich.tartarus.us 
+      description: Image server 
+      widget:
+        type: immich 
+        url: https://immich.tartarus.us 
+        key: {{HOMEPAGE_VAR_IMMICH_KEY}}
+  - Mealie:
+      href: https://mealie.tartarus.us 
+      description: Recipe organizer
+      widget:
+        type: mealie 
+        url: https://mealie.tartarus.us 
+        key: {{HOMEPAGE_VAR_MEALIE_KEY}}
+        version: 2
+  # - Navidrome:
+  #     href: https://navidrome.tartarus.us 
+  #     description: Music Server
+  #     widget:
+  #       type: navidrome 
+  #       url: https://navidrome.tartarus.us
+  #       user: {{HOMEPAGE_VAR_NAVIDROME_USERNAME}}
+        
+- Infra:
+  - Backrest:
+      href: https://backrest.tartarus.us
+      description: Backrest backups
+      widget:
+        type: backrest 
+        url: https://backrest.tartarus.us
+        username: {{HOMEPAGE_VAR_BACKREST_USERNAME}}
+        password: {{HOMEPAGE_VAR_BACKREST_PASSWORD}}
+  - Cloudflared:
+      href: https://cloudflare.com 
+      description: Cloudflare tunnels 
+      widget:
+        type: cloudflared 
+        accountid: {{HOMEPAGE_VAR_CLOUDFLARE_ACCOUNTID}}
+        tunnelid: 2a3d2a8b-ccac-4bf4-8e6e-357d25235a98
+        key: {{HOMEPAGE_VAR_CLOUDFLARE_KEY}}
+  - Mikrotik Gateway:
+      href: http://router.tartarus.us
+      description: Mikrotik gateway
+      widget:
+        type: mikrotik 
+        url: http://192.168.40.1
+        username: {{HOMEPAGE_VAR_MIKROTIK_GATEWAY_USERNAME}}
+        password: {{HOMEPAGE_VAR_MIKROTIK_GATEWAY_PASSWORD}}
+  - NextDNS:
+      href: https://my.nextdns.io 
+      description: DNS Provider
+      widget: 
+        type: nextdns 
+        profile: 8edf13
+        key: {{HOMEPAGE_VAR_NEXTDNS_KEY}}
+  - QNAP: 
+      href: https://nas.tartarus.us 
+      description: NAS Device 
+      widget: 
+        type: qnap 
+        url: https://nas.tartarus.us 
+        username: {{HOMEPAGE_VAR_QNAP_USERNAME}}
+        password: {{HOMEPAGE_VAR_QNAP_PASSWORD}}
+  - Syncthing:
+      href: https://syncthing.tartarus.us 
+      description: File sync 
+      widget: 
+        type: syncthing 
+        url: https://syncthing.tartarus.us 
+        key: {{HOMEPAGE_VAR_SYNCTHING_KEY}}
+  - UptimeKuma:
+      href: https://uptimekuma.tartarus.us 
+      description: Uptime Monitoring
+      widget:
+        type: uptimekuma 
+        url: https://uptimekuma.tartarus.us 
+        slug: homelab
+
