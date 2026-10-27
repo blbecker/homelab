@@ -93,6 +93,10 @@ locals {
       public_key     = "cFifEprH9J2PunyA9UYBTa4MsaXh2aq3xC3VCBB7pik="
       remote_address = "192.168.50.100/32"
     }
+    "benjamin-laptop" = {
+      public_key = "L7F4UH2qIvFo7oLQK0g8ZXQrmA3kqzlo2KatYYIuXTg="
+      remote_address = "192.168.50.101/32"
+    }
     "github" = {
       public_key     = "h7fuc0klo6BQvlWX1H3RdfC5UDv3D6o39K7LHFtesCs="
       remote_address = "192.168.50.10/32"
