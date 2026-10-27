@@ -2,6 +2,7 @@
 - Media:
   - Bazarr:
       href: https://bazarr.tartarus.us
+      icon: bazarr
       description: Subtitle retrieval
       widget:
         type: bazarr
@@ -10,6 +11,7 @@
   - Sonarr:
       href: https://sonarr.tartarus.us
       description: TV Show Downloads
+      icon: sonarr
       widget:
         type: sonarr
         url: https://sonarr.tartarus.us
@@ -17,6 +19,7 @@
   - Radarr: 
       href: https://radarr.tartarus.us
       description: Movie Downloads
+      icon: radarr
       widget:
         type: radarr
         url: https://radarr.tartarus.us
@@ -24,6 +27,7 @@
   - Lidarr: 
       href: https://lidarr.tartarus.us 
       description: Music Downloads
+      icon: lidarr
       widget:
         type: lidarr
         url: https://lidarr.tartarus.us
@@ -32,6 +36,7 @@
   - Immich:
       href: https://immich.tartarus.us 
       description: Image server 
+      icon: immich
       widget:
         type: immich 
         url: https://immich.tartarus.us 
@@ -39,6 +44,7 @@
   - Mealie:
       href: https://mealie.tartarus.us 
       description: Recipe organizer
+      icon: mealie
       widget:
         type: mealie 
         url: https://mealie.tartarus.us 
@@ -56,6 +62,7 @@
   - Backrest:
       href: https://backrest.tartarus.us
       description: Backrest backups
+      icon: backrest
       widget:
         type: backrest 
         url: https://backrest.tartarus.us
@@ -64,6 +71,7 @@
   - Cloudflared:
       href: https://cloudflare.com 
       description: Cloudflare tunnels 
+      icon: cloudflare
       widget:
         type: cloudflared 
         accountid: {{HOMEPAGE_VAR_CLOUDFLARE_ACCOUNTID}}
@@ -72,6 +80,7 @@
   - Mikrotik Gateway:
       href: http://router.tartarus.us
       description: Mikrotik gateway
+      icon: mikrotik
       widget:
         type: mikrotik 
         url: http://192.168.40.1
@@ -80,6 +89,7 @@
   - NextDNS:
       href: https://my.nextdns.io 
       description: DNS Provider
+      icon: nextdns
       widget: 
         type: nextdns 
         profile: 8edf13
@@ -87,6 +97,7 @@
   - QNAP: 
       href: https://nas.tartarus.us 
       description: NAS Device 
+      icon qnap
       widget: 
         type: qnap 
         url: https://nas.tartarus.us 
@@ -95,6 +106,7 @@
   - Syncthing:
       href: https://syncthing.tartarus.us 
       description: File sync 
+      icon: syncthing
       widget: 
         type: syncthing 
         url: https://syncthing.tartarus.us 
@@ -102,6 +114,7 @@
   - UptimeKuma:
       href: https://uptimekuma.tartarus.us 
       description: Uptime Monitoring
+      icon: uptime-kuma
       widget:
         type: uptimekuma 
         url: https://uptimekuma.tartarus.us 
