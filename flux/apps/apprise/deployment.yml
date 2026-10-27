@@ -26,7 +26,7 @@ spec:
         readOnlyRootFilesystem: true
       containers:
         - name: apprise
-          image: docker.io/caronc/apprise:2.0.1
+          image: docker.io/caronc/apprise:2.0.2
           env:
             - name: TZ
               value: "America/Puerto_Rico"
