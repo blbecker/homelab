@@ -97,7 +97,7 @@
   - QNAP: 
       href: https://nas.tartarus.us 
       description: NAS Device 
-      icon qnap
+      icon: qnap
       widget: 
         type: qnap 
         url: https://nas.tartarus.us 
