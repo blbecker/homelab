@@ -53,3 +53,9 @@ spec:
                 insecureGrpc: true
               secureJsonData:
                 token: '${INFLUXDB3_AUTH_TOKEN}'
+      sidecar:
+        dashboards:
+          enabled: true
+          label: grafana_dashboard
+          labelValue: "1"
+          searchNamespace: prometheus-operator
