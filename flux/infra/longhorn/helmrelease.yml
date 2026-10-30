@@ -93,13 +93,13 @@ spec:
       #   nodeDownPodDeletionPolicy: ~
       #   nodeDrainPolicy: ~
       #   replicaReplenishmentWaitInterval: ~
-      #   concurrentReplicaRebuildPerNodeLimit: ~
-      #   concurrentVolumeBackupRestorePerNodeLimit: ~
+      concurrentReplicaRebuildPerNodeLimit: 1
+      concurrentVolumeBackupRestorePerNodeLimit: 1
       #   disableRevisionCounter: ~
       #   systemManagedPodsImagePullPolicy: ~
       #   allowVolumeCreationWithDegradedAvailability: ~
       #   autoCleanupSystemGeneratedSnapshot: ~
-      concurrentAutomaticEngineUpgradePerNodeLimit: 3
+      concurrentAutomaticEngineUpgradePerNodeLimit: 1
     #   backingImageCleanupWaitInterval: ~
     #   backingImageRecoveryWaitInterval: ~
     #   guaranteedInstanceManagerCPU: ~
