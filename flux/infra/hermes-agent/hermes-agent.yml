@@ -12,6 +12,15 @@ spec:
       type: ClusterIP                # optional; ClusterIP (default) | LoadBalancer | NodePort
   hermes:
     image: ghcr.io/blbecker/hermes-agent:0.0.13
+    packages: # operator installs these via init container into $HERMES_HOME/.python-packages on the PVC (served via PYTHONPATH)
+      pip:
+        install: # keep in sync with the sealed venv pins when bumping the image tag (PYTHONPATH shadows the venv for agent-run code)
+          - google-api-python-client==2.194.0
+          - google-auth==2.55.1
+          - google-auth-oauthlib==1.3.1
+          - google-auth-httplib2==0.3.1
+          - httplib2==0.32.0
+          - pyasn1==0.6.4
     skills: # optional; omit if no skills are needed
       - identifier: official/finance/stocks # required; skill path or HTTP(S) URL to a SKILL.md
         category: finance # optional; category folder to install into
