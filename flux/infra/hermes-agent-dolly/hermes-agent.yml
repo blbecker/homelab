@@ -21,7 +21,7 @@ spec:
           - soundfile==0.14.0
           - audioread==3.1.0
           - pydub==0.25.1
-          - numba==0.68.1
+          - numba # was 0.68.1
           - scikit-learn==1.9.1
     skills: # optional; omit if no skills are needed
       - identifier: official/finance/stocks # required; skill path or HTTP(S) URL to a SKILL.md
