@@ -29,6 +29,7 @@ spec:
         name: stocks # optional; overrides the skill name from SKILL.md frontmatter
         force: false #
       - identifier: optional-skills/creative/meme-generation
+      - identifier: productivity/google-workspace
     plugins: # install OpenViking memory plugin
       - identifier: openviking
         enable: true
