@@ -12,6 +12,20 @@ spec:
     - backrest.tartarus.us
 
   rules:
-    - backendRefs:
+    # Multihost sync: HTTP/2 cleartext
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /v1sync.BackrestSyncService/
+      backendRefs:
+        - name: backrest-sync
+          port: 9898
+
+    # Everything else: HTTP/1.1 backend
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
         - name: backrest
           port: 9898

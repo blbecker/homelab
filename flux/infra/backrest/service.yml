@@ -4,11 +4,27 @@ metadata:
   name: backrest
   namespace: backrest
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   selector:
     app.kubernetes.io/name: backrest
   ports:
-    - name: http # Web UI
+    - name: http
       port: 9898
       targetPort: http
       protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backrest-sync
+  namespace: backrest
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: backrest
+  ports:
+    - name: h2c
+      port: 9898
+      targetPort: http
+      protocol: TCP
+      appProtocol: kubernetes.io/h2c
