@@ -44,7 +44,7 @@ spec:
 
       containers:
         - name: influxdb
-          image: influxdata/influxdb3-ui:1.11.0
+          image: influxdata/influxdb3-ui:1.11.2
           imagePullPolicy: Always
           args:
             - --mode=admin
