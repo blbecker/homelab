@@ -4,20 +4,20 @@
   "metadata": {
     "name": "be22jx5",
     "namespace": "default",
-    "uid": "4f2d648d-a109-4790-b095-0197077a636f",
-    "resourceVersion": "1793557898707987",
+    "uid": "187589c3-eee7-4a81-8039-62852f8173b3",
+    "resourceVersion": "1793561602281019",
     "generation": 1,
-    "creationTimestamp": "2026-11-01T18:31:38Z",
+    "creationTimestamp": "2026-11-01T19:33:22Z",
     "labels": {
-      "grafana.app/deprecatedInternalID": "269554353184768"
+      "grafana.app/deprecatedInternalID": "285088279138304"
     },
     "annotations": {
       "grafana.app/createdBy": "access-policy:service",
       "grafana.app/managedBy": "classic-file-provisioning",
       "grafana.app/managerId": "sidecarProvider",
-      "grafana.app/sourceChecksum": "7569bd7f4eb7fc1fd92e46b2ba75db41",
+      "grafana.app/sourceChecksum": "a4270ba5b8be2265fccf7adaf4db2169",
       "grafana.app/sourcePath": "/tmp/dashboards/smarthome.json",
-      "grafana.app/sourceTimestamp": "1793557890000",
+      "grafana.app/sourceTimestamp": "1793561593000",
       "grafana.app/folder": ""
     }
   },
@@ -212,7 +212,7 @@
                         "editorMode": "builder",
                         "exemplar": false,
                         "expr": "ups_battery_charge",
-                        "instant": false,
+                        "instant": true,
                         "key": "Q-41647e28-ff27-4b25-855a-34ca4987f369-0",
                         "legendFormat": "{{ups}}",
                         "range": true
@@ -338,8 +338,9 @@
                       "spec": {
                         "editorMode": "code",
                         "exemplar": false,
-                        "expr": "ups_ups_load{ups=~\"(cyberpower|qnapups)\"}",
-                        "instant": false,
+                        "expr": "ups_ups_load{}",
+                        "format": "time_series",
+                        "instant": true,
                         "key": "Q-41647e28-ff27-4b25-855a-34ca4987f369-0",
                         "legendFormat": "{{ups}}",
                         "range": true
