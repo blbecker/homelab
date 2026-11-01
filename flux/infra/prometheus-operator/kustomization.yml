@@ -9,6 +9,7 @@ resources:
   - mikrotik-service-monitor.yml 
   - snmp_exporter.yml 
   - snmp_exporter_svc.yml 
+  - service-monitors/peanut.yml
 
 configMapGenerator:
   - name: smarthome-dashboard

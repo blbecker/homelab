@@ -7,6 +7,12 @@ resource "routeros_ip_dns" "dns-server" {
   ]
 }
 
+resource "routeros_ip_dns_record" "deimos" {
+  name    = "deimos.tartarus.us"
+  address = "192.168.10.50"
+  type    = "A"
+}
+
 resource "routeros_ip_dns_record" "router" {
   name    = "router.tartarus.us"
   address = cidrhost(local.vlans["mgmt"].gateway_cidr, 1)

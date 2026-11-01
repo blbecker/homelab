@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: peanut-env
+  namespace: peanut
+data:
+  WEB_PORT: "8080"
+  AUTH_DISABLED: "true"
+  WEB_HOST: "0.0.0.0"
+  # NUT config will come from settings.yml via init container
+  # Other available environment variables (add as needed):
+  # WEB_PASSWORD: "" # Set via secret if using auto-creation
+  # BASE_PATH: "" # For reverse proxy
+  # SSL_CERT_PATH: ""
+  # SSL_KEY_PATH: ""
+  DISABLE_CONFIG_FILE: "true"
+  # DEBUG: "false"

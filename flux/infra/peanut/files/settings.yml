@@ -1,0 +1,11 @@
+NUT_SERVERS:
+  - HOST: 'augustus.tartarus.us'
+    PORT: 3493
+  - HOST: 'deimos.tartarus.us'
+    PORT: 3493
+
+# INFLUX_HOST: '${INFLUX_HOST}'
+# INFLUX_TOKEN: '${INFLUX_TOKEN}'
+# INFLUX_ORG: '${INFLUX_ORG}'
+# INFLUX_BUCKET: '${INFLUX_BUCKET}'
+# INFLUX_INTERVAL: ${INFLUX_INTERVAL:-10}
