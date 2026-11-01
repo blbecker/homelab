@@ -35,7 +35,7 @@ spec:
               mountPath: /var/lib/influxdb3
       containers:
         - name: influxdb
-          image: influxdb:3.12.1-core
+          image: influxdb:3.12.2-core
           imagePullPolicy: Always
           env:
             - name: TZ
