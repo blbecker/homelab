@@ -4,20 +4,21 @@
   "metadata": {
     "name": "be22jx5",
     "namespace": "default",
-    "uid": "187589c3-eee7-4a81-8039-62852f8173b3",
-    "resourceVersion": "1793561602281019",
+    "uid": "674bd9a1-e207-46a4-95e5-7b3714c47bf2",
+    "resourceVersion": "1793568788521984",
     "generation": 1,
-    "creationTimestamp": "2026-11-01T19:33:22Z",
+    "creationTimestamp": "2026-11-01T21:33:08Z",
     "labels": {
-      "grafana.app/deprecatedInternalID": "285088279138304"
+      "grafana.app/deprecatedInternalID": "315229553836032"
     },
     "annotations": {
       "grafana.app/createdBy": "access-policy:service",
       "grafana.app/managedBy": "classic-file-provisioning",
       "grafana.app/managerId": "sidecarProvider",
-      "grafana.app/sourceChecksum": "a4270ba5b8be2265fccf7adaf4db2169",
+      "grafana.app/sourceChecksum": "dd8c2d8f56c13edd7d6a6e53a9e989b5",
       "grafana.app/sourcePath": "/tmp/dashboards/smarthome.json",
-      "grafana.app/sourceTimestamp": "1793561593000",
+      "grafana.app/sourceTimestamp": "1793568788000",
+      "grafana.app/updatedBy": "access-policy:service",
       "grafana.app/folder": ""
     }
   },
@@ -43,7 +44,7 @@
         }
       }
     ],
-    "cursorSync": "Off",
+    "cursorSync": "Crosshair",
     "editable": true,
     "elements": {
       "panel-1": {
@@ -68,7 +69,7 @@
                         "editorMode": "code",
                         "format": "time_series",
                         "rawQuery": true,
-                        "rawSql": "SELECT\n    date_bin_gapfill(INTERVAL '5 minutes', time) AS time,\n    \"deviceName\" AS metric,\n    interpolate(avg(value)) AS temperature\nFROM temperature\nWHERE $__timeFilter(time)\nGROUP BY date_bin_gapfill(INTERVAL '5 minutes', time), \"deviceName\"\nORDER BY time",
+                        "rawSql": "SELECT\n    $__timeGroup(\"time\", '1m') AS \"time\",\n    AVG(\"value\") AS \"\",\n    \"deviceName\" as \"metric\"\nFROM \"temperature\"\nWHERE\n    $__timeFilter(\"time\")\nGROUP BY 1, \"deviceName\"\nORDER BY 1 ASC",
                         "sql": {
                           "columns": [
                             {
@@ -141,7 +142,7 @@
                     },
                     "showPoints": "auto",
                     "showValues": false,
-                    "spanNulls": false,
+                    "spanNulls": true,
                     "stacking": {
                       "group": "A",
                       "mode": "none"
@@ -150,7 +151,6 @@
                       "mode": "off"
                     }
                   },
-                  "displayName": "${__field.labels.device}",
                   "thresholds": {
                     "mode": "absolute",
                     "steps": [
@@ -187,7 +187,7 @@
                 }
               }
             },
-            "version": "13.2.4"
+            "version": "13.3.0"
           }
         }
       },
@@ -211,8 +211,8 @@
                       "spec": {
                         "editorMode": "builder",
                         "exemplar": false,
-                        "expr": "ups_battery_charge",
-                        "instant": true,
+                        "expr": "avg by(ups) (ups_battery_charge)",
+                        "instant": false,
                         "key": "Q-41647e28-ff27-4b25-855a-34ca4987f369-0",
                         "legendFormat": "{{ups}}",
                         "range": true
@@ -269,7 +269,7 @@
                     },
                     "showPoints": "always",
                     "showValues": false,
-                    "spanNulls": false,
+                    "spanNulls": true,
                     "stacking": {
                       "group": "A",
                       "mode": "none"
@@ -279,6 +279,7 @@
                     }
                   },
                   "fieldMinMax": false,
+                  "min": 0,
                   "thresholds": {
                     "mode": "absolute",
                     "steps": [
@@ -314,7 +315,7 @@
                 }
               }
             },
-            "version": "13.2.4"
+            "version": "13.3.0"
           }
         }
       },
@@ -336,11 +337,11 @@
                       "group": "prometheus",
                       "kind": "DataQuery",
                       "spec": {
-                        "editorMode": "code",
+                        "editorMode": "builder",
                         "exemplar": false,
-                        "expr": "ups_ups_load{}",
+                        "expr": "avg by(ups) (ups_ups_load)",
                         "format": "time_series",
-                        "instant": true,
+                        "instant": false,
                         "key": "Q-41647e28-ff27-4b25-855a-34ca4987f369-0",
                         "legendFormat": "{{ups}}",
                         "range": true
@@ -397,7 +398,7 @@
                     },
                     "showPoints": "always",
                     "showValues": false,
-                    "spanNulls": false,
+                    "spanNulls": true,
                     "stacking": {
                       "group": "A",
                       "mode": "none"
@@ -425,8 +426,12 @@
               },
               "options": {
                 "legend": {
-                  "calcs": [],
-                  "displayMode": "list",
+                  "calcs": [
+                    "min",
+                    "max",
+                    "mean"
+                  ],
+                  "displayMode": "table",
                   "placement": "bottom",
                   "showLegend": true
                 },
@@ -437,7 +442,7 @@
                 }
               }
             },
-            "version": "13.2.4"
+            "version": "13.3.0"
           }
         }
       },
@@ -463,7 +468,7 @@
                         "editorMode": "code",
                         "format": "table",
                         "rawQuery": true,
-                        "rawSql": "SELECT\n    $__timeGroup(\"time\", '1m') AS \"time\",\n    AVG(\"value\") AS \"value\",\n    \"deviceName\" as \"metric\"\nFROM \"power\"\nWHERE\n    $__timeFilter(\"time\")\nGROUP BY 1, \"deviceName\"\nORDER BY 1 ASC",
+                        "rawSql": "SELECT\n    $__timeGroup(\"time\", '1m') AS \"time\",\n    AVG(\"value\") AS \"\",\n    \"deviceName\" as \"metric\"\nFROM \"power\"\nWHERE\n    $__timeFilter(\"time\")\nGROUP BY 1, \"deviceName\"\nORDER BY 1 ASC",
                         "sql": {
                           "columns": [
                             {
@@ -594,7 +599,250 @@
                 }
               }
             },
-            "version": "13.2.4"
+            "version": "13.3.0"
+          }
+        }
+      },
+      "panel-5": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "prometheus"
+                      },
+                      "group": "prometheus",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "editorMode": "builder",
+                        "expr": "avg by(ups) (ups_battery_runtime)",
+                        "legendFormat": "{{ups}}",
+                        "range": true
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "",
+          "id": 5,
+          "links": [],
+          "title": "UPS Runtime",
+          "vizConfig": {
+            "group": "gauge",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "red",
+                        "value": 0
+                      },
+                      {
+                        "color": "#EAB839",
+                        "value": 120
+                      },
+                      {
+                        "color": "green",
+                        "value": 300
+                      }
+                    ]
+                  }
+                },
+                "overrides": []
+              },
+              "options": {
+                "barShape": "flat",
+                "barWidthFactor": 0.3,
+                "effects": {
+                  "barGlow": false,
+                  "centerGlow": false,
+                  "gradient": true
+                },
+                "endpointMarker": "point",
+                "minVizHeight": 75,
+                "minVizWidth": 75,
+                "orientation": "auto",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "segmentCount": 1,
+                "segmentSpacing": 0.3,
+                "shape": "gauge",
+                "showThresholdLabels": false,
+                "showThresholdMarkers": false,
+                "sizing": "auto",
+                "sparkline": true,
+                "textMode": "auto"
+              }
+            },
+            "version": "13.3.0"
+          }
+        }
+      },
+      "panel-6": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "P951FEA4DE68E13C5"
+                      },
+                      "group": "influxdb",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "dataset": "iox",
+                        "editorMode": "code",
+                        "format": "time_series",
+                        "rawQuery": true,
+                        "rawSql": "SELECT\n    $__timeGroup(\"time\", '1m') AS \"time\",\n    \"deviceName\" as \"metric\",\n    AVG(\"value\") AS \"\",\nFROM \"humidity\"\nWHERE\n    $__timeFilter(\"time\")\nGROUP BY 1, \"deviceName\"\nORDER BY 1 ASC",
+                        "sql": {
+                          "columns": [
+                            {
+                              "parameters": [
+                                {
+                                  "name": "value",
+                                  "type": "functionParameter"
+                                }
+                              ],
+                              "type": "function"
+                            }
+                          ],
+                          "groupBy": [
+                            {
+                              "property": {
+                                "name": "deviceName",
+                                "type": "string"
+                              },
+                              "type": "groupBy"
+                            }
+                          ]
+                        },
+                        "table": "temperature"
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "",
+          "id": 6,
+          "links": [],
+          "title": "Humidity Probes",
+          "vizConfig": {
+            "group": "timeseries",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.6,
+                    "drawStyle": "line",
+                    "fillOpacity": 0,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "insertNulls": false,
+                    "lineInterpolation": "linear",
+                    "lineWidth": 1,
+                    "pointSize": 5,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "showPoints": "auto",
+                    "showValues": false,
+                    "spanNulls": true,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "none"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  },
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  },
+                  "unit": "humidity"
+                },
+                "overrides": []
+              },
+              "options": {
+                "legend": {
+                  "calcs": [
+                    "min",
+                    "max",
+                    "mean"
+                  ],
+                  "displayMode": "table",
+                  "enableFacetedFilter": false,
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "single",
+                  "sort": "none"
+                }
+              }
+            },
+            "version": "13.3.0"
           }
         }
       }
@@ -619,7 +867,7 @@
                           "name": "panel-3"
                         },
                         "height": 8,
-                        "width": 12,
+                        "width": 9,
                         "x": 0,
                         "y": 0
                       }
@@ -632,8 +880,21 @@
                           "name": "panel-2"
                         },
                         "height": 8,
-                        "width": 12,
-                        "x": 12,
+                        "width": 9,
+                        "x": 9,
+                        "y": 0
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-5"
+                        },
+                        "height": 8,
+                        "width": 6,
+                        "x": 18,
                         "y": 0
                       }
                     }
@@ -675,6 +936,19 @@
                         "width": 12,
                         "x": 12,
                         "y": 0
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-6"
+                        },
+                        "height": 8,
+                        "width": 12,
+                        "x": 0,
+                        "y": 8
                       }
                     }
                   ]
