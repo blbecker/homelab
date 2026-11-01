@@ -1,0 +1,20 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: peanut
+  namespace: prometheus-operator
+  labels:
+    release: prometheus-operator
+spec:
+  namespaceSelector:
+    matchNames:
+      - peanut
+
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: peanut
+
+  endpoints:
+    - port: http
+      path: /api/v1/metrics
+      interval: 30s

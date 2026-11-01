@@ -119,4 +119,11 @@
         type: uptimekuma 
         url: https://uptimekuma.tartarus.us 
         slug: homelab
-
+  - Peanut:
+      href: https://peanut.tartarus.us 
+      description: UPS Monitoring
+      icon: peanut
+      widgets:
+        - type: peanut 
+          url: https://peanut.tartarus.us 
+          key: qnapups
