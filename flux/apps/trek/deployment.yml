@@ -1,0 +1,95 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: trek
+  namespace: trek
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: trek
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: trek
+    spec:
+      dnsConfig:
+        options:
+          - name: ndots
+            value: "1"
+      automountServiceAccountToken: false
+      securityContext:
+        fsGroup: 20000
+        fsGroupChangePolicy: "Always"
+        readOnlyRootFilesystem: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: trek
+          image: mauriceboe/trek:latest
+          imagePullPolicy: Always
+          env:
+            - name: NODE_ENV
+              value: "production"
+            - name: PORT
+              value: "3000"
+            - name: TZ
+              value: "America/Puerto_Rico"
+            - name: LOG_LEVEL
+              value: "info"
+          envFrom:
+            - secretRef:
+                name: trek-secrets
+          ports:
+            - name: http
+              containerPort: 3000
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /app/data
+              name: trek-data
+            - mountPath: /app/uploads
+              name: trek-uploads
+            - mountPath: /tmp
+              name: tmp-volume
+          securityContext:
+            runAsUser: 20000
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+              add:
+                - CHOWN
+                - SETUID
+                - SETGID
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: http
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: http
+            initialDelaySeconds: 10
+            timeoutSeconds: 5
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "500m"
+            limits:
+              memory: "1Gi"
+              cpu: "1"
+      volumes:
+        - name: trek-data
+          persistentVolumeClaim:
+            claimName: trek-data
+        - name: trek-uploads
+          persistentVolumeClaim:
+            claimName: trek-uploads
+        - name: tmp-volume
+          emptyDir:
+            medium: Memory
+            sizeLimit: 128Mi

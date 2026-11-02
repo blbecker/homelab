@@ -1,0 +1,17 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: trek-web-route
+  namespace: trek
+spec:
+  parentRefs:
+    - name: main-gateway
+      namespace: traefik
+
+  hostnames:
+    - trek.tartarus.us
+
+  rules:
+    - backendRefs:
+        - name: trek
+          port: 80
