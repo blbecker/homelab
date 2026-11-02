@@ -4,11 +4,11 @@ metadata:
   name: trek-uploads
   namespace: trek
   annotations:
-    longhorn.io/recurring-job-group: default
+    nfs.io/storage-path: "trek-uploads"
 spec:
-  storageClassName: longhorn
+  storageClassName: qnap-fixed-name-nfs-client
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
       storage: 10Gi
