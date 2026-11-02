@@ -73,6 +73,11 @@ ingress:
     originRequest:
       httpHostHeader: "ntfy.tartarus.us"
 
+  - hostname: tududi.tartarus.us 
+    service: http://tududi.tududi.svc.cluster.local:80
+    originRequest:
+      httpHostHeader: "tududi.tartarus.us"
+
   - hostname: uptimekuma.tartarus.us
     service: http://uptimekuma.uptimekuma.svc.cluster.local:3001
     originRequest:

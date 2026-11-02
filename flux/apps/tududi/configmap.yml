@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tududi-config
+  namespace: tududi
+data:
+  OIDC_ENABLED: "true"
+  OIDC_PROVIDER_NAME: Authentik
+  OIDC_PROVIDER_SLUG: tududi
+  OIDC_ISSUER_URL: https://authentik.tartarus.us/application/o/tududi/
+  OIDC_CLIENT_ID: VkwtKAjj5UeAvgGNW3aKSSgjmUDxzehuh71VBVEi
+  OIDC_SCOPE: openid profile email
+  OIDC_AUTO_PROVISION: "true"
+  FF_ENABLE_MCP: "true"
+  NODE_ENV: production
+  PORT: "3002"
+  TZ: "America/Puerto_Rico"
+  TUDUDI_USER_EMAIL: "tududi.admin@mail.bckr.me"
+  BASE_URL: "https://tududi.tartarus.us"
+  FRONTEND_URL: "https://tududi.tartarus.us"
+  BACKEND_URL: "https://tududi.tartarus.us"
+  TUDUDI_ALLOWED_ORIGINS: "https://tududi.tartarus.us"
+  TUDUDI_TRUST_PROXY: "true"
+  DB_FILE: "/app/db/production.sqlite3"
+  TUDUDI_UPLOAD_PATH: "/data/uploads"
+  PASSWORD_AUTH_ENABLED: "false"
+

@@ -29,41 +29,9 @@ spec:
         - name: tududi
           image: docker.io/chrisvel/tududi:1.14.0
           imagePullPolicy: IfNotPresent
-          env:
-            - name: NODE_ENV
-              value: "production"
-            - name: PORT
-              value: "3002"
-            - name: TZ
-              value: "America/Puerto_Rico"
-            # initial admin account, created on first startup only
-            - name: TUDUDI_USER_EMAIL
-              value: "tududi.admin@mail.bckr.me"
-            # public URLs: needed for OIDC callbacks and generated links
-            - name: BASE_URL
-              value: "https://tududi.tartarus.us"
-            - name: FRONTEND_URL
-              value: "https://tududi.tartarus.us"
-            - name: BACKEND_URL
-              value: "https://tududi.tartarus.us"
-            # CORS allowlist for the public origin
-            - name: TUDUDI_ALLOWED_ORIGINS
-              value: "https://tududi.tartarus.us"
-            # required behind Traefik, otherwise sessions break after login
-            - name: TUDUDI_TRUST_PROXY
-              value: "true"
-            # SQLite on the Longhorn volume, attachments on the NFS volume.
-            # The DB lives in /app/db (chowned by the image entrypoint, which
-            # works on Longhorn). Uploads deliberately live OUTSIDE /app:
-            # the QNAP NFS export squashes root, so the entrypoint's
-            # `chown -R app:app /app/uploads` fails with EPERM and, under
-            # `set -eu`, aborts the container before the app starts. Mounting
-            # the share at /data/uploads keeps it off that chown path.
-            - name: DB_FILE
-              value: "/app/db/production.sqlite3"
-            - name: TUDUDI_UPLOAD_PATH
-              value: "/data/uploads"
           envFrom:
+            - configMapRef:
+                name: tududi-config
             - secretRef:
                 name: tududi-secrets
           ports:
