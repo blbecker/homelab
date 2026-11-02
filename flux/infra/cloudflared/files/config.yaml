@@ -72,6 +72,11 @@ ingress:
     service: http://ntfy.ntfy.svc.cluster.local:8080
     originRequest:
       httpHostHeader: "ntfy.tartarus.us"
+  
+  - hostname: trek.tartarus.us 
+    service: http://trek.tududi.svc.cluster.local:80
+    originRequest:
+      httpHostHeader: "trek.tartarus.us"
 
   - hostname: tududi.tartarus.us 
     service: http://tududi.tududi.svc.cluster.local:80

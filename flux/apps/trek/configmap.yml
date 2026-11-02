@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: trek-config
+  namespace: trek
+data:
+  OIDC_ENABLED: "true"
+  OIDC_ISSUER: https://authentik.tartarus.us/application/o/trek/
+  OIDC_CLIENT_ID: DF1h5zbhCriHI238NtO5SMCBfqvCDYuqf7ZQCFzx
+  OIDC_ADMIN_CLAIM: entitlements
+  OIDC_ADMIN_VALUE: trek-admins
+  OIDC_SCOPE: openid email profile entitlements
+  OIDC_DISPLAY_NAME: Authentik
+  OIDC_DISCOVERY_URL: https://authentik.tartarus.us/application/o/trek/.well-known/openid-configuration
+  OIDC_USERNAME_CLAIM: preferred_username
+  NODE_ENV: production
+  PORT: "3000"
+  TZ: "America/Puerto_Rico"
+  LOG_LEVEL: "info"
