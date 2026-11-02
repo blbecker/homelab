@@ -35,11 +35,11 @@ spec:
         force: false
       - identifier: optional-skills/creative/meme-generation
       - identifier: productivity/google-workspace
+      - identifier: optional-skills/autonomous-ai-agents/opencode
     plugins: # install OpenViking memory plugin
       - identifier: openviking
         enable: true
       - identifier: rabilrbl/hermes-brave-search-plugin
-      - identifier: official/autonomous-ai-agents/opencode
     config:
       raw: # optional; omit if no custom config.yml is needed
         tool_loop_guardrails:
