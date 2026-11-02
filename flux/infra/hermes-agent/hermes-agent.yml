@@ -15,7 +15,7 @@ spec:
     packages: # operator installs these via init container into $HERMES_HOME/.python-packages on the PVC (served via PYTHONPATH)
       npm:
         install:
-          - @opencode/cli
+          - "@opencode/cli"
       pip:
         install: # keep in sync with the sealed venv pins when bumping the image tag (PYTHONPATH shadows the venv for agent-run code)
           - google-api-python-client==2.194.0
