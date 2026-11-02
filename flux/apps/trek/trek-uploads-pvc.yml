@@ -4,7 +4,7 @@ metadata:
   name: trek-uploads
   namespace: trek
   annotations:
-    nfs.io/storage-path: "trek-uploads"
+    nfs.io/storage-path: "trek-data"
 spec:
   storageClassName: qnap-fixed-name-nfs-client
   accessModes:
