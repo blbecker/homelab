@@ -1,0 +1,17 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: tududi-web-route
+  namespace: tududi
+spec:
+  parentRefs:
+    - name: main-gateway
+      namespace: traefik
+
+  hostnames:
+    - tududi.tartarus.us
+
+  rules:
+    - backendRefs:
+        - name: tududi
+          port: 80

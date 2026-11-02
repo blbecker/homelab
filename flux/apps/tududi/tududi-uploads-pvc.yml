@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: tududi-uploads
+  namespace: tududi
+  annotations:
+    nfs.io/storage-path: "tududi-uploads"
+spec:
+  storageClassName: qnap-fixed-name-nfs-client
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 5Gi
