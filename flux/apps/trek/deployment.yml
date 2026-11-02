@@ -5,6 +5,8 @@ metadata:
   namespace: trek
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app.kubernetes.io/name: trek
@@ -19,15 +21,13 @@ spec:
             value: "1"
       automountServiceAccountToken: false
       securityContext:
-        fsGroup: 20000
-        fsGroupChangePolicy: "Always"
-        readOnlyRootFilesystem: true
+        fsGroup: 1000
         seccompProfile:
           type: RuntimeDefault
       containers:
         - name: trek
           image: mauriceboe/trek:latest
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           env:
             - name: NODE_ENV
               value: "production"
@@ -52,16 +52,13 @@ spec:
             - mountPath: /tmp
               name: tmp-volume
           securityContext:
-            runAsUser: 20000
-            readOnlyRootFilesystem: true
             allowPrivilegeEscalation: false
-            capabilities:
-              drop:
-                - ALL
-              add:
-                - CHOWN
-                - SETUID
-                - SETGID
+          startupProbe:
+            httpGet:
+              path: /api/health
+              port: http
+            periodSeconds: 10
+            failureThreshold: 60
           livenessProbe:
             httpGet:
               path: /api/health
@@ -72,9 +69,10 @@ spec:
             failureThreshold: 3
           readinessProbe:
             httpGet:
-              path: /api/health
+              path: /api/health/ready
               port: http
             initialDelaySeconds: 10
+            periodSeconds: 10
             timeoutSeconds: 5
           resources:
             requests:
