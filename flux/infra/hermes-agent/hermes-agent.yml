@@ -39,7 +39,7 @@ spec:
       - identifier: openviking
         enable: true
       - identifier: rabilrbl/hermes-brave-search-plugin
-      - official/autonomous-ai-agents/opencode
+      - identifier: official/autonomous-ai-agents/opencode
     config:
       raw: # optional; omit if no custom config.yml is needed
         tool_loop_guardrails:
