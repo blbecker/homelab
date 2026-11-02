@@ -13,6 +13,9 @@ spec:
   hermes:
     image: ghcr.io/blbecker/hermes-agent:0.0.23
     packages: # operator installs these via init container into $HERMES_HOME/.python-packages on the PVC (served via PYTHONPATH)
+      npm:
+        install:
+          - @opencode/cli
       pip:
         install: # keep in sync with the sealed venv pins when bumping the image tag (PYTHONPATH shadows the venv for agent-run code)
           - google-api-python-client==2.194.0
@@ -36,6 +39,7 @@ spec:
       - identifier: openviking
         enable: true
       - identifier: rabilrbl/hermes-brave-search-plugin
+      - official/autonomous-ai-agents/opencode
     config:
       raw: # optional; omit if no custom config.yml is needed
         tool_loop_guardrails:
