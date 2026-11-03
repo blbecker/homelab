@@ -23,6 +23,17 @@ spec:
     #   enabled: false
     #   # Available types: k3s, rke2, rke1
     #   type: "k3s"
+    networkPolicies:
+      # restrictInternalTraffic defaults to true and is what renders the
+      # longhorn-manager NetworkPolicy; without a scrape source Prometheus in
+      # prometheus-operator is denied TCP/9500 (where /metrics is served).
+      metricsScrapeSources:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: prometheus-operator
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: prometheus
     preUpgradeChecker:
       jobEnabled: false
     service:
