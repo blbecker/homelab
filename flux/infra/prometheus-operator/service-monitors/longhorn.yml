@@ -1,0 +1,20 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: longhorn
+  namespace: prometheus-operator
+  labels:
+    release: prometheus-operator
+spec:
+  namespaceSelector:
+    matchNames:
+      - longhorn
+
+  selector:
+    matchLabels:
+      app: longhorn-manager
+
+  endpoints:
+    - port: manager
+      path: /metrics
+      interval: 30s
