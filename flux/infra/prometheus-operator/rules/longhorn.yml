@@ -1,0 +1,126 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: longhorn
+  namespace: prometheus-operator
+  labels:
+    release: prometheus-operator
+spec:
+  groups:
+    - name: longhorn.volumes
+      rules:
+        # `longhorn_volume_robustness` is one-hot encoded per robustness state
+        # (labels: volume, pvc, pvc_namespace, state), not a numeric value, so
+        # select on the label rather than comparing to 2/3.
+        - alert: LonghornVolumeDegraded
+          expr: max by (volume, pvc, pvc_namespace) (longhorn_volume_robustness{state="degraded"} == 1)
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Longhorn volume {{ $labels.pvc_namespace }}/{{ $labels.pvc }} is degraded"
+            description: "Replicas are missing or rebuilding for volume {{ $labels.volume }}. A second replica loss makes this volume unavailable."
+
+        - alert: LonghornVolumeFaulted
+          expr: max by (volume, pvc, pvc_namespace) (longhorn_volume_robustness{state="faulted"} == 1)
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Longhorn volume {{ $labels.pvc_namespace }}/{{ $labels.pvc }} is faulted"
+            description: "Volume {{ $labels.volume }} has no healthy replica left and I/O is failing. Pods mounting this PVC are down."
+
+        - alert: LonghornPVCUsageHigh
+          # Filesystem usage of PVCs that are actually backed by Longhorn, joined
+          # through longhorn_volume_capacity_bytes. Longhorn's own
+          # actual_size/capacity ratio is NOT a fullness signal (thin volumes
+          # routinely exceed 100%), so kubelet stats are the source of truth.
+          expr: |
+            max by (namespace, persistentvolumeclaim, volume) (
+              (kubelet_volume_stats_used_bytes / kubelet_volume_stats_capacity_bytes) * 100
+              and on (namespace, persistentvolumeclaim)
+              count by (namespace, persistentvolumeclaim, volume) (
+                label_replace(
+                  label_replace(longhorn_volume_capacity_bytes, "namespace", "$1", "pvc_namespace", "(.*)"),
+                  "persistentvolumeclaim", "$1", "pvc", "(.*)"
+                )
+              )
+            ) > 85
+          for: 15m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Longhorn PVC {{ $labels.namespace }}/{{ $labels.persistentvolumeclaim }} is {{ printf \"%.0f\" $value }}% full"
+            description: "Volume {{ $labels.volume }} is above 85% filesystem usage. Longhorn volumes cannot be shrunk; resize the PVC or clean up data."
+
+    - name: longhorn.nodes
+      rules:
+        - alert: LonghornDiskUsageHigh
+          expr: |
+            100 * (max by (node, disk) (longhorn_disk_usage_bytes) / max by (node, disk) (longhorn_disk_capacity_bytes)) > 85
+          for: 15m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Longhorn disk {{ $labels.disk }} on {{ $labels.node }} is {{ printf \"%.0f\" $value }}% full"
+            description: "Above 85% Longhorn stops scheduling new replicas on this disk (default storageMinimalAvailablePercentage is 25% of disk)."
+
+        - alert: LonghornDiskUsageCritical
+          expr: |
+            100 * (max by (node, disk) (longhorn_disk_usage_bytes) / max by (node, disk) (longhorn_disk_capacity_bytes)) > 95
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Longhorn disk {{ $labels.disk }} on {{ $labels.node }} is {{ printf \"%.0f\" $value }}% full"
+            description: "Existing volumes can fail to rebuild and writes may fail. Free space or add disks now."
+
+        - alert: LonghornNodeNotReady
+          expr: max by (node) (longhorn_node_status{condition="ready"} == 0)
+          for: 10m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Longhorn node {{ $labels.node }} is not ready"
+            description: "The longhorn-manager on {{ $labels.node }} reports the node ready condition as false; volumes and replicas on it are at risk."
+
+        - alert: LonghornNodeUnschedulable
+          expr: max by (node) (longhorn_node_status{condition="schedulable"} == 0)
+          for: 30m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Longhorn node {{ $labels.node }} is not schedulable"
+            description: "No new replicas can be placed on {{ $labels.node }}. Check for eviction, disk pressure or (in 1.13) the kernelmodulesloaded/requiredpackages environment checks."
+
+    - name: longhorn.backups
+      rules:
+        - alert: LonghornVolumeBackupStale
+          expr: |
+            (time() - max by (volume, pvc, pvc_namespace) (longhorn_volume_last_backup_at)) > 93600
+            and (max by (volume, pvc, pvc_namespace) (longhorn_volume_last_backup_at) > 0)
+          for: 6h
+          labels:
+            severity: warning
+          annotations:
+            summary: "Longhorn volume {{ $labels.pvc_namespace }}/{{ $labels.pvc }} has no backup in over 26h"
+            description: "Last successful backup of {{ $labels.volume }} is older than the 26h threshold (daily job + slack). Check the recurring job and the backup target."
+
+        - alert: LonghornVolumeNeverBackedUp
+          expr: max by (volume, pvc, pvc_namespace) (longhorn_volume_last_backup_at) == 0
+          for: 24h
+          labels:
+            severity: info
+          annotations:
+            summary: "Longhorn volume {{ $labels.pvc_namespace }}/{{ $labels.pvc }} has never been backed up"
+            description: "Volume {{ $labels.volume }} has no backup at all. Either attach a recurring job or confirm the data is disposable."
+
+        - alert: LonghornBackupJobFailed
+          # longhorn_backup_state: 0=new, 1=pending, 2=in-progress, 3=completed, 4=error, 5=unknown.
+          expr: max by (volume, recurring_job) (longhorn_backup_state == 4)
+          for: 15m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Longhorn backup job {{ $labels.recurring_job }} is in error for {{ $labels.volume }}"
+            description: "A backup of volume {{ $labels.volume }} failed. Check the backup target (NFS/S3 credentials, capacity, network)."

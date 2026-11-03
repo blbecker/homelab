@@ -11,11 +11,15 @@ resources:
   - snmp_exporter_svc.yml 
   - service-monitors/peanut.yml
   - service-monitors/longhorn.yml
+  - rules/longhorn.yml
 
 configMapGenerator:
   - name: smarthome-dashboard
     files:
       - files/dashboards/smarthome.json
+  - name: longhorn-dashboard
+    files:
+      - files/dashboards/longhorn.json
 
 generatorOptions:
   labels:
