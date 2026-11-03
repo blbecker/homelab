@@ -11,7 +11,7 @@ spec:
     service:
       type: ClusterIP                # optional; ClusterIP (default) | LoadBalancer | NodePort
   hermes:
-    image: ghcr.io/blbecker/hermes-agent:0.0.23
+    image: ghcr.io/blbecker/hermes-agent:0.0.25
     packages: # operator installs these via init container into $HERMES_HOME/.python-packages on the PVC (served via PYTHONPATH)
       npm:
         install:
