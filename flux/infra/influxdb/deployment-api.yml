@@ -44,6 +44,13 @@ spec:
               value: setup
             - name: INFLUXDB3_NODE_ID
               value: influxdb
+            # influxdb:3.12.2-core defaults INFLUXDB3_DATA_DIR to
+            # /home/influxdb3/.influxdb3, which is NOT on the PVC mounted at
+            # /var/lib/influxdb3. Without this override the catalog, WAL and
+            # parquet files live in the container's writable layer and every
+            # pod recreation wipes the catalog and regenerates the admin token.
+            - name: INFLUXDB3_DATA_DIR
+              value: /var/lib/influxdb3
             - name: DOCKER_INFLUXDB_INIT_USERNAME
               valueFrom:
                 secretKeyRef:
