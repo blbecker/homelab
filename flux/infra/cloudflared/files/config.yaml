@@ -74,7 +74,7 @@ ingress:
       httpHostHeader: "ntfy.tartarus.us"
   
   - hostname: trek.tartarus.us 
-    service: http://trek.tududi.svc.cluster.local:80
+    service: http://trek.trek.svc.cluster.local:80
     originRequest:
       httpHostHeader: "trek.tartarus.us"
 
