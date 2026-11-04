@@ -2,6 +2,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: prometheus-operator
 resources:
+  - alertmanagerconfig.yml
   - helmrelease.yaml 
   - httproute-alertmanager.yml 
   - httproute-grafana.yml 

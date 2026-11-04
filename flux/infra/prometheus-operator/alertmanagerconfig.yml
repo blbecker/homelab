@@ -1,0 +1,28 @@
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: AlertmanagerConfig
+metadata:
+  name: ntfy
+  namespace: prometheus-operator
+  labels:
+    alertmanager: main
+spec:
+  route:
+    receiver: ntfy
+    groupBy:
+      - namespace
+      - alertname
+    groupWait: 30s
+    groupInterval: 5m
+    repeatInterval: 24h
+
+  receivers:
+    - name: ntfy
+      webhookConfigs:
+        - url: https://ntfy.tartarus.us/alerts?template=alertmanager
+          sendResolved: true
+          httpConfig:
+            authorization:
+              type: Bearer
+              credentials:
+                name: alertmanager-secrets
+                key: NTFY_TOKEN

@@ -8,3 +8,6 @@ auth-access:
   - "openclaw:openclaw:wo"
   - "apprise:apprise:wo"
   - "desktopAnsible:alerts:wo"
+  - "grafana:alerts:wo"
+  - "alertmanager:alerts:wo"
+  - "metis:alerts:wo"

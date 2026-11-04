@@ -1,0 +1,43 @@
+title: |
+  {{- if eq .status "firing" }}
+  🚨 Alert: {{ (first .alerts).labels.alertname }}
+  {{- else if eq .status "resolved" }}
+  ✅ Resolved: {{ (first .alerts).labels.alertname }}
+  {{- else }}
+  {{ fail "Unsupported Alertmanager status." }}
+  {{- end }}
+
+message: |
+  Status: {{ .status | title }}
+  Receiver: {{ .receiver }}
+  
+  {{- range .alerts }}
+  Alert: {{ .labels.alertname }}
+  Instance: {{ .labels.instance }}
+  Severity: {{ .labels.severity }}
+  Starts at: {{ .startsAt }}
+  {{ if and .endsAt (ne .endsAt "0001-01-01T00:00:00Z") }}Ends at: {{ .endsAt }}{{ end }}
+  {{- if .annotations.summary }}
+  Summary: {{ .annotations.summary }}
+  {{- end }}
+  {{- if .annotations.description }}
+  Description: {{ .annotations.description }}
+  {{- end }}
+  Source: {{ .generatorURL }}
+  
+  {{ end }}
+
+priority: |
+  {{- if eq .status "resolved" }}
+    {{- 3 }}
+  {{- else }}
+    {{- $priority := 3 }}
+    {{- range .alerts }}
+      {{- if eq .labels.severity "critical" }}
+        {{- $priority = 5 }}
+      {{- else if and (eq .labels.severity "warning") (lt $priority 4) }}
+        {{- $priority = 4 }}
+      {{- end }}
+    {{- end }}
+    {{- $priority }}
+  {{- end }}

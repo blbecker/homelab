@@ -42,9 +42,14 @@ spec:
               containerPort: 80
               protocol: TCP
           volumeMounts:
-            - mountPath: /etc/ntfy
+            - name: config
+              mountPath: /etc/ntfy/server.yml
+              subPath: server.yml
               readOnly: true
-              name: config
+            - name: config
+              mountPath: /etc/ntfy/templates/alertmanager.yml
+              subPath: alertmanager.yml
+              readOnly: true
             - mountPath: /var/cache/ntfy/attachments
               name: attachments
           securityContext:

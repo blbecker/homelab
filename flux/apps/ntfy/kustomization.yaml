@@ -9,3 +9,4 @@ configMapGenerator:
   - name: ntfy-configmap
     files:
       - files/server.yml
+      - files/templates/alertmanager.yml
