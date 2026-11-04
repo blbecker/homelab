@@ -85,3 +85,11 @@ spec:
         superuser: false
         passwordSecret:
           name: tranquil-pds-pg-user-creds
+
+      - name: tududi
+        ensure: present
+        comment: tududi server
+        login: true
+        superuser: false
+        passwordSecret:
+          name: tududi-pg-user-creds
