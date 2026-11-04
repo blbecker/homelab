@@ -38,10 +38,3 @@ priority: |
     {{- end }}
     {{- $priority }}
   {{- end }}
-
-actions: |
-  {{- range .alerts }}
-  - action: view
-    label: View {{ .labels.alertname }}
-    url: {{ .generatorURL }}
-  {{- end }}
