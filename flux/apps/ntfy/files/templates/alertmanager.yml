@@ -23,7 +23,7 @@ message: |
   {{- if .annotations.description }}
   Description: {{ .annotations.description }}
   {{- end }}
-  Source: {{ .generatorURL }}
+  Source: [Link]({{ .generatorURL }})
   
   {{ end }}
 
