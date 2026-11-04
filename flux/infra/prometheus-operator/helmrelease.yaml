@@ -21,8 +21,12 @@ spec:
     crds: CreateReplace
 
   values:
+    prometheus:
+      prometheusSpec:
+        externalUrl: https://prometheus.tartarus.us
     alertmanager:
       alertmanagerSpec:
+        externalUrl: https://alertmanager.tartarus.us
         alertmanagerConfigSelector:
           matchLabels:
             alertmanager: main
