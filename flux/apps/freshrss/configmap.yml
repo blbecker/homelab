@@ -22,7 +22,10 @@ data:
   OIDC_CLIENT_ID: q0CYi3qHWpRa6r7yNWzMOhdpiMUDyGGt3RdBob4X
   OIDC_REMOTE_USER_CLAIM: preferred_username
   OIDC_SCOPES: openid profile email
-  OIDC_X_FORWARDED_HEADERS: X-Forwarded-Host X-Forwarded-Port X-Forwarded-Proto
+  # neither traefik nor cloudflared sets X-Forwarded-Port, so listing it only
+  # makes mod_auth_openidc warn on every request (it checks for the header and
+  # finds nothing); rebuilds the redirect URI from X-Forwarded-Host/-Proto
+  OIDC_X_FORWARDED_HEADERS: X-Forwarded-Host X-Forwarded-Proto
 
   # $VAR references are expanded by the entrypoint's `eval`, which is how the
   # image's own compose examples pass the (secret) password through.
