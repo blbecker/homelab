@@ -53,6 +53,9 @@ spec:
         serviceMonitor:
           enabled: true
           interval: 30s
+          # Same namespace as every other ServiceMonitor in this repo; the chart still points
+          # namespaceSelector at the traefik namespace, which is where the Service lives.
+          namespace: prometheus-operator
           additionalLabels:
             # kube-prometheus-stack's default serviceMonitorSelector (release name)
             release: prometheus-operator
