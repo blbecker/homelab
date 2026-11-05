@@ -38,6 +38,14 @@ spec:
         passwordSecret:
           name: authentik-pg-user-creds
 
+      - name: freshrss
+        ensure: present
+        comment: Freshrss server
+        login: true
+        superuser: false
+        passwordSecret:
+          name: freshrss-pg-user-creds
+
       - name: gotify
         ensure: present
         comment: Gotify notification server
