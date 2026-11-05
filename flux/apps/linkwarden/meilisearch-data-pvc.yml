@@ -3,12 +3,10 @@ kind: PersistentVolumeClaim
 metadata:
   name: linkwarden-meilisearch
   namespace: linkwarden
-  annotations:
-    nfs.io/storage-path: "linkwarden-meilisearch"
 spec:
-  storageClassName: qnap-fixed-name-nfs-client
+  storageClassName: longhorn
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   resources:
     requests:
-      storage: 5Gi
+      storage: 1Gi
