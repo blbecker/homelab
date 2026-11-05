@@ -3,7 +3,7 @@ kind: Kustomization
 namespace: linkwarden
 resources:
   - ./configmap.yml
-  - ./httproute.yml
+  - ./dnsendpoint.yml
   - ./linkwarden-data-pvc.yml
   - ./linkwarden-deployment.yml
   - ./linkwarden-service.yml
