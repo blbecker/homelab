@@ -1,0 +1,86 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: freshrss
+  namespace: freshrss
+spec:
+  replicas: 1
+  # one writer against the NFS-backed data + extensions volumes
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: freshrss
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: freshrss
+    spec:
+      dnsConfig:
+        options:
+          - name: ndots
+            value: "1"
+      automountServiceAccountToken: false
+      securityContext:
+        # the entrypoint chowns the data/extensions dirs to www-data and fixes
+        # permissions, so it has to start as root (same as the compose setup);
+        # Apache itself drops to www-data
+        fsGroup: 33
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: freshrss
+          image: ghcr.io/freshrss/freshrss:1.30.4
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: freshrss-config
+            - secretRef:
+                name: freshrss-secrets
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /var/www/FreshRSS/data
+              name: freshrss-data
+            - mountPath: /var/www/FreshRSS/extensions
+              name: freshrss-extensions
+          securityContext:
+            allowPrivilegeEscalation: false
+          # first boot runs the CLI install against postgres, so allow some time
+          startupProbe:
+            httpGet:
+              path: /
+              port: http
+            periodSeconds: 10
+            failureThreshold: 30
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 15
+            periodSeconds: 30
+            timeoutSeconds: 10
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "100m"
+            limits:
+              memory: "1Gi"
+              cpu: "1"
+      volumes:
+        - name: freshrss-data
+          persistentVolumeClaim:
+            claimName: freshrss-data
+        - name: freshrss-extensions
+          persistentVolumeClaim:
+            claimName: freshrss-extensions

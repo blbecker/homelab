@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: freshrss-config
+  namespace: freshrss
+data:
+  TZ: America/Puerto_Rico
+  # refresh feeds twice an hour (:03 and :33)
+  CRON_MIN: "3,33"
+  # pods + traefik live in 10.42.0.0/16, so the client IP is taken from
+  # X-Forwarded-For for logging and external auth
+  TRUSTED_PROXY: "10.42.0.0/16"
+  BASE_URL: https://freshrss.tartarus.us
+  # shared CNPG cluster (role/db/creds are provisioned in flux/infra)
+  DB_HOST: main-rw.cloudnative-pg.svc.cluster.local
+  DB_BASE: freshrss
+  DB_USER: freshrss
+  ADMIN_EMAIL: freshrss.admin@mail.bckr.me
+  # OIDC needs the Debian image and a full env block; left off for now
+  OIDC_ENABLED: "0"
+  # $VAR references are expanded by the entrypoint's `eval`, which is how the
+  # image's own compose examples pass the (secret) password through.
+  # Only honoured on first boot; afterwards use cli/reconfigure.php.
+  FRESHRSS_INSTALL: |-
+    --api-enabled
+    --base-url ${BASE_URL}
+    --db-base ${DB_BASE}
+    --db-host ${DB_HOST}
+    --db-password ${DB_PASSWORD}
+    --db-type pgsql
+    --db-user ${DB_USER}
+    --default-user admin
+    --language en
+    --title FreshRSS
+  FRESHRSS_USER: |-
+    --api-password ${ADMIN_API_PASSWORD}
+    --email ${ADMIN_EMAIL}
+    --language en
+    --password ${ADMIN_PASSWORD}
+    --user admin
