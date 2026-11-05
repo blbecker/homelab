@@ -8,6 +8,7 @@ spec:
   path: flux/apps/linkwarden
   dependsOn:
     - name: traefik
+    - name: longhorn
   prune: true # remove any elements later removed from the above path
   timeout: 5m
   retryInterval: 2m
