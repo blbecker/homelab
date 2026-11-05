@@ -9,3 +9,12 @@ data:
   MEILI_HOST: http://linkwarden-meilisearch.linkwarden.svc.cluster.local:7700
   STORAGE_FOLDER: /data/data
   TZ: America/Puerto_Rico
+  OPENROUTER_MODEL: deepseek/deepseek-v4.1-flash-1017
+  NEXT_PUBLIC_AUTHENTIK_ENABLED: "true"
+  AUTHENTIK_ISSUER: https://authentik.tartarus.us/application/o/linkwarden
+  AUTHENTIK_CLIENT_ID: qQShu2yZX2qdAulkfUy2lcNozxsf9QZVj66RMZTK
+  NEXT_PUBLIC_EMAIL_PROVIDER: "true"
+  EMAIL_FROM: Linkwarden <noreply@linkwarden.tartarus.us>
+  BASE_URL: https://linkwarden.tartarus.us
+  NEXT_PUBLIC_DISABLE_REGISTRATION: "true"
+  NEXT_PUBLIC_CREDENTIALS_ENABLED: "false"

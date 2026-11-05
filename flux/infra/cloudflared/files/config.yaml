@@ -58,6 +58,11 @@ ingress:
     originRequest:
       httpHostHeader: "knot.tartarus.us"
   
+  - hostname: linkwarden.tartarus.us
+    service: http://linkwarden.linkwarden.svc.cluster.local:80
+    originRequest:
+      httpHostHeader: "linkwarden.tartarus.us"
+  
   - hostname: mealie.tartarus.us
     service: http://mealie.mealie.svc.cluster.local:9000
     originRequest:
