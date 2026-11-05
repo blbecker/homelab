@@ -18,11 +18,6 @@ ingress:
     originRequest:
       httpHostHeader: "authentik.tartarus.us"
 
-  - hostname: bsky.tartarus.us
-    service: http://bsky.bsky.svc.cluster.local:6767
-    originRequest:
-      httpHostHeader: "bsky.tartarus.us"
-
   - hostname: cinny.tartarus.us
     service: http://cinny.cinny.svc.cluster.local:8080
     originRequest:
@@ -58,10 +53,10 @@ ingress:
     originRequest:
       httpHostHeader: "irc.tartarus.us"
 
-  - hostname: knot.tartarus.us
-    service: http://knot-web.knot.svc.cluster.local:5555
-    originRequest:
-      httpHostHeader: "knot.tartarus.us"
+  # - hostname: knot.tartarus.us
+  #   service: http://knot-web.knot.svc.cluster.local:5555
+  #   originRequest:
+  #     httpHostHeader: "knot.tartarus.us"
   
   - hostname: linkwarden.tartarus.us
     service: http://linkwarden.linkwarden.svc.cluster.local:80
