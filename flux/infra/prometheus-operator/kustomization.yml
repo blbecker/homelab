@@ -14,6 +14,7 @@ resources:
   - service-monitors/longhorn.yml
   - rules/longhorn.yml
   - rules/traefik.yml
+  - rules/cert-manager.yml
 
 configMapGenerator:
   - name: smarthome-dashboard
@@ -25,6 +26,9 @@ configMapGenerator:
   - name: traefik-dashboard
     files:
       - files/dashboards/traefik.json
+  - name: cert-manager-dashboard
+    files:
+      - files/dashboards/cert-manager.json
 
 generatorOptions:
   labels:
