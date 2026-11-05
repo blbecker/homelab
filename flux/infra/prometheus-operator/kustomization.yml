@@ -13,6 +13,7 @@ resources:
   - service-monitors/peanut.yml
   - service-monitors/longhorn.yml
   - rules/longhorn.yml
+  - rules/traefik.yml
 
 configMapGenerator:
   - name: smarthome-dashboard
@@ -21,6 +22,9 @@ configMapGenerator:
   - name: longhorn-dashboard
     files:
       - files/dashboards/longhorn.json
+  - name: traefik-dashboard
+    files:
+      - files/dashboards/traefik.json
 
 generatorOptions:
   labels:
