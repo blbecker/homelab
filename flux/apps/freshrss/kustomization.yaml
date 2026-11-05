@@ -3,8 +3,8 @@ kind: Kustomization
 namespace: freshrss
 resources:
   - ./configmap.yml
+  - ./dnsendpoint.yml
   - ./freshrss-data-pvc.yml
   - ./freshrss-deployment.yml
   - ./freshrss-extensions-pvc.yml
   - ./freshrss-service.yml
-  - ./httproute.yml

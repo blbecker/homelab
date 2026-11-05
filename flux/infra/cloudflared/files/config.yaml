@@ -33,6 +33,11 @@ ingress:
     originRequest:
       httpHostHeader: "continuwuity.tartarus.us"
   
+  - hostname: freshrss.tartarus.us
+    service: http://freshrss.freshrss.svc.cluster.local:80
+    originRequest:
+      httpHostHeader: "freshrss.tartarus.us"
+  
   - hostname: gotify.tartarus.us
     service: http://gotify.gotify.svc.cluster.local:80
     originRequest:

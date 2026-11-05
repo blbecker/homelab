@@ -15,9 +15,15 @@ data:
   DB_HOST: main-rw.cloudnative-pg.svc.cluster.local
   DB_BASE: freshrss
   DB_USER: freshrss
+  
   ADMIN_EMAIL: freshrss.admin@mail.bckr.me
-  # OIDC needs the Debian image and a full env block; left off for now
-  OIDC_ENABLED: "0"
+  OIDC_ENABLED: "1"
+  OIDC_PROVIDER_METADATA_URL: https://authentik.tartarus.us/application/o/fresh-rss/.well-known/openid-configuration
+  OIDC_CLIENT_ID: q0CYi3qHWpRa6r7yNWzMOhdpiMUDyGGt3RdBob4X
+  OIDC_REMOTE_USER_CLAIM: preferred_username
+  OIDC_SCOPES: openid profile email
+  OIDC_X_FORWARDED_HEADERS: X-Forwarded-Host X-Forwarded-Port X-Forwarded-Proto
+
   # $VAR references are expanded by the entrypoint's `eval`, which is how the
   # image's own compose examples pass the (secret) password through.
   # Only honoured on first boot; afterwards use cli/reconfigure.php.
