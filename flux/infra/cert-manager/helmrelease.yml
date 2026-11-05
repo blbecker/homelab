@@ -13,3 +13,21 @@ spec:
   # releaseName: cert-manager
   values:
     installCRDs: true
+
+    # The controller/webhook/cainjector already serve /metrics on the `http-metrics` port (9402);
+    # prometheus.enabled has defaulted to true since v1.15, so the only missing piece was the
+    # ServiceMonitor. Kept explicit because that default is what makes this work.
+    prometheus:
+      enabled: true
+      servicemonitor:
+        enabled: true
+        # Same namespace as every other ServiceMonitor here (the chart then adds a
+        # namespaceSelector pointing back at cert-manager, which is where the Services live).
+        namespace: prometheus-operator
+        interval: 30s
+        # Chart default scrapeTimeout is 30s, which equals a 30s interval and is rejected at
+        # reconcile; kube-prometheus-stack runs 30s/10s globally, so match it.
+        scrapeTimeout: 10s
+        labels:
+          # kube-prometheus-stack's default serviceMonitorSelector (release name)
+          release: prometheus-operator
