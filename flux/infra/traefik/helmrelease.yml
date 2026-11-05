@@ -48,6 +48,10 @@ spec:
         # Routers labels stay off: one series per router x protocol x code multiplies cardinality
         # for detail we can already get from the (fewer) service-level series.
         addRoutersLabels: false
+        # Chart default is "0.1,0.3,1.2,5.0": a p99 interpolated across the 1.2 -> 5.0 gap is a
+        # guess, which makes both the latency panel and the >3s alert meaningless. Costs ~70 extra
+        # bucket series (~315 total for this job).
+        buckets: "0.05,0.1,0.25,0.5,1,2.5,5,10"
         service:
           enabled: true
         serviceMonitor:
