@@ -24,6 +24,22 @@ spec:
     prometheus:
       prometheusSpec:
         externalUrl: https://prometheus.tartarus.us
+
+    # k3s runs kube-apiserver and etcd in the same process as the kubelet, so every
+    # node's :10250/metrics re-exposes the full apiserver_*/etcd_* metric set that
+    # job="apiserver" already scrapes from :6443. Measured 2026-11-05: 150,047 +
+    # 39,787 series of pure re-export, 70% of the kubelet job (271,325 series) and
+    # ~24% of the whole TSDB head. Dropping it costs nothing - every one of those
+    # families is still served by job="apiserver" (upstream dashboards filter on it)
+    # - and halves the biggest scrape in the cluster (381k samples/cycle -> ~190k).
+    # Not touched: kubelet_*, container_*, prober_*, storage_operation_*.
+    kubelet:
+      serviceMonitor:
+        metricRelabelings:
+          - action: drop
+            sourceLabels:
+              - __name__
+            regex: "apiserver_.*|etcd_.*"
     alertmanager:
       alertmanagerSpec:
         externalUrl: https://alertmanager.tartarus.us
