@@ -1,0 +1,95 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: traefik
+  namespace: prometheus-operator
+  labels:
+    release: prometheus-operator
+spec:
+  groups:
+    # Traefik terminates every HTTP route in the cluster and runs a single replica, so
+    # "down" here is a total ingress outage, not a degraded path.
+    - name: traefik.availability
+      rules:
+        - alert: TraefikDown
+          expr: up{job="traefik-metrics"} == 0
+          for: 2m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Traefik metrics target is down"
+            description: "Prometheus cannot scrape traefik at :9100/metrics. Traefik is a single replica and terminates every HTTP route, so this is either an in-flight restart (a ~10-20s total ingress outage) or a crash. Runbook: `kubectl -n traefik get pods` and `kubectl -n traefik logs deploy/traefik --tail=50`."
+
+        - alert: TraefikSingleReplicaMissing
+          # The deployment is deliberately 1 replica; anything but exactly 1 available pod is
+          # worth knowing even if the scrape still works from the surviving pod.
+          expr: |
+            kube_deployment_status_replicas_available{namespace="traefik", deployment="traefik"} != 1
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Traefik is not running exactly one replica ({{ $value }} available)"
+            description: "Traefik is deployed as a single replica for this cluster. 0 available means ingress is fully down; more than 1 means something scaled it and the LoadBalancer now splits traffic across pods that each reload config independently."
+
+    # Request quality. Every rule below carries a minimum-traffic guard: this cluster idles at
+    # ~0.1 req/s outside browsing, and an unguarded ratio on single-digit request counts is noise.
+    - name: traefik.quality
+      rules:
+        - alert: TraefikHigh5xxRate
+          # Traefik's own `service` label arrives in Prometheus as `exported_service`:
+          # prometheus-operator renames scraped labels that collide with the target's
+          # `service` label (honorLabels is false). Grouping on `service` would collapse
+          # every service into one series named "traefik-metrics".
+          expr: |
+            (
+              sum by (exported_service) (increase(traefik_service_requests_total{code=~"5.."}[15m]))
+              /
+              clamp_min(sum by (exported_service) (increase(traefik_service_requests_total[15m])), 1)
+            ) > 0.05
+            and
+            sum by (exported_service) (increase(traefik_service_requests_total[15m])) >= 20
+          for: 15m
+          labels:
+            severity: warning
+          annotations:
+            summary: "{{ $labels.exported_service }} is returning >5% 5xx through traefik"
+            description: "More than 5% of responses for this service have a 5xx status over 15m, on at least 20 requests (the fastest service here idles near 0.03 req/s, so a rate guard would never pass while a count guard fires on a real error burst). The backend is up enough to answer, so traefik routing works and the app is erroring. Runbook: check the workload's own logs and pod readiness, then `kubectl -n <ns> get endpoints <svc>`. A service that legitimately answers 5xx needs an exclusion on this rule, not a higher threshold."
+
+        - alert: TraefikHighLatency
+          expr: |
+            (
+              histogram_quantile(0.99, sum by (le, exported_service) (rate(traefik_service_request_duration_seconds_bucket[15m])))
+              > 3
+            )
+            and
+            sum by (exported_service) (increase(traefik_service_request_duration_seconds_count[15m])) >= 20
+          for: 15m
+          labels:
+            severity: warning
+          annotations:
+            summary: "{{ $labels.exported_service }} p99 latency is above 3s through traefik"
+            description: "The 99th percentile request duration for this service has exceeded 3s for 15m at >0.05 req/s. Traefik measures the full upstream round trip, so this is the backend (or its dependency), not the proxy. Baseline for this cluster is p99 ~1s at the entrypoint. Runbook: `kubectl -n <ns> top pods` then check the app's own duration metrics or DB latency."
+
+    # Certificate expiry is checked from traefik's side because traefik serves whatever cert is in
+    # the TLS store, including certs cert-manager does not own. cert-manager renews at 30 days, so
+    # crossing 21 days means the renewal path (ACME / DNS-01 through Cloudflare) is broken.
+    - name: traefik.tls
+      rules:
+        - alert: TraefikTlsCertExpiringSoon
+          expr: min by (cn, sans) ((traefik_tls_certs_not_after - time()) / 86400) < 21
+          for: 1h
+          labels:
+            severity: warning
+          annotations:
+            summary: "TLS certificate {{ $labels.cn }} expires in {{ printf \"%.1f\" $value }} days"
+            description: "cert-manager renews at 30 days, so a cert inside 21 days means the renewal did not happen. Runbook: `kubectl -n <ns> describe certificate <name>` and check the ACME order / DNS-01 challenge with Cloudflare, then `kubectl -n cert-manager logs deploy/cert-manager --tail=50`."
+
+        - alert: TraefikTlsCertExpiringCritical
+          expr: min by (cn, sans) ((traefik_tls_certs_not_after - time()) / 86400) < 7
+          for: 15m
+          labels:
+            severity: critical
+          annotations:
+            summary: "TLS certificate {{ $labels.cn }} expires in {{ printf \"%.1f\" $value }} days"
+            description: "Under a week left on a certificate traefik serves. Browsers will fail on it and every host sharing this certificate breaks at once. Runbook: reissue manually (`cmctl renew <cert>` or delete the CertificateRequest to retrigger), then fix the renewal path."
