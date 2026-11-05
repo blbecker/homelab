@@ -38,5 +38,24 @@ spec:
     accessLog:
       enabled: true
 
+    # Prometheus metrics on the `metrics` entrypoint (ports.metrics = 9100, in-cluster only).
+    # Scraped through the chart's own dedicated metrics Service + ServiceMonitor, so 9100 never
+    # lands on the LoadBalancer Service and there is no hand-rolled ServiceMonitor to drift.
+    metrics:
+      prometheus:
+        addEntryPointsLabels: true
+        addServicesLabels: true
+        # Routers labels stay off: one series per router x protocol x code multiplies cardinality
+        # for detail we can already get from the (fewer) service-level series.
+        addRoutersLabels: false
+        service:
+          enabled: true
+        serviceMonitor:
+          enabled: true
+          interval: 30s
+          additionalLabels:
+            # kube-prometheus-stack's default serviceMonitorSelector (release name)
+            release: prometheus-operator
+
     service:
       loadBalancerIP: 192.168.40.84
