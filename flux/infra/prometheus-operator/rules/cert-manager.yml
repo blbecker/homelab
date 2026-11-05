@@ -1,0 +1,100 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: cert-manager
+  namespace: prometheus-operator
+  labels:
+    release: prometheus-operator
+spec:
+  groups:
+    # Three pods back this: the controller (renewals), the webhook (admission for every
+    # Certificate-consuming workload, e.g. pod-gateway) and cainjector (CA bundle injection).
+    # jobLabel is app.kubernetes.io/name, so the jobs are cert-manager / cainjector / webhook
+    # and every certmanager_* metric below comes from job="cert-manager".
+    - name: cert-manager.availability
+      rules:
+        - alert: CertManagerComponentDown
+          expr: up{job=~"cert-manager|cainjector|webhook"} == 0
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "cert-manager component {{ $labels.job }} is not being scraped"
+            description: "Prometheus cannot scrape the {{ $labels.job }} pod on :9402/metrics. Controller down means no renewals (a broken renewal is invisible for ~30 days, then TLS dies everywhere at once); webhook down blocks Certificate admission for every workload that depends on an injected CA (pod-gateway, intel device plugin); cainjector down leaves stale CA bundles. Runbook: `kubectl -n cert-manager get pods` and `kubectl -n cert-manager logs deploy/{{ $labels.job }} --tail=50` (deployment names are cert-manager, cert-manager-cainjector, cert-manager-webhook)."
+
+    # The Certificate's own namespace lands in `exported_namespace`:
+    # prometheus-operator renames scraped labels that collide with the target's `namespace`
+    # label, so `namespace` here is always "cert-manager" (the pod's namespace).
+    - name: cert-manager.certificates
+      rules:
+        - alert: CertManagerCertificateNotReady
+          expr: certmanager_certificate_ready_status{condition="True"} == 0
+          for: 15m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Certificate {{ $labels.exported_namespace }}/{{ $labels.name }} is not Ready"
+            description: "cert-manager cannot get this Certificate into a Ready state, so its stored TLS secret is missing, expired or not being replaced. 15m of grace covers a normal first issuance. If this is a certificate traefik serves, the failure becomes a browser-facing TLS error the moment the current cert lapses. Runbook: `kubectl -n {{ $labels.exported_namespace }} describe certificate {{ $labels.name }}` and read the Failed/Issuing conditions, then check the CertificateRequest and Order it references."
+
+        - alert: CertManagerCertificateRenewalOverdue
+          # The earliest real signal of the classic cert-manager failure: the renewal time has
+          # passed by more than a day, so attempts are failing while expiry is still weeks out.
+          # Healthy certs sit at ~+30 days here until renewal jumps them forward.
+          expr: (time() - certmanager_certificate_renewal_timestamp_seconds) > 86400
+          for: 1h
+          labels:
+            severity: warning
+          annotations:
+            summary: "Certificate {{ $labels.exported_namespace }}/{{ $labels.name }} renewal is overdue"
+            description: "cert-manager intended to renew this certificate more than 24h ago and has not succeeded, so the Certificate is still holding the old one and its expiry countdown keeps running. This is the failure mode that stays invisible for weeks: the DNS-01 path through Cloudflare or the ACME account is broken and nothing surfaces until the cert actually expires. Runbook: `kubectl -n {{ $labels.exported_namespace }} get certificaterequest,order,challenge` and `kubectl -n cert-manager logs deploy/cert-manager --tail=100 | grep -i -E 'acme|challenge|error'`."
+
+        - alert: CertManagerCertificateExpiringSoon
+          expr: (certmanager_certificate_expiration_timestamp_seconds - time()) / 86400 < 21
+          for: 1h
+          labels:
+            severity: warning
+          annotations:
+            summary: "Certificate {{ $labels.exported_namespace }}/{{ $labels.name }} expires in {{ printf \"%.1f\" $value }} days"
+            description: "Let's Encrypt certificates renew at about 30 days remaining, so being inside 21 days means renewal is late or failing (issuer: {{ $labels.issuer_name }}). Runbook: check the Certificate's Events and the issuer's Ready state; if the ACME path is broken, reissuing by hand (`cmctl renew {{ $labels.name }} -n {{ $labels.exported_namespace }}`) buys time but the renewal path still needs fixing."
+
+        - alert: CertManagerCertificateExpiringCritical
+          expr: (certmanager_certificate_expiration_timestamp_seconds - time()) / 86400 < 7
+          for: 15m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Certificate {{ $labels.exported_namespace }}/{{ $labels.name }} expires in {{ printf \"%.1f\" $value }} days"
+            description: "Under a week left. Anything serving this certificate starts failing for real clients at expiry, and every host on a wildcard cert fails together. Runbook: renew out-of-band now (`cmctl renew`), then repair the ACME/DNS-01 path."
+
+    - name: cert-manager.issuers
+      rules:
+        - alert: CertManagerIssuerNotReady
+          expr: certmanager_issuer_ready_status{condition="True"} == 0
+          for: 15m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Issuer {{ $labels.exported_namespace }}/{{ $labels.name }} is not Ready"
+            description: "A namespaced Issuer cannot sign, so every Certificate that references it will fail to renew. Runbook: `kubectl -n {{ $labels.exported_namespace }} describe issuer {{ $labels.name }}` — usually a bad CA secret or an ACME account problem."
+
+        - alert: CertManagerClusterIssuerNotReady
+          expr: certmanager_clusterissuer_ready_status{condition="True"} == 0
+          for: 10m
+          labels:
+            severity: critical
+          annotations:
+            summary: "ClusterIssuer {{ $labels.name }} is not Ready"
+            description: "Cluster-wide: {{ $labels.name }} (letsencrypt-prod for the wildcard certs behind traefik) cannot sign. No new certificate can be issued and existing ones cannot renew themselves. Runbook: `kubectl describe clusterissuer {{ $labels.name }}` — check the ACME account registration and the DNS-01 solver credentials (Cloudflare token secret)."
+
+    - name: cert-manager.acme
+      rules:
+        - alert: CertManagerAcmeRequestFailed
+          # ACME traffic only exists during issuance/renewal, so any non-2xx inside an hour is
+          # worth a look rather than being ratio-thresholded on a ~0 baseline.
+          expr: sum by (action, status) (increase(certmanager_http_acme_client_request_count{status!~"2.."}[1h])) > 0
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "ACME {{ $labels.action }} request returned {{ $labels.status }}"
+            description: "A Let's Encrypt ACME call failed in the last hour (action {{ $labels.action }}, HTTP {{ $labels.status }}). 4xx usually means a challenge or account problem (DNS-01 propagation, stale account key); 429 is rate limiting from repeated failed attempts; 5xx is upstream at Let's Encrypt. Runbook: `kubectl -n cert-manager logs deploy/cert-manager --tail=100 | grep -i acme` and inspect any pending Challenge."
