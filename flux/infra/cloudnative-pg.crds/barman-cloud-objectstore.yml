@@ -12,7 +12,7 @@ spec:
     # Backblaze B2, S3-compatible endpoint (same region as the Longhorn
     # backup target). REPLACE the bucket below with the real bucket name.
     # ---------------------------------------------------------------------
-    destinationPath: s3://REPLACE-ME-cnpg-postgres-backups
+    destinationPath: s3://tartarus-cnpg-postgres-backups
     endpointURL: https://s3.us-east-005.backblazeb2.com
 
     s3Credentials:
