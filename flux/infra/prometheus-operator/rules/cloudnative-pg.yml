@@ -11,8 +11,12 @@ spec:
     # harbor, immich, linkwarden, n8n, ntfy, tranquil-pds, tududi.
     - name: cloudnative-pg.cluster
       rules:
+        # A PodMonitor's job label is "<monitor-namespace>/<monitor-name>", not the bare
+        # monitor name (ServiceMonitors take the job name from the Service instead), so match
+        # the prefix - an exact `job="cloudnative-pg-instances"` selects nothing and the alert
+        # can never fire.
         - alert: CNPGMetricsEndpointDown
-          expr: up{job="cloudnative-pg-instances"} == 0
+          expr: up{job=~".*cloudnative-pg-instances"} == 0
           for: 10m
           labels:
             severity: critical
@@ -24,7 +28,10 @@ spec:
               because WAL archiving runs through this process.
 
         - alert: CNPGMetricsCollectionFailing
-          expr: max by (namespace, cluster) (cnpg_collector_last_collection_error) == 1
+          # min, not max: during a rolling restart the instance being replaced always reports a
+          # collection error for a minute or two ("the database system is shutting down") and
+          # that is not worth a notification. All instances failing is.
+          expr: min by (namespace, cluster) (cnpg_collector_last_collection_error) == 1
           for: 15m
           labels:
             severity: warning
@@ -67,18 +74,39 @@ spec:
               the last good base backup - re-run when convenient and check the plugin logs in the
               instance pod.
 
+        # The schedule is weekly - `0 30 3 * * 0`, Sundays 03:30 UTC - so "too old" has to allow a
+        # full week plus a day of slack; a 48h threshold fires mid-week on a healthy cluster.
+        # The `> 0` guard is load-bearing: the plugin exports these gauges as 0 (not absent) until a
+        # backup has ever succeeded, and `time() - 0` would otherwise make this fire forever.
         - alert: CNPGBackupTooOld
-          expr: (time() - max by (namespace, cluster) (barman_cloud_cloudnative_pg_io_last_available_backup_timestamp)) > 172800
+          expr: |
+            max by (namespace, cluster) (barman_cloud_cloudnative_pg_io_last_available_backup_timestamp) > 0
+            and
+            (time() - max by (namespace, cluster) (barman_cloud_cloudnative_pg_io_last_available_backup_timestamp)) > 691200
           for: 1h
           labels:
             severity: critical
           annotations:
-            summary: "No successful base backup for {{ $labels.cluster }} in over 48h"
+            summary: "No successful base backup for {{ $labels.cluster }} in over 8 days"
             description: >-
-              The nightly ScheduledBackup (03:30) has not produced a usable base backup in more than 48
-              hours, so two runs were missed. Point-in-time recovery now depends entirely on WAL archives
-              and an older base backup. Check the ScheduledBackup status, the ObjectStore, and the B2
-              credentials/bucket.
+              The weekly ScheduledBackup (Sundays 03:30 UTC) has missed at least one run: the newest
+              usable base backup is more than 8 days old. Point-in-time recovery now depends on that
+              stale base backup plus WAL archives. Check the ScheduledBackup status, the ObjectStore,
+              and the B2 credentials/bucket.
+
+        - alert: CNPGNoSuccessfulBaseBackup
+          expr: max by (namespace, cluster) (barman_cloud_cloudnative_pg_io_last_available_backup_timestamp) == 0
+          for: 30m
+          labels:
+            severity: warning
+          annotations:
+            summary: "{{ $labels.cluster }} has no successful base backup at all"
+            description: >-
+              The Barman Cloud plugin reports no completed base backup for {{ $labels.cluster }}, so
+              there is no recoverability point: archived WAL files are useless without a base backup to
+              replay them onto. Either no backup has run yet (fresh install - the first weekly run is
+              Sunday 03:30 UTC, or set `immediate: true` on the ScheduledBackup) or every attempt has
+              failed. Do not consider this cluster backed up until this alert clears.
 
         - alert: CNPGWALArchivingStalled
           expr: max by (namespace, cluster) (cnpg_collector_pg_wal_archive_status{value="ready"}) > 10
