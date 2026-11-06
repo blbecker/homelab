@@ -28,6 +28,13 @@ spec:
       path: /metrics
       interval: 30s
       scrapeTimeout: 10s
+      # Metric curation tier S1 (metrics-policy.md): the Go runtime of the instance manager. 105 of
+      # this job's 2,164 series; every cnpg_collector_* and barman_cloud_* family is untouched.
+      metricRelabelings:
+        - action: drop
+          sourceLabels:
+            - __name__
+          regex: "go_.*|process_cpu_seconds_total|process_open_fds|process_max_fds|process_virtual_memory_bytes|process_start_time_seconds|process_network_receive_bytes_total|process_network_transmit_bytes_total|workqueue_.*|rest_client_.*|scheduler_.*|kubernetes_feature_enabled"
 ---
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
@@ -44,8 +51,15 @@ spec:
     matchLabels:
       app.kubernetes.io/name: cloudnative-pg
   podMetricsEndpoints:
-    # controller-runtime / workqueue metrics for the operator itself.
+    # controller-runtime / workqueue metrics for the operator itself. The workqueue_* and
+    # rest_client_* families are the bulk of it (449 of 899 series) and are pure plumbing, so they
+    # go with tier S1; controller_runtime_* is kept because it is the real reconciliation signal.
     - port: metrics
       path: /metrics
       interval: 30s
       scrapeTimeout: 10s
+      metricRelabelings:
+        - action: drop
+          sourceLabels:
+            - __name__
+          regex: "go_.*|process_cpu_seconds_total|process_open_fds|process_max_fds|process_virtual_memory_bytes|process_start_time_seconds|process_network_receive_bytes_total|process_network_transmit_bytes_total|workqueue_.*|rest_client_.*|scheduler_.*|kubernetes_feature_enabled"

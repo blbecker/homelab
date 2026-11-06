@@ -17,6 +17,7 @@ resources:
   - rules/traefik.yml
   - rules/cert-manager.yml
   - rules/cloudnative-pg.yml
+  - rules/prometheus-storage.yml
 
 configMapGenerator:
   - name: smarthome-dashboard
@@ -31,6 +32,9 @@ configMapGenerator:
   - name: cert-manager-dashboard
     files:
       - files/dashboards/cert-manager.json
+  - name: prometheus-storage-dashboard
+    files:
+      - files/dashboards/prometheus-storage.json
 
 generatorOptions:
   labels:

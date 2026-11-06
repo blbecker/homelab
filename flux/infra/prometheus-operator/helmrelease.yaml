@@ -25,6 +25,49 @@ spec:
       prometheusSpec:
         externalUrl: https://prometheus.tartarus.us
 
+        # Metrics are the most replaceable data in this cluster, but they have to survive a pod
+        # restart or reschedule - the chart default (emptyDir) did not, which is why history kept
+        # resetting to a couple of days. 5Gi on the standard `longhorn` class (3 replicas).
+        storageSpec:
+          volumeClaimTemplate:
+            spec:
+              storageClassName: longhorn
+              accessModes:
+                - ReadWriteOnce
+              resources:
+                requests:
+                  storage: 5Gi
+
+        retention: 14d
+        # 85% of the 5Gi volume. Prometheus needs headroom for in-progress compactions, which keep
+        # the source blocks and the new compacted block on disk at the same time. See
+        # rules/prometheus-storage.yml - PrometheusRetentionSizeBound tells us when this limit, and
+        # not the 14d clock, is what decides how far back we can query.
+        retentionSize: 4GB
+
+      serviceMonitor:
+        metricRelabelings:
+          # ---------------------------------------------------------------------------------------
+          # Metric curation policy, tier S1: drop instrumentation plumbing we never query.
+          # Rationale, measured savings and the "what is available" workflow live in
+          # metrics-policy.md. There is no global metric-relabel in prometheus-operator, so the
+          # same rule is anchored here and aliased into every scrape target that supports it.
+          # Nothing dropped here is referenced by any dashboard or alert rule in this repo, and
+          # every family stays visible in the scrape catalog via
+          #   /api/v1/targets/metadata?match_target={job="..."}
+          # so storage stays bounded without hiding that a metric exists.
+          # ---------------------------------------------------------------------------------------
+          - &dropPlumbing
+            action: drop
+            sourceLabels:
+              - __name__
+            regex: "go_.*|process_cpu_seconds_total|process_open_fds|process_max_fds|process_virtual_memory_bytes|process_start_time_seconds|process_network_receive_bytes_total|process_network_transmit_bytes_total|workqueue_.*|rest_client_.*|scheduler_.*|kubernetes_feature_enabled|apiserver_watch_.*|.*_body_size_bytes.*|apiserver_flowcontrol_.*|csi_operations_.*|storage_operation_.*|kubelet_runtime_operations_.*|volume_operation_total_seconds.*|longhorn_workqueue_.*|longhorn_rest_client_.*|node_scrape_collector_.*|node_network_address_assign_type|node_network_device_id|node_network_flags|node_network_carrier.*|node_nfs_requests_total|node_boot_time_seconds|node_os_info|node_exporter_build_info"
+
+    kubeApiServer:
+      serviceMonitor:
+        metricRelabelings:
+          - *dropPlumbing
+
     # k3s runs kube-apiserver and etcd in the same process as the kubelet, so every
     # node's :10250/metrics re-exposes the full apiserver_*/etcd_* metric set that
     # job="apiserver" already scrapes from :6443. Measured 2026-11-05: 150,047 +
@@ -32,7 +75,7 @@ spec:
     # ~24% of the whole TSDB head. Dropping it costs nothing - every one of those
     # families is still served by job="apiserver" (upstream dashboards filter on it)
     # - and halves the biggest scrape in the cluster (381k samples/cycle -> ~190k).
-    # Not touched: kubelet_*, container_*, prober_*, storage_operation_*.
+    # Not touched: kubelet_*, container_*, prober_*, machine_*.
     kubelet:
       serviceMonitor:
         metricRelabelings:
@@ -40,9 +83,31 @@ spec:
             sourceLabels:
               - __name__
             regex: "apiserver_.*|etcd_.*"
+          - *dropPlumbing
+
+    prometheus-node-exporter:
+      prometheus:
+        monitor:
+          metricRelabelings:
+            - *dropPlumbing
+
     alertmanager:
+      serviceMonitor:
+        metricRelabelings:
+          - *dropPlumbing
       alertmanagerSpec:
         externalUrl: https://alertmanager.tartarus.us
+        # Silence log + notification log: kilobytes, but they are the only non-reconstructible
+        # state Alertmanager has.
+        storage:
+          volumeClaimTemplate:
+            spec:
+              storageClassName: longhorn
+              accessModes:
+                - ReadWriteOnce
+              resources:
+                requests:
+                  storage: 1Gi
         alertmanagerConfigSelector:
           matchLabels:
             alertmanager: main
@@ -53,6 +118,12 @@ spec:
         # Allow routes to match alerts regardless of their namespace label.
         alertmanagerConfigMatcherStrategy:
           type: None
+
+    prometheusOperator:
+      serviceMonitor:
+        metricRelabelings:
+          - *dropPlumbing
+
     grafana:
       enabled: true
       envFromSecret: grafana-secrets
