@@ -18,3 +18,14 @@ spec:
     - port: manager
       path: /metrics
       interval: 30s
+      # Metric curation tier S1 (see metrics-policy.md). Longhorn's manager exposes 35,848 series
+      # here; 30,505 of them are its own client/workqueue instrumentation
+      # (longhorn_rest_client_*_latency_seconds_bucket alone is 13,904 of that). Volume, replica,
+      # node, disk and backup metrics are untouched - they are what the longhorn dashboard and the
+      # rules in rules/longhorn.yml read. The dropped families remain visible in the catalog at
+      # /api/v1/targets/metadata?match_target={job="longhorn-backend"}.
+      metricRelabelings:
+        - action: drop
+          sourceLabels:
+            - __name__
+          regex: "go_.*|process_cpu_seconds_total|process_open_fds|process_max_fds|process_virtual_memory_bytes|process_start_time_seconds|process_network_receive_bytes_total|process_network_transmit_bytes_total|workqueue_.*|rest_client_.*|scheduler_.*|kubernetes_feature_enabled|apiserver_watch_.*|.*_body_size_bytes.*|apiserver_flowcontrol_.*|csi_operations_.*|storage_operation_.*|kubelet_runtime_operations_.*|volume_operation_total_seconds.*|longhorn_workqueue_.*|longhorn_rest_client_.*|node_scrape_collector_.*|node_network_address_assign_type|node_network_device_id|node_network_flags|node_network_carrier.*|node_nfs_requests_total|node_boot_time_seconds|node_os_info|node_exporter_build_info"

@@ -1,0 +1,107 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: prometheus-storage
+  namespace: prometheus-operator
+  labels:
+    release: prometheus-operator
+spec:
+  groups:
+    # Prometheus keeps 14d of data on a 5Gi Longhorn volume with retentionSize 4GB. Those two limits
+    # are not the same promise: whichever trips first wins, and when the size limit wins the 14d
+    # window silently becomes "as much as fits". The dashboard (Prometheus storage & compaction)
+    # shows the gap against 14d; these rules fire only when the situation is actually broken, so a
+    # size-bound-but-stable TSDB does not produce a permanent alert.
+    - name: prometheus.storage
+      rules:
+        - alert: PrometheusRetentionWindowTooShort
+          expr: |
+            (100 * prometheus_tsdb_storage_blocks_bytes / clamp_min(prometheus_tsdb_retention_limit_bytes, 1) > 90)
+            and
+            ((time() - prometheus_tsdb_lowest_timestamp / 1000) / 86400 < 3)
+          for: 6h
+          labels:
+            severity: warning
+          annotations:
+            summary: "Prometheus is keeping less than 3 days of metrics"
+            description: >-
+              The TSDB blocks are pinned at retentionSize (4GB) and the oldest retained sample is
+              under 3 days old, so size-based eviction - not the 14d retention window - is deciding
+              how far back you can query. The "Prometheus storage & compaction" dashboard shows the
+              real window against the configured 14d. Fix by dropping more metric families
+              (metrics-policy.md, tier S2) or growing the volume; raising retentionSize alone just
+              fills the disk.
+
+        - alert: PrometheusStorageFillingUp
+          expr: |
+            prometheus_tsdb_retention_limit_bytes > 0
+            and
+            prometheus_tsdb_storage_blocks_bytes < prometheus_tsdb_retention_limit_bytes
+            and
+            predict_linear(prometheus_tsdb_storage_blocks_bytes[6h], 3 * 86400) > prometheus_tsdb_retention_limit_bytes
+          for: 1h
+          labels:
+            severity: warning
+          annotations:
+            summary: "Prometheus blocks will reach retentionSize within 3 days"
+            description: >-
+              At the growth rate of the last 6h the TSDB blocks hit the 4GB retention limit within
+              three days, after which the oldest data starts being deleted ahead of the 14d window.
+              This is the early warning: either the ingest rate grew (new targets, new
+              high-cardinality labels) or the volume is too small for the retention we asked for.
+              The rule deliberately stays silent once the blocks are already at the limit - that
+              steady state is what PrometheusRetentionWindowTooShort is for.
+
+        - alert: PrometheusPVCNearlyFull
+          expr: |
+            kubelet_volume_stats_used_bytes{namespace="prometheus-operator", persistentvolumeclaim=~"prometheus-.*"}
+              / kubelet_volume_stats_capacity_bytes{namespace="prometheus-operator", persistentvolumeclaim=~"prometheus-.*"} > 0.9
+          for: 30m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Prometheus data volume is over 90% full"
+            description: >-
+              The Longhorn volume behind /prometheus is above 90% used. retentionSize (4GB of 5Gi) is
+              supposed to make this impossible, so if it happens the size limit is not being enforced
+              - check that retentionSize is actually set (the "Storage configured?" panel) and that
+              compaction is not stuck holding source and compacted blocks at once. A full volume makes
+              Prometheus fail writes and eventually crash-loop.
+
+        - alert: PrometheusCompactionFailing
+          expr: rate(prometheus_tsdb_compactions_failed_total[15m]) > 0
+          for: 15m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Prometheus compaction is failing"
+            description: >-
+              Compactions are failing, which leaves overlapping blocks on disk and stalls retention
+              cleanup - the TSDB grows without the retention policy being able to reclaim anything.
+              Check the Prometheus logs for the compaction error and the volume for I/O errors.
+
+        - alert: PrometheusWALCorruption
+          expr: increase(prometheus_tsdb_wal_corruptions_total[1h]) > 0
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Prometheus had to truncate a corrupt WAL segment"
+            description: >-
+              Prometheus found a corrupt WAL segment and truncated it, losing the samples it held.
+              On this stack the usual cause is the storage underneath: a non-POSIX or network
+              filesystem, or a Longhorn replica that went away mid-write. Check the volume health
+              before assuming it was a one-off.
+
+        - alert: PrometheusTooOldSamplesDropped
+          expr: rate(prometheus_tsdb_too_old_samples_total[15m]) > 0
+          for: 30m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Prometheus is rejecting samples as too old"
+            description: >-
+              Samples are arriving outside the retention window and being dropped at ingest. With
+              size-based retention this is the second symptom of over-aggressive eviction: the newest
+              blocks are gone before the scrape lands. Correlate with PrometheusRetentionWindowTooShort
+              and with a target whose scrape interval or timeout is too long.
