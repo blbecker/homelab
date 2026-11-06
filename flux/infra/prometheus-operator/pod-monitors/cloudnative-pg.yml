@@ -1,0 +1,51 @@
+# CloudNativePG is scraped through PodMonitors rather than the operator's
+# built-in `spec.monitoring.enablePodMonitor`, which is deprecated in CNPG 1.30
+# ("this feature will be removed in an upcoming release ... create a PodMonitor
+# manually"). Both monitors live in prometheus-operator with the release label so
+# they match the Prometheus podMonitorSelector, and select across namespaces the
+# same way service-monitors/longhorn.yml does.
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: cloudnative-pg-instances
+  namespace: prometheus-operator
+  labels:
+    release: prometheus-operator
+spec:
+  namespaceSelector:
+    matchNames:
+      - cloudnative-pg
+  selector:
+    matchLabels:
+      cnpg.io/podRole: instance
+  podMetricsEndpoints:
+    # cnpg_collector_* (WAL, fencing, collection errors, per-database stats)
+    # and the plugin's backup metrics barman_cloud_cloudnative_pg_io_*
+    # (last_failed_backup_timestamp, last_available_backup_timestamp,
+    # first_recoverability_point) are all served by the instance manager here.
+    - port: metrics
+      path: /metrics
+      interval: 30s
+      scrapeTimeout: 10s
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: cloudnative-pg-operator
+  namespace: prometheus-operator
+  labels:
+    release: prometheus-operator
+spec:
+  namespaceSelector:
+    matchNames:
+      - cloudnative-pg
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: cloudnative-pg
+  podMetricsEndpoints:
+    # controller-runtime / workqueue metrics for the operator itself.
+    - port: metrics
+      path: /metrics
+      interval: 30s
+      scrapeTimeout: 10s

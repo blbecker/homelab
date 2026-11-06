@@ -12,9 +12,11 @@ resources:
   - snmp_exporter_svc.yml 
   - service-monitors/peanut.yml
   - service-monitors/longhorn.yml
+  - pod-monitors/cloudnative-pg.yml
   - rules/longhorn.yml
   - rules/traefik.yml
   - rules/cert-manager.yml
+  - rules/cloudnative-pg.yml
 
 configMapGenerator:
   - name: smarthome-dashboard

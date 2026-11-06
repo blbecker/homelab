@@ -1,0 +1,34 @@
+apiVersion: barmancloud.cnpg.io/v1
+kind: ObjectStore
+metadata:
+  name: b2-postgres-backups
+  namespace: cloudnative-pg
+spec:
+  # Barman retention policy, applied to both WAL archives and base backups.
+  retentionPolicy: "30d"
+
+  configuration:
+    # ---------------------------------------------------------------------
+    # Backblaze B2, S3-compatible endpoint (same region as the Longhorn
+    # backup target). REPLACE the bucket below with the real bucket name.
+    # ---------------------------------------------------------------------
+    destinationPath: s3://REPLACE-ME-cnpg-postgres-backups
+    endpointURL: https://s3.us-east-005.backblazeb2.com
+
+    s3Credentials:
+      accessKeyId:
+        name: barman-cloud-b2-creds
+        key: ACCESS_KEY_ID
+      secretAccessKey:
+        name: barman-cloud-b2-creds
+        key: ACCESS_SECRET_KEY
+
+    wal:
+      compression: gzip
+      maxParallel: 2
+
+    data:
+      compression: gzip
+      jobs: 2
+      # 5Gi of data + 5Gi WAL today; keep the worker count low so the backup
+      # does not compete with the ten application databases for CPU.

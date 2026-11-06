@@ -1,0 +1,23 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: plugin-barman-cloud
+  namespace: flux-system
+spec:
+  interval: 15m
+  path: flux/infra/plugin-barman-cloud
+  prune: true
+  dependsOn:
+    - name: cloudnative-pg
+    # the chart creates cert-manager Issuer/Certificates
+    - name: cert-manager
+  timeout: 5m0s
+  retryInterval: 2m0s
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  healthChecks:
+    - apiVersion: apps/v1
+      kind: Deployment
+      name: plugin-barman-cloud
+      namespace: cloudnative-pg
