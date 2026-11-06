@@ -13,5 +13,5 @@ spec:
   pluginConfiguration:
     name: barman-cloud.cloudnative-pg.io
   backupOwnerReference: self
-  immediate: false
+  immediate: true
   suspend: false
