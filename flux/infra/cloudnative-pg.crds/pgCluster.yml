@@ -23,6 +23,20 @@ spec:
   nodeMaintenanceWindow:
     reusePVC: false # rebuild from other replica instead
 
+  # Backups through the Barman Cloud CNPG-I plugin (chart plugin-barman-cloud,
+  # store barman-cloud-objectstore.yml). isWALArchiver turns on continuous WAL
+  # shipping, which is what makes point-in-time recovery possible; nightly base
+  # backups are scheduled by barman-cloud-scheduledbackup.yml.
+  plugins:
+    - name: barman-cloud.cloudnative-pg.io
+      isWALArchiver: true
+      parameters:
+        barmanObjectName: b2-postgres-backups
+
+  # Run base backups on a standby rather than the primary when possible.
+  backup:
+    target: prefer-standby
+
   affinity:
     enablePodAntiAffinity: true
     topologyKey: kubernetes.io/hostname

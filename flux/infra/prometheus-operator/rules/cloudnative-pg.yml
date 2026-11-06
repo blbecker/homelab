@@ -1,0 +1,93 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: cloudnative-pg
+  namespace: prometheus-operator
+  labels:
+    release: prometheus-operator
+spec:
+  groups:
+    # One Cluster (`main`) serves ten applications: authentik, freshrss, gotify,
+    # harbor, immich, linkwarden, n8n, ntfy, tranquil-pds, tududi.
+    - name: cloudnative-pg.cluster
+      rules:
+        - alert: CNPGMetricsEndpointDown
+          expr: up{job="cloudnative-pg-instances"} == 0
+          for: 10m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Postgres instance {{ $labels.pod }} is not exporting metrics"
+            description: >-
+              The instance manager on {{ $labels.pod }} ({{ $labels.namespace }}) has not answered a
+              scrape for 10m. Either the pod is gone or its exporter is wedged - both need looking at,
+              because WAL archiving runs through this process.
+
+        - alert: CNPGMetricsCollectionFailing
+          expr: max by (namespace, cluster) (cnpg_collector_last_collection_error) == 1
+          for: 15m
+          labels:
+            severity: warning
+          annotations:
+            summary: "CloudNativePG cannot collect metrics for {{ $labels.cluster }}"
+            description: >-
+              The exporter's last collection cycle failed, so every cnpg_collector_* series for
+              {{ $labels.cluster }} is stale. Usually a connectivity or credential problem for the
+              metrics queries, not necessarily a database outage - check `kubectl cnpg status`.
+
+        - alert: CNPGInstanceFenced
+          expr: max by (namespace, cluster) (cnpg_collector_fencing_on) == 1
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "CloudNativePG instance for {{ $labels.cluster }} is fenced"
+            description: >-
+              An instance is fenced: it is running but deliberately detached from the cluster
+              (failed liveness, disk full, or a stuck start-up). Writes are not flowing to it.
+
+    - name: cloudnative-pg.backups
+      rules:
+        # Backup metrics come from the Barman Cloud plugin (barman_cloud_cloudnative_pg_io_*
+        # prefix); the in-core cnpg_collector_last_*_backup_timestamp gauges are deprecated.
+        - alert: CNPGBackupFailed
+          expr: |
+            (max by (namespace, cluster) (barman_cloud_cloudnative_pg_io_last_failed_backup_timestamp)
+              > max by (namespace, cluster) (barman_cloud_cloudnative_pg_io_last_available_backup_timestamp))
+            and
+            (time() - max by (namespace, cluster) (barman_cloud_cloudnative_pg_io_last_failed_backup_timestamp) < 86400)
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Base backup failed for {{ $labels.cluster }} in the last 24h"
+            description: >-
+              The most recent base backup attempt for {{ $labels.cluster }} failed and it is newer than
+              the last successful one. WAL archiving may still be healthy, so recovery would work up to
+              the last good base backup - re-run when convenient and check the plugin logs in the
+              instance pod.
+
+        - alert: CNPGBackupTooOld
+          expr: (time() - max by (namespace, cluster) (barman_cloud_cloudnative_pg_io_last_available_backup_timestamp)) > 172800
+          for: 1h
+          labels:
+            severity: critical
+          annotations:
+            summary: "No successful base backup for {{ $labels.cluster }} in over 48h"
+            description: >-
+              The nightly ScheduledBackup (03:30) has not produced a usable base backup in more than 48
+              hours, so two runs were missed. Point-in-time recovery now depends entirely on WAL archives
+              and an older base backup. Check the ScheduledBackup status, the ObjectStore, and the B2
+              credentials/bucket.
+
+        - alert: CNPGWALArchivingStalled
+          expr: max by (namespace, cluster) (cnpg_collector_pg_wal_archive_status{value="ready"}) > 10
+          for: 30m
+          labels:
+            severity: warning
+          annotations:
+            summary: "WAL archiving is falling behind for {{ $labels.cluster }}"
+            description: >-
+              More than 10 WAL segments have been waiting in pg_wal/archive_status for 30m. If this keeps
+              growing, the archive_command is failing (plugin, endpoint or credentials) and PITR
+              recoverability is sliding backwards. Check `kubectl cnpg status` for the archiving condition.

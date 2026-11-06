@@ -9,6 +9,9 @@ spec:
   prune: true
   dependsOn:
     - name: cloudnative-pg
+    # ObjectStore CRD comes from the plugin chart, and the Cluster/backup CRs
+    # reference resources the plugin registers.
+    - name: plugin-barman-cloud
   timeout: 2m0s
   retryInterval: 2m0s
   sourceRef:
