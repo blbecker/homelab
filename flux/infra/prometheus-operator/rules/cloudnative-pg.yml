@@ -7,6 +7,14 @@ metadata:
     release: prometheus-operator
 spec:
   groups:
+    # Annotation rule for this whole file: `cluster` exists on `cnpg_collector_up` and on NO other
+    # family. `cnpg_pg_*`, `cnpg_collector_fencing_on`, `cnpg_collector_last_collection_error`,
+    # `cnpg_collector_pg_wal_archive_status` and both `barman_cloud_*` gauges carry
+    # pod/instance/namespace only, so `{{ $labels.cluster }}` renders as an empty string and the
+    # notification reads "falling behind for ." - verified against /api/v1/series. Annotations name
+    # the namespace instead, and aggregations stay `max by (namespace, cluster)` so the label is
+    # still there if CNPG ever adds it.
+    #
     # One Cluster (`main`) serves ten applications: authentik, freshrss, gotify,
     # harbor, immich, linkwarden, n8n, ntfy, tranquil-pds, tududi.
     - name: cloudnative-pg.cluster
@@ -36,10 +44,10 @@ spec:
           labels:
             severity: warning
           annotations:
-            summary: "CloudNativePG cannot collect metrics for {{ $labels.cluster }}"
+            summary: "CloudNativePG cannot collect metrics for the cluster in {{ $labels.namespace }}"
             description: >-
               The exporter's last collection cycle failed, so every cnpg_collector_* series for
-              {{ $labels.cluster }} is stale. Usually a connectivity or credential problem for the
+              the cluster in {{ $labels.namespace }} is stale. Usually a connectivity or credential problem for the
               metrics queries, not necessarily a database outage - check `kubectl cnpg status`.
 
         # Wraparound is not a performance problem, it is an outage: at 2^31-1 unfrozen XIDs
@@ -67,7 +75,7 @@ spec:
           labels:
             severity: critical
           annotations:
-            summary: "CloudNativePG instance for {{ $labels.cluster }} is fenced"
+            summary: "CloudNativePG instance for the cluster in {{ $labels.namespace }} is fenced"
             description: >-
               An instance is fenced: it is running but deliberately detached from the cluster
               (failed liveness, disk full, or a stuck start-up). Writes are not flowing to it.
@@ -86,9 +94,9 @@ spec:
           labels:
             severity: warning
           annotations:
-            summary: "Base backup failed for {{ $labels.cluster }} in the last 24h"
+            summary: "Base backup failed for the cluster in {{ $labels.namespace }} in the last 24h"
             description: >-
-              The most recent base backup attempt for {{ $labels.cluster }} failed and it is newer than
+              The most recent base backup attempt for the cluster in {{ $labels.namespace }} failed and it is newer than
               the last successful one. WAL archiving may still be healthy, so recovery would work up to
               the last good base backup - re-run when convenient and check the plugin logs in the
               instance pod.
@@ -106,7 +114,7 @@ spec:
           labels:
             severity: critical
           annotations:
-            summary: "No successful base backup for {{ $labels.cluster }} in over 8 days"
+            summary: "No successful base backup for the cluster in {{ $labels.namespace }} in over 8 days"
             description: >-
               The weekly ScheduledBackup (Sundays 03:30 UTC) has missed at least one run: the newest
               usable base backup is more than 8 days old. Point-in-time recovery now depends on that
@@ -119,9 +127,9 @@ spec:
           labels:
             severity: warning
           annotations:
-            summary: "{{ $labels.cluster }} has no successful base backup at all"
+            summary: "The cluster in {{ $labels.namespace }} has no successful base backup at all"
             description: >-
-              The Barman Cloud plugin reports no completed base backup for {{ $labels.cluster }}, so
+              The Barman Cloud plugin reports no completed base backup for the cluster in {{ $labels.namespace }}, so
               there is no recoverability point: archived WAL files are useless without a base backup to
               replay them onto. Either no backup has run yet (fresh install - the first weekly run is
               Sunday 03:30 UTC, or set `immediate: true` on the ScheduledBackup) or every attempt has
@@ -152,7 +160,7 @@ spec:
           labels:
             severity: warning
           annotations:
-            summary: "WAL archiving is falling behind for {{ $labels.cluster }}"
+            summary: "WAL archiving is falling behind for the cluster in {{ $labels.namespace }}"
             description: >-
               More than 10 WAL segments have been waiting in pg_wal/archive_status for 30m. If this keeps
               growing, the archive_command is failing (plugin, endpoint or credentials) and PITR
