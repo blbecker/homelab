@@ -42,6 +42,25 @@ spec:
               {{ $labels.cluster }} is stale. Usually a connectivity or credential problem for the
               metrics queries, not necessarily a database outage - check `kubectl cnpg status`.
 
+        # Wraparound is not a performance problem, it is an outage: at 2^31-1 unfrozen XIDs
+        # Postgres refuses new transactions and the cluster needs an offline single-user
+        # vacuum. Autovacuum normally keeps this tiny (3.0e6 here), so 1.3e9 is already
+        # "something is blocking freezing" - long-running transactions, a disabled
+        # autovacuum, or a replication slot holding back xmin.
+        - alert: CNPGTransactionIDAgeHigh
+          expr: max by (namespace) (cnpg_pg_database_xid_age) > 1.3e9
+          for: 1h
+          labels:
+            severity: critical
+          annotations:
+            summary: "Postgres in {{ $labels.namespace }} is approaching transaction-ID wraparound"
+            description: >-
+              The oldest unfrozen transaction ID is {{ $value | humanize }} - within 40% of the
+              2.15e9 hard limit, above which Postgres accepts no new writes. Find the oldest
+              transaction (`SELECT pid, state, xact_start FROM pg_stat_activity ORDER BY
+              age(backend_xid) DESC NULLS LAST`) and let autovacuum catch up; a manual
+              `VACUUM FREEZE` on the largest tables buys time.
+
         - alert: CNPGInstanceFenced
           expr: max by (namespace, cluster) (cnpg_collector_fencing_on) == 1
           for: 5m
@@ -107,6 +126,25 @@ spec:
               replay them onto. Either no backup has run yet (fresh install - the first weekly run is
               Sunday 03:30 UTC, or set `immediate: true` on the ScheduledBackup) or every attempt has
               failed. Do not consider this cluster backed up until this alert clears.
+
+        # The companion to CNPGWALArchivingStalled: that one watches the backlog, this one
+        # watches the failures. Postgres retries archive_command, so a single failure is
+        # noise and a *rising* failed_count is the signal (bad B2 credentials, bucket gone,
+        # network). The counter is cumulative since stats reset, hence increase() and not
+        # the raw value - it sits at 16 here from months of retries and means nothing today.
+        - alert: CNPGWALArchiveFailing
+          expr: max by (namespace) (increase(cnpg_pg_stat_archiver_failed_count[1h])) > 0
+          for: 30m
+          labels:
+            severity: warning
+          annotations:
+            summary: "WAL archiving failed in the last hour in {{ $labels.namespace }}"
+            description: >-
+              {{ $value | humanize }} archive_command invocations failed in the past hour. While
+              they keep failing, the WAL archive stops advancing and any restore becomes limited
+              to the last successfully archived segment - the base backups are fine but the
+              point-in-time window is shrinking. Check the instance logs for the plugin's error
+              text and the ObjectStore credentials/bucket.
 
         - alert: CNPGWALArchivingStalled
           expr: max by (namespace, cluster) (cnpg_collector_pg_wal_archive_status{value="ready"}) > 10

@@ -35,6 +35,12 @@ configMapGenerator:
   - name: prometheus-storage-dashboard
     files:
       - files/dashboards/prometheus-storage.json
+  - name: cloudnative-pg-dashboard
+    files:
+      - files/dashboards/cloudnative-pg.json
+  - name: cloudnative-pg-backups-dashboard
+    files:
+      - files/dashboards/cloudnative-pg-backups.json
 
 generatorOptions:
   labels:
