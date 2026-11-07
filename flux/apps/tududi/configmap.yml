@@ -21,7 +21,7 @@ data:
   BACKEND_URL: "https://tududi.tartarus.us"
   TUDUDI_ALLOWED_ORIGINS: "https://tududi.tartarus.us"
   TUDUDI_TRUST_PROXY: "true"
-  DB_FILE: "/app/db/production.sqlite3"
+  # DB_FILE: "/app/db/production.sqlite3"
   TUDUDI_UPLOAD_PATH: "/data/uploads"
   PASSWORD_AUTH_ENABLED: "false"
 
