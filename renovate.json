@@ -25,5 +25,7 @@
       "matchPackageNames": ["/.*fluxcd.*/", "/HelmRepository/", "/HelmRelease/"]
     }
   ],
-  "dependencyDashboard": true
+  "dependencyDashboard": {
+    "enabled": true
+  }
 }
