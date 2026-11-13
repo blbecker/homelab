@@ -34,7 +34,7 @@ spec:
         name: agentmail
         force: false
       - identifier: optional-skills/creative/meme-generation
-      - identifier: productivity/google-workspace
+      - identifier: NousResearch/hermes-agent/skills/productivity/google-workspace
       - identifier: optional-skills/autonomous-ai-agents/opencode
     plugins: # install OpenViking memory plugin
       - identifier: volcengine/OpenViking/examples/hermes-plugin
