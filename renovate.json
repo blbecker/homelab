@@ -1,5 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["local>blbecker/renovate-config"],
   "flux": {
     "managerFilePatterns": ["/flux/.+\\.(yml|yaml)$/"]
   },
