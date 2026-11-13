@@ -31,8 +31,9 @@ spec:
       - identifier: optional-skills/creative/meme-generation
       - identifier: productivity/google-workspace
     plugins: # install OpenViking memory plugin
-      - identifier: openviking
+      - identifier: volcengine/OpenViking/examples/hermes-plugin
         enable: true
+        ref: e855796c83f9eb575d9b0f3082926660730f6a63
       - identifier: rabilrbl/hermes-brave-search-plugin
     config:
       raw: # optional; omit if no custom config.yml is needed
