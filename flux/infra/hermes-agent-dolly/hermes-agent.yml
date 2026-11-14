@@ -40,6 +40,14 @@ spec:
         tool_loop_guardrails:
           warnings_enabled: true # inject warnings into tool results (default: true)
           hard_stop_enabled: true # also BLOCK the call past the hard-stop threshold (default: false)
+        mcp_servers:
+          wordpress:
+            command: "npx"
+            args: ["-y", "@instawp/mcp-wp"]
+            env:
+              WORDPRESS_PASSWORD: "${env:WORDPRESS_APP_PASSWORD}"
+              WORDPRESS_API_URL: "https://rayrayincolor.com"
+              WORDPRESS_USERNAME: "${env:WORDPRESS_USERNAME}"
         matrix:
           require_mention: true # Require @mention in rooms (default: true)
           allowed_users: # Matrix users allowed to trigger agent turns
