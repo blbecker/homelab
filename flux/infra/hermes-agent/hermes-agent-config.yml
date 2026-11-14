@@ -8,4 +8,6 @@ data:
   OPENVIKING_ENDPOINT: http://openviking:1933
   MATRIX_E2EE_MODE: required
   GOOGLE_WORKSPACE_CLI_CREDENTIALS_FILE: /opt/data/.config/gws/credentials.json
+  # who bd (beads) records on issue writes; the workstation agents set BEADS_ACTOR=opencode
+  BEADS_ACTOR: hermes
 
