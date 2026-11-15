@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: airtrail-uploads
+  namespace: airtrail
+  annotations:
+    nfs.io/storage-path: "airtrail-uploads"
+spec:
+  storageClassName: qnap-fixed-name-nfs-client
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 5Gi
+
