@@ -44,6 +44,14 @@ spec:
 
   managed:
     roles:
+      - name: airtrail
+        ensure: present
+        comment: Airtrail server
+        login: true
+        superuser: false
+        passwordSecret:
+          name: airtrail-pg-user-creds
+
       - name: authentik
         ensure: present
         comment: Authentik server

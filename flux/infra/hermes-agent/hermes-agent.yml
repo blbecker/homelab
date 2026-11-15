@@ -57,10 +57,18 @@ spec:
             url: "https://mcp.openweathermap.org/mcp"
             headers:
               Authorization: "Bearer ${env:OPENWEATHERMAP_DATA_KEY}"
-          tududu:
+          tududi:
             url: "https://tududi.tartarus.us/api/mcp"
             headers:
               Authorization: "Bearer ${env:TUDUDI_API_KEY}"
+          airtrail:
+            url: "https://airtrail.tartarus.us/api/mcp"
+            headers:
+              Authorization: "Bearer ${env:AIRTRAIL_API_TOKEN}"
+          trek:
+            url: "https://trek.tartarus.us/mcp"
+            headers:
+              Authorization: "Bearer ${env:TREK_API_TOKEN}"
         matrix:
           require_mention: true # Require @mention in rooms (default: true)
           allowed_users: # Matrix users allowed to trigger agent turns
