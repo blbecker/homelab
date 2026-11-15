@@ -4,7 +4,7 @@ metadata:
   name: hermes
 spec:
   hermes:
-    image: ghcr.io/blbecker/hermes-agent:0.0.25
+    image: ghcr.io/blbecker/hermes-agent:0.0.27@sha256:fef99ea8d432b7ebe3f44087467a64b2c5b8b583a96128abda8f82a4c6b1c9cd
     packages:
       pip:
         install:
