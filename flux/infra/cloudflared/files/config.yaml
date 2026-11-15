@@ -12,6 +12,11 @@ ingress:
     service: http://actual.actual.svc.cluster.local:5006
     originRequest:
       httpHostHeader: "actual.tartarus.us"
+
+  - hostname: airtrail.tartarus.us 
+    service: http://airtrail.airtrail.svc.cluster.local:80
+    originRequest:
+      httpHostHeader: "airtrail.tartarus.us"
   
   - hostname: authentik.tartarus.us
     service: http://authentik.authentik.svc.cluster.local:9000

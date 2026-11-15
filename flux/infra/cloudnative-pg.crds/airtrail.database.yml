@@ -1,0 +1,10 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: airtrail
+  namespace: cloudnative-pg
+spec:
+  name: airtrail
+  owner: airtrail
+  cluster:
+    name: main

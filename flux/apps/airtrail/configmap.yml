@@ -1,0 +1,19 @@
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: airtrail-config
+  namespace: airtrail
+data:
+  ORIGIN: https://airtrail.tartarus.us
+  UPLOAD_LOCATION: /uploads
+  PUID: "2000"
+  PGID: "2000"
+  ADDRESS_HEADER: X-Forwarded-For
+  OAUTH_ENABLED: "true"
+  OIDC_ISSUER_URL: https://authentik.tartarus.us/application/o/airtrail/.well-known/openid-configuration
+  OIDC_CLIENT_ID: Aqhyo3Adh0zI04YN1LYdEtyLI28EmH2jitrKeeN5
+  OIDC_SCOPE: openid profile email
+  OAUTH_AUTO_LOGIN: "true"
+  OAUTH_HIDE_PASSWORD_FORM: "true"
+  OAUTH_BUTTON_TEXT: "Log in with Authentik"

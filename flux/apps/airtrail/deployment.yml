@@ -1,0 +1,87 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: airtrail
+  namespace: airtrail
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: airtrail
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: airtrail
+    spec:
+      dnsConfig:
+        options:
+          - name: ndots
+            value: "1"
+      automountServiceAccountToken: false
+      securityContext:
+        # airtrail's image defaults to PUID/PGID 1001 (user "app")
+        fsGroup: 2000
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: airtrail
+          image: johly/airtrail:v3.14.0
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: airtrail-config
+            - secretRef:
+                name: airtrail-secrets
+          ports:
+            - name: http
+              containerPort: 3000
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /uploads
+              name: airtrail-uploads
+            - mountPath: /tmp
+              name: tmp-volume
+          securityContext:
+            # the image entrypoint chowns /app/{db,backups} and drops
+            # privileges with su-exec, so it must start as root and keep a
+            # writable root filesystem (no runAsUser / readOnlyRootFilesystem)
+            allowPrivilegeEscalation: false
+          # startupProbe:
+          #   httpGet:
+          #     path: /api/health
+          #     port: http
+          #   periodSeconds: 10
+          #   failureThreshold: 60
+          # livenessProbe:
+          #   httpGet:
+          #     path: /api/health
+          #     port: http
+          #   initialDelaySeconds: 15
+          #   periodSeconds: 30
+          #   timeoutSeconds: 10
+          #   failureThreshold: 3
+          # readinessProbe:
+          #   httpGet:
+          #     path: /api/health
+          #     port: http
+          #   initialDelaySeconds: 10
+          #   periodSeconds: 10
+          #   timeoutSeconds: 5
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "500m"
+            limits:
+              memory: "1Gi"
+              cpu: "1"
+      volumes:
+        - name: airtrail-uploads
+          persistentVolumeClaim:
+            claimName: airtrail-uploads
+        - name: tmp-volume
+          emptyDir:
+            medium: Memory
+            sizeLimit: 128Mi
+
