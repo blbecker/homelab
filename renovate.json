@@ -21,6 +21,10 @@
       "allowedVersions": "<=5.0.0"
     },
     {
+      "matchDatasources": ["docker"],
+      "pinDigests": false
+    },
+    {
       "enabled": false,
       "matchPackageNames": ["/.*fluxcd.*/", "/HelmRepository/", "/HelmRelease/"]
     }
