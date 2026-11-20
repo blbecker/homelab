@@ -71,13 +71,13 @@ spec:
         auxiliary:
           title:
             provider: openrouter
-            model: ~google/gemini-flash-latest
+            model: openai/gpt-oss-20b
           vision:
             provider: openrouter
-            model: ~google/gemini-flash-latest
+            model: deepseek/deepseek-v4.1-flash-1017
           compression:
             provider: openrouter
-            model: ~google/gemini-flash-latest
+            model: deepseek/deepseek-v4.1-flash-1017
         memory:
           provider: openviking
         image_gen:
