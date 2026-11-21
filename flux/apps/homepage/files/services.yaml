@@ -130,3 +130,15 @@
         - type: peanut 
           url: https://peanut.tartarus.us 
           key: cyberpower
+- Overview:
+  - Calendar:
+      widget:
+        type: calendar 
+        firstDatInWeek: sunday 
+        view: monthly 
+        maxEvents: 10 
+        timezone: America/Puerto_Rico
+        integrations:
+          - type: ical 
+            url: {{HOMEPAGE_VAR_WORK_ICS_LINK}}
+            name: Work
