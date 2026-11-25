@@ -97,6 +97,10 @@ locals {
       public_key = "L7F4UH2qIvFo7oLQK0g8ZXQrmA3kqzlo2KatYYIuXTg="
       remote_address = "192.168.50.101/32"
     }
+    "benjamin-thor" = {
+      public_key = "yCO5CRQj3ZKB48/XU7M0zPLnpDsJlOTLbnHMmxlVN0E="
+      remote_address = "192.168.50.102"
+    }
     "github" = {
       public_key     = "h7fuc0klo6BQvlWX1H3RdfC5UDv3D6o39K7LHFtesCs="
       remote_address = "192.168.50.10/32"
