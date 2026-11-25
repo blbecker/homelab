@@ -27,7 +27,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: tududi
-          image: docker.io/chrisvel/tududi:2.1.0
+          image: docker.io/chrisvel/tududi:2.1.3
           imagePullPolicy: IfNotPresent
           envFrom:
             - configMapRef:
