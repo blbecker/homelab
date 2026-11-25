@@ -26,7 +26,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: trek
-          image: mauriceboe/trek:5.1.4
+          image: mauriceboe/trek:5.2.1
           imagePullPolicy: IfNotPresent
           envFrom:
             - configMapRef:
