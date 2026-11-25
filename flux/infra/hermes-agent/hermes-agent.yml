@@ -73,6 +73,10 @@ spec:
             url: "https://trek.tartarus.us/mcp"
             headers:
               Authorization: "Bearer ${env:TREK_API_TOKEN}"
+          letsfg: # hosted travel MCP: OAuth 2.1 + DCR; tokens cached on the PVC under /opt/data/mcp-tokens/
+            url: "https://letsfg.co/mcp"
+            auth: oauth
+            connect_timeout: 60
         matrix:
           require_mention: true # Require @mention in rooms (default: true)
           allowed_users: # Matrix users allowed to trigger agent turns
