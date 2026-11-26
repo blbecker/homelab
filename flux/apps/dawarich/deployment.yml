@@ -119,4 +119,4 @@ spec:
             claimName: dawarich-storage
         - name: watched
           emptyDir:
-            sizeLimit: 64Mi
+            sizeLimit: 512Mi
