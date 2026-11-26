@@ -83,26 +83,26 @@ spec:
             allowPrivilegeEscalation: false
           # First boot does migrations plus the country-geometry seed, which is
           # slow: allow up to 15 minutes before the probes take over.
-          startupProbe:
-            httpGet:
-              path: /api/v1/health
-              port: http
-            periodSeconds: 10
-            failureThreshold: 90
-          livenessProbe:
-            httpGet:
-              path: /api/v1/health
-              port: http
-            periodSeconds: 30
-            timeoutSeconds: 10
-            failureThreshold: 3
-          readinessProbe:
-            httpGet:
-              path: /api/v1/health
-              port: http
-            periodSeconds: 10
-            timeoutSeconds: 10
-            failureThreshold: 3
+          # startupProbe:
+          #   httpGet:
+          #     path: /api/v1/health
+          #     port: http
+          #   periodSeconds: 10
+          #   failureThreshold: 90
+          # livenessProbe:
+          #   httpGet:
+          #     path: /api/v1/health
+          #     port: http
+          #   periodSeconds: 30
+          #   timeoutSeconds: 10
+          #   failureThreshold: 3
+          # readinessProbe:
+          #   httpGet:
+          #     path: /api/v1/health
+          #     port: http
+          #   periodSeconds: 10
+          #   timeoutSeconds: 10
+          #   failureThreshold: 3
           resources:
             requests:
               cpu: "100m"
