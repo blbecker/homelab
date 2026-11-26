@@ -14,6 +14,9 @@ configMapGenerator:
   - name: dawarich-config
     envs:
       - files/dawarich.env
-# envFrom references the ConfigMap by its bare name, so the hash suffix is off.
-generatorOptions:
-  disableNameSuffixHash: true
+# Name-suffix hash deliberately LEFT ON: kustomize's nameReference transformer
+# rewrites the Deployment's envFrom.configMapRef.name to the hashed name, so an
+# env change alters the pod template and the Deployment rolls itself. Do not add
+# disableNameSuffixHash here -- it silently turns config edits into no-ops until
+# someone restarts the pod by hand (secrets under flux/infra/secrets are plain
+# resources and still need a manual rollout).
