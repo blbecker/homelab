@@ -10,7 +10,7 @@ metadata:
   # means splitting Sidekiq into its own Deployment later needs no PVC change.
   # Same shape as immich's photo library.
   annotations:
-    nfs.io/storage-path: "dawarich-storage"
+    nfs.io/storage-path: "dawarich/storage"
 spec:
   storageClassName: qnap-fixed-name-nfs-client
   accessModes:
