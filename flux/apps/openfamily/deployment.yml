@@ -1,0 +1,91 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: openfamily
+  namespace: openfamily
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: openfamily
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: openfamily
+    spec:
+      dnsConfig:
+        options:
+          - name: ndots
+            value: "1"
+      automountServiceAccountToken: false
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: openfamily
+          # Built from wheresfrank/openfamily by .github/workflows/build-openfamily.yml;
+          # the tag is the pinned upstream commit. Package must be public so the
+          # Harbor pull-through proxy (Kyverno rewrite) can fetch it.
+          image: ghcr.io/blbecker/openfamily-api:sha-6b6968c
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: openfamily-config
+            - secretRef:
+                name: openfamily-secrets
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          volumeMounts:
+            # Release APK cache pulled from GitHub, served by /admin/.
+            - mountPath: /data/apk
+              name: apk
+            # Deployed-ref marker (self-update is disabled; kept writable).
+            - mountPath: /data/deploy
+              name: deploy-meta
+            - mountPath: /tmp
+              name: tmp
+          securityContext:
+            # The image is alpine with no USER: it runs as root by default.
+            # It needs no privileges beyond writing the two mounts above, so
+            # keep the root filesystem read-only and drop escalation.
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            periodSeconds: 5
+            failureThreshold: 30
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "1"
+              memory: "512Mi"
+      volumes:
+        - name: apk
+          persistentVolumeClaim:
+            claimName: openfamily-apk
+        - name: deploy-meta
+          emptyDir:
+            sizeLimit: 16Mi
+        - name: tmp
+          emptyDir:
+            sizeLimit: 64Mi

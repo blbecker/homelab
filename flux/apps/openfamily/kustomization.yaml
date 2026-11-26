@@ -1,0 +1,20 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: openfamily
+resources:
+  - ./deployment.yml
+  - ./dnsendpoint.yml
+  - ./openfamily-apk-pvc.yml
+  - ./service.yml
+
+# Non-secret runtime configuration. `envs` renders one ConfigMap key per
+# KEY=VALUE line in files/openfamily.env; the Deployment consumes it with
+# envFrom, so adding a setting is a one-line change to the env file.
+configMapGenerator:
+  - name: openfamily-config
+    envs:
+      - files/openfamily.env
+# envFrom refers to the ConfigMap by its bare name, so the content hash suffix
+# must be disabled (same reason as flux/infra/influxdb).
+generatorOptions:
+  disableNameSuffixHash: true

@@ -22,3 +22,10 @@ spec:
       kind: Cluster
       name: main
       namespace: cloudnative-pg
+    # OpenFamily's own cluster (PostGIS + TimescaleDB, PG18 image-volume
+    # extensions). Gate the Kustomization on it so the app Kustomization's
+    # dependsOn actually waits for a Ready database.
+    - apiVersion: postgresql.cnpg.io/v1
+      kind: Cluster
+      name: openfamily
+      namespace: cloudnative-pg

@@ -1,0 +1,78 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: openfamily
+  namespace: cloudnative-pg
+spec:
+  # One instance: this is a household deployment and the database is small.
+  # Backups come from the barman-cloud plugin below, not from a standby.
+  instances: 1
+
+  # PostgreSQL 18 minimal image + PostGIS + TimescaleDB, all mounted as
+  # read-only image volumes (see openfamily.imagecatalog.yml). Extensions are
+  # baked into the operand image at Pod start, so this cluster is deliberately
+  # separate from `main`: vectorchord:17.5 cannot gain PostGIS/TimescaleDB.
+  imageCatalogRef:
+    apiGroup: postgresql.cnpg.io
+    kind: ImageCatalog
+    name: openfamily-postgresql
+    major: 18
+
+  postgresql:
+    # timescaledb must be preloaded for CREATE EXTENSION timescaledb to work.
+    shared_preload_libraries:
+      - "timescaledb"
+    extensions:
+      - name: postgis
+      - name: timescaledb-oss
+    parameters:
+      # TimescaleDB telemetry off. timescaledb.license is left at its packaged
+      # default ('timescale'): the PGDG package the extension image copies ships
+      # the community build, and its install script creates add_retention_policy
+      # (verified against postgresql-18-timescaledb 2.32.0+dfsg). If a future
+      # image ever ships the Apache-2-only build, migration 000010 fails and
+      # SHOW timescaledb.license reports 'apache' -- that is the canary.
+      timescaledb.telemetry_level: "off"
+      max_locks_per_transaction: "128"
+
+  # Small to start; the longhorn class allows expansion, so growing PGDATA or WAL
+  # is a manifest edit (shrinking is not).
+  storage:
+    storageClass: longhorn-no-replication
+    size: 2Gi
+
+  walStorage:
+    storageClass: longhorn-no-replication
+    size: 2Gi
+
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "256Mi"
+    limits:
+      cpu: "1"
+      memory: "1Gi"
+
+  # see https://cloudnative-pg.io/documentation/1.22/kubernetes_upgrade/
+  nodeMaintenanceWindow:
+    reusePVC: false # rebuild from the replica when one exists
+
+  # Reuses the existing Barman Cloud plugin and its B2 ObjectStore. The plugin
+  # derives the destination prefix from the cluster name, so OpenFamily's
+  # backups land under s3://tartarus-cnpg-postgres-backups/openfamily/ next to
+  # `main`'s, with the ObjectStore's 30d retention.
+  plugins:
+    - name: barman-cloud.cloudnative-pg.io
+      isWALArchiver: true
+      parameters:
+        barmanObjectName: b2-postgres-backups
+
+  managed:
+    roles:
+      - name: openfamily
+        ensure: present
+        comment: OpenFamily API server
+        login: true
+        superuser: false
+        passwordSecret:
+          name: openfamily-pg-user-creds

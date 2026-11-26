@@ -1,0 +1,80 @@
+name: Build OpenFamily API image
+
+# wheresfrank/openfamily publishes no backend image: upstream's only artifact is
+# the docker-compose stack, which builds backend/Dockerfile locally. This builds
+# that same Dockerfile, unmodified, from a pinned upstream commit and pushes it
+# to GHCR so the API can be deployed like every other workload in flux/.
+# Bump procedure: containers/openfamily/README.md
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - containers/openfamily/**
+      - .github/workflows/build-openfamily.yml
+  pull_request:
+    paths:
+      - containers/openfamily/**
+      - .github/workflows/build-openfamily.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  IMAGE: ghcr.io/blbecker/openfamily-api
+  UPSTREAM_REPO: wheresfrank/openfamily
+  # Pinned upstream commit. Keep flux/apps/openfamily/deployment.yml's image tag
+  # in sync (sha-<first 7 chars>).
+  UPSTREAM_REF: 6b6968c3a83cab1c3ae0af6880d5f08b41bce0b0
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Derive image tag from the pinned commit
+        id: tag
+        run: echo "tag=sha-${UPSTREAM_REF:0:7}" >> "$GITHUB_OUTPUT"
+
+      # The Dockerfile resolves the deployed git ref from .git/ (COPY .git/ /git/),
+      # so a fetch + checkout is required -- a tarball download would break it.
+      - name: Fetch upstream at the pinned commit
+        run: |
+          set -euo pipefail
+          git init --quiet "$RUNNER_TEMP/upstream"
+          git -C "$RUNNER_TEMP/upstream" remote add origin "https://github.com/${UPSTREAM_REPO}.git"
+          git -C "$RUNNER_TEMP/upstream" fetch --depth 1 origin "$UPSTREAM_REF"
+          git -C "$RUNNER_TEMP/upstream" checkout --quiet --detach FETCH_HEAD
+          git -C "$RUNNER_TEMP/upstream" log -1 --format='%H %s'
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GHCR
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # PRs build without pushing, so a broken Dockerfile or a bad upstream pin
+      # fails review instead of main.
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: ${{ runner.temp }}/upstream
+          file: ${{ runner.temp }}/upstream/backend/Dockerfile
+          build-args: |
+            GIT_COMMIT=${{ env.UPSTREAM_REF }}
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: |
+            ${{ env.IMAGE }}:${{ steps.tag.outputs.tag }}
+            ${{ env.IMAGE }}:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

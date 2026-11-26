@@ -1,0 +1,19 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: openfamily
+  namespace: cloudnative-pg
+spec:
+  name: openfamily
+  owner: openfamily
+  cluster:
+    name: openfamily
+  # Extensions are declared here, not left to the app's migrations. The API runs
+  # golang-migrate with its own non-superuser role, so `CREATE EXTENSION IF NOT
+  # EXISTS postgis/timescaledb` in migration 000001 only succeeds because these
+  # already exist. Versions are pinned and match the extension images.
+  extensions:
+    - name: timescaledb
+      version: "2.32.0"
+    - name: postgis
+      version: "3.7.0"

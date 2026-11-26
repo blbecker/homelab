@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: openfamily-apk
+  namespace: openfamily
+  # Cache for the Android release APKs the admin panel downloads (a few MB of
+  # plain files, no POSIX-locking or mmap requirement), so the QNAP NFS export
+  # is the right home and no Longhorn volume is needed.
+  annotations:
+    nfs.io/storage-path: "openfamily-apk"
+spec:
+  storageClassName: qnap-fixed-name-nfs-client
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 5Gi

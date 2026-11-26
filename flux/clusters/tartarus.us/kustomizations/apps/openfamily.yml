@@ -1,0 +1,26 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: openfamily
+  namespace: flux-system
+spec:
+  interval: 15m
+  path: flux/apps/openfamily
+  dependsOn:
+    - name: traefik
+    - name: longhorn
+    # Wait for the OpenFamily CNPG Cluster/Database to exist and report Ready
+    # before the API is rolled out, so first boot does not crashloop on a
+    # missing database.
+    - name: cloudnative-pg.crds
+  prune: true
+  timeout: 2m
+  retryInterval: 2m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  healthChecks:
+    - apiVersion: apps/v1
+      kind: Deployment
+      name: openfamily
+      namespace: openfamily

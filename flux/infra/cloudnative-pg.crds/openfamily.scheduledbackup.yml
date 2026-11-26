@@ -1,0 +1,22 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: ScheduledBackup
+metadata:
+  name: openfamily-nightly
+  namespace: cloudnative-pg
+spec:
+  # CloudNativePG cron format carries a leading seconds field:
+  # "0 45 4 * * *" = every day at 04:45:00 UTC (after `main`'s weekly 03:30).
+  # Location history is written continuously, so a daily base backup is worth
+  # the (small) extra storage; WAL archiving already gives PITR between runs.
+  schedule: "0 45 4 * * *"
+  cluster:
+    name: openfamily
+  method: plugin
+  pluginConfiguration:
+    name: barman-cloud.cloudnative-pg.io
+  backupOwnerReference: self
+  # Deliberately not immediate: the cluster is being created in the same commit
+  # and an immediate backup assigned to a pod that is still rolling dies
+  # untracked. First base backup lands on the next schedule.
+  immediate: false
+  suspend: false

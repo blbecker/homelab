@@ -1,0 +1,38 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: ImageCatalog
+metadata:
+  name: openfamily-postgresql
+  namespace: cloudnative-pg
+spec:
+  images:
+    # PostgreSQL 18 is required for image-volume extensions (the
+    # extension_control_path GUC). Image and extension digests are taken
+    # verbatim from the official CloudNativePG extension catalog
+    # (cloudnative-pg/artifacts, image-catalogs-extensions/catalog-minimal-trixie.yaml,
+    # images.cnpg.io/date 20261123) so the operand image, the PostGIS extension
+    # and the TimescaleDB extension are guaranteed to share major version, OS
+    # distro (trixie) and architecture.
+    #
+    # The catalog carries the per-extension plumbing that a hand-written
+    # extensions: stanza would have to repeat (PostGIS needs
+    # ld_library_path: system plus GDAL_DATA/PROJ_DATA pointing into the mounted
+    # extension image).
+    - major: 18
+      image: ghcr.io/cloudnative-pg/postgresql:18.7-202611230809-minimal-trixie@sha256:c8caac9817d2b5e5e66297a3ccf86d9fcbd68f097aa6cc00161d83f9635e88cc
+      extensions:
+        - name: postgis
+          image:
+            reference: ghcr.io/cloudnative-pg/postgis-extension:3.7.0-202611251238-18-trixie@sha256:326fdac46af44202e7724ed2a3b16d6b52484715bbe4908774dcbcb1ec917a64
+          ld_library_path:
+            - system
+          env:
+            - name: GDAL_DATA
+              value: ${image_root}/share/gdal
+            - name: PROJ_DATA
+              value: ${image_root}/share/proj
+        # TimescaleDB. OpenFamily's migration 000010 calls add_retention_policy(),
+        # which is a Timescale License (community) function -- see the Cluster's
+        # spec.postgresql.parameters note.
+        - name: timescaledb-oss
+          image:
+            reference: ghcr.io/cloudnative-pg/timescaledb-oss:2.32.0-202611251238-18-trixie@sha256:724fdbe39a7cd4a18862ccc316ecc442c079ac4e6daff8a32556948f15904c49
