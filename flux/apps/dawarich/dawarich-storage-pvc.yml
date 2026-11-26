@@ -3,14 +3,18 @@ kind: PersistentVolumeClaim
 metadata:
   name: dawarich-storage
   namespace: dawarich
-  # ActiveStorage (imported photos/exports). Starts small -- the longhorn class
-  # allows expansion, so growing is a manifest edit.
+  # Rails ActiveStorage (imported photos, archives, exports). Plain files written
+  # through ActiveStorage's DiskService (tmpfile + rename, no POSIX locks, no
+  # mmap), so the QNAP array -- not Longhorn -- is the right home: it is the big
+  # array, it already gets the host-level backup treatment, and ReadWriteMany
+  # means splitting Sidekiq into its own Deployment later needs no PVC change.
+  # Same shape as immich's photo library.
   annotations:
-    longhorn.io/recurring-job-group: default
+    nfs.io/storage-path: "dawarich-storage"
 spec:
-  storageClassName: longhorn
+  storageClassName: qnap-fixed-name-nfs-client
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
       storage: 5Gi
