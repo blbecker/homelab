@@ -1,0 +1,19 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: ScheduledBackup
+metadata:
+  name: dawarich-nightly
+  namespace: cloudnative-pg
+spec:
+  # CloudNativePG cron carries a leading seconds field:
+  # "0 15 5 * * *" = every day at 05:15:00 UTC.
+  schedule: "0 15 5 * * *"
+  cluster:
+    name: dawarich
+  method: plugin
+  pluginConfiguration:
+    name: barman-cloud.cloudnative-pg.io
+  backupOwnerReference: self
+  # Not immediate: the cluster is created in this same commit and WAL archiving
+  # already covers PITR until the first base backup lands.
+  immediate: false
+  suspend: false

@@ -1,0 +1,25 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: dawarich
+  namespace: flux-system
+spec:
+  interval: 15m
+  path: flux/apps/dawarich
+  dependsOn:
+    - name: traefik
+    - name: longhorn
+    # The API migrates its database on boot, so wait for the PostGIS CNPG
+    # cluster to exist and report Ready before rolling the Deployment.
+    - name: cloudnative-pg.crds
+  prune: true
+  timeout: 5m
+  retryInterval: 2m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  healthChecks:
+    - apiVersion: apps/v1
+      kind: Deployment
+      name: dawarich
+      namespace: dawarich

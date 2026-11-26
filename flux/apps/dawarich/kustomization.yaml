@@ -1,0 +1,21 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: dawarich
+resources:
+  - ./dawarich-public-pvc.yml
+  - ./dawarich-storage-pvc.yml
+  - ./dawarich-watched-pvc.yml
+  - ./deployment.yml
+  - ./dnsendpoint.yml
+  - ./service.yml
+
+# Non-secret runtime configuration: `envs` renders one ConfigMap key per
+# KEY=VALUE line in files/dawarich.env, consumed by the Deployment via envFrom.
+# Do NOT quote values in the env file -- kustomize keeps the quotes.
+configMapGenerator:
+  - name: dawarich-config
+    envs:
+      - files/dawarich.env
+# envFrom references the ConfigMap by its bare name, so the hash suffix is off.
+generatorOptions:
+  disableNameSuffixHash: true

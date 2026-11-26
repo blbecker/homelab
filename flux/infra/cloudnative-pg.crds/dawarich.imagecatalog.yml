@@ -1,0 +1,31 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: ImageCatalog
+metadata:
+  name: dawarich-postgresql
+  namespace: cloudnative-pg
+spec:
+  images:
+    # Dawarich needs PostGIS only (no TimescaleDB). Extensions are mounted as
+    # read-only image volumes, which requires PostgreSQL 18 (extension_control_path)
+    # -- hence a dedicated cluster rather than `main` (cloudnative-vectorchord:17.5).
+    #
+    # Image and extension digests are taken verbatim from the official
+    # CloudNativePG extension catalog (cloudnative-pg/artifacts ->
+    # image-catalogs-extensions/catalog-minimal-trixie.yaml, images.cnpg.io/date
+    # 20261123) so operand image and extension share major, distro (trixie) and
+    # arch. Trimmed to the one major and the one extension this app uses; the
+    # catalog entry also carries PostGIS's required ld_library_path: system and
+    # GDAL_DATA/PROJ_DATA plumbing.
+    - major: 18
+      image: ghcr.io/cloudnative-pg/postgresql:18.7-202611230809-minimal-trixie@sha256:c8caac9817d2b5e5e66297a3ccf86d9fcbd68f097aa6cc00161d83f9635e88cc
+      extensions:
+        - name: postgis
+          image:
+            reference: ghcr.io/cloudnative-pg/postgis-extension:3.7.0-202611251238-18-trixie@sha256:326fdac46af44202e7724ed2a3b16d6b52484715bbe4908774dcbcb1ec917a64
+          ld_library_path:
+            - system
+          env:
+            - name: GDAL_DATA
+              value: ${image_root}/share/gdal
+            - name: PROJ_DATA
+              value: ${image_root}/share/proj

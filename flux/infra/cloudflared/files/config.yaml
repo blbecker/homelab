@@ -33,6 +33,11 @@ ingress:
     originRequest:
       httpHostHeader: "continuwuity.tartarus.us"
   
+  - hostname: dawarich.tartarus.us
+    service: http://dawarich.dawarich.svc.cluster.local:80
+    originRequest:
+      httpHostHeader: "dawarich.tartarus.us"
+
   - hostname: freshrss.tartarus.us
     service: http://freshrss.freshrss.svc.cluster.local:80
     originRequest:

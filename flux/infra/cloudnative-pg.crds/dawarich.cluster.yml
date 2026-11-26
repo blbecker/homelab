@@ -1,0 +1,64 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: dawarich
+  namespace: cloudnative-pg
+spec:
+  # One instance: a personal location archive. Durability comes from the
+  # barman-cloud plugin below, not from a standby.
+  instances: 1
+
+  imageCatalogRef:
+    apiGroup: postgresql.cnpg.io
+    kind: ImageCatalog
+    name: dawarich-postgresql
+    major: 18
+
+  postgresql:
+    extensions:
+      - name: postgis
+
+  # Dawarich's own compose gives the DB shm_size: 1G (PostGIS imports); CNPG
+  # sizes /dev/shm from here.
+  ephemeralVolumesSizeLimit:
+    shm: 1Gi
+
+  storage:
+    storageClass: longhorn-no-replication
+    size: 4Gi
+
+  walStorage:
+    storageClass: longhorn-no-replication
+    size: 2Gi
+
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "256Mi"
+    limits:
+      cpu: "1"
+      memory: "1Gi"
+
+  # see https://cloudnative-pg.io/documentation/1.22/kubernetes_upgrade/
+  nodeMaintenanceWindow:
+    reusePVC: false
+
+  # Reuses the existing Barman Cloud plugin + B2 ObjectStore; the plugin
+  # prefixes by cluster name, so backups land under
+  # s3://tartarus-cnpg-postgres-backups/dawarich/ with the ObjectStore's 30d
+  # retention.
+  plugins:
+    - name: barman-cloud.cloudnative-pg.io
+      isWALArchiver: true
+      parameters:
+        barmanObjectName: b2-postgres-backups
+
+  managed:
+    roles:
+      - name: dawarich
+        ensure: present
+        comment: Dawarich location archive
+        login: true
+        superuser: false
+        passwordSecret:
+          name: dawarich-pg-user-creds

@@ -1,0 +1,117 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dawarich
+  namespace: dawarich
+spec:
+  replicas: 1
+  # Single Rails pod with embedded Sidekiq: keep one pod at a time so two
+  # release tasks never run migrations concurrently.
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: dawarich
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: dawarich
+    spec:
+      dnsConfig:
+        options:
+          - name: ndots
+            value: "1"
+      automountServiceAccountToken: false
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+      # Mirrors upstream's 60s stop_grace_period so running jobs can finish or
+      # return to the queue instead of being killed mid-import.
+      terminationGracePeriodSeconds: 60
+      containers:
+        - name: dawarich
+          image: freikin/dawarich:1.23.0
+          imagePullPolicy: IfNotPresent
+          # The image's ENTRYPOINT is `bundle exec`; upstream compose runs
+          # web-entrypoint.sh (DB migrate + data:migrate + seed + static asset
+          # sync, then `exec bundle exec "$@"`) with the Rails server as the
+          # command, so mirror that exactly. Bind 0.0.0.0 rather than compose's
+          # `::` so kubelet probes and the Service reach it over IPv4.
+          command:
+            - web-entrypoint.sh
+          args:
+            - bin/rails
+            - server
+            - -p
+            - "3000"
+            - -b
+            - 0.0.0.0
+          envFrom:
+            - configMapRef:
+                name: dawarich-config
+            - secretRef:
+                name: dawarich-secrets
+          ports:
+            - name: http
+              containerPort: 3000
+              protocol: TCP
+            - name: metrics
+              containerPort: 9394
+              protocol: TCP
+          volumeMounts:
+            # Static assets are re-synced from the image into this volume on
+            # every boot (see web-entrypoint.sh), so it must stay writable.
+            - mountPath: /var/app/public
+              name: public
+            # ActiveStorage blobs (imported photos, exports).
+            - mountPath: /var/app/storage
+              name: storage
+            # Import drop folder -- on the QNAP export so Google Takeout / GPX
+            # archives can be copied in from another machine.
+            - mountPath: /var/app/tmp/imports/watched
+              name: watched
+          securityContext:
+            # The entrypoint runs `rails db:migrate`, `rake data:migrate`,
+            # `rails db:seed` and the public-asset sync on every start, and the
+            # image ships no USER (runs as root); PUID/PGID are deliberately
+            # left unset so it never chowns the NFS watched volume.
+            allowPrivilegeEscalation: false
+          # First boot does migrations plus the country-geometry seed, which is
+          # slow: allow up to 15 minutes before the probes take over.
+          startupProbe:
+            httpGet:
+              path: /api/v1/health
+              port: http
+            periodSeconds: 10
+            failureThreshold: 90
+          livenessProbe:
+            httpGet:
+              path: /api/v1/health
+              port: http
+            periodSeconds: 30
+            timeoutSeconds: 10
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /api/v1/health
+              port: http
+            periodSeconds: 10
+            timeoutSeconds: 10
+            failureThreshold: 3
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "512Mi"
+            limits:
+              cpu: "2"
+              memory: "2Gi"
+      volumes:
+        - name: public
+          persistentVolumeClaim:
+            claimName: dawarich-public
+        - name: storage
+          persistentVolumeClaim:
+            claimName: dawarich-storage
+        - name: watched
+          persistentVolumeClaim:
+            claimName: dawarich-watched
