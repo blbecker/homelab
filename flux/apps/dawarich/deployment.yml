@@ -59,8 +59,10 @@ spec:
               containerPort: 9394
               protocol: TCP
           volumeMounts:
-            # Static assets are re-synced from the image into this volume on
-            # every boot (see web-entrypoint.sh), so it must stay writable.
+            # Rails public/: compiled assets + poster themes, wiped and
+            # re-synced from the image on every boot (web-entrypoint.sh), and
+            # nothing user-generated is written here -- so pod-local scratch,
+            # not a PVC and not NFS churn.
             - mountPath: /var/app/public
               name: public
             # ActiveStorage blobs (imported photos, exports).
@@ -107,8 +109,8 @@ spec:
               memory: "2Gi"
       volumes:
         - name: public
-          persistentVolumeClaim:
-            claimName: dawarich-public
+          emptyDir:
+            sizeLimit: 512Mi
         - name: storage
           persistentVolumeClaim:
             claimName: dawarich-storage
