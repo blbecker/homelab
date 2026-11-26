@@ -68,8 +68,11 @@ spec:
             # ActiveStorage blobs (imported photos, exports).
             - mountPath: /var/app/storage
               name: storage
-            # Import drop folder -- on the QNAP export so Google Takeout / GPX
-            # archives can be copied in from another machine.
+            # Import drop folder. We import through the UI instead, so this is
+            # only here to give the hourly Import::WatcherJob a real, empty
+            # directory to scan: without the mount, Dir.entries raises ENOENT
+            # once an hour (the job sets retry: false, so it shows as a failed
+            # job each time).
             - mountPath: /var/app/tmp/imports/watched
               name: watched
           securityContext:
@@ -115,5 +118,5 @@ spec:
           persistentVolumeClaim:
             claimName: dawarich-storage
         - name: watched
-          persistentVolumeClaim:
-            claimName: dawarich-watched
+          emptyDir:
+            sizeLimit: 64Mi

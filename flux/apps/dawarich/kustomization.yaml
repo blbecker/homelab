@@ -3,7 +3,6 @@ kind: Kustomization
 namespace: dawarich
 resources:
   - ./dawarich-storage-pvc.yml
-  - ./dawarich-watched-pvc.yml
   - ./deployment.yml
   - ./dnsendpoint.yml
   - ./service.yml
