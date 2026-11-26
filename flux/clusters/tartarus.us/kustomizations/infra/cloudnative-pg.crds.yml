@@ -22,3 +22,9 @@ spec:
       kind: Cluster
       name: main
       namespace: cloudnative-pg
+    # Dawarich's PostGIS cluster. Gate on it so the app Kustomization's
+    # dependsOn actually waits for a Ready database instead of only `main`.
+    - apiVersion: postgresql.cnpg.io/v1
+      kind: Cluster
+      name: dawarich
+      namespace: cloudnative-pg

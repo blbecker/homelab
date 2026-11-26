@@ -1,0 +1,20 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: dawarich
+  namespace: cloudnative-pg
+spec:
+  name: dawarich
+  owner: dawarich
+  cluster:
+    name: dawarich
+  # PostGIS is declared here because Dawarich's migrations run as the
+  # non-superuser `dawarich` role inside the container: `enable_extension` in
+  # the schema would otherwise fail on a bare cluster.
+  extensions:
+    # image volume extension, digest-pinned in dawarich.imagecatalog.yml
+    - name: postgis
+      version: "3.7.0"
+    # ships inside the postgresql-18 package (contrib); not version-pinned so a
+    # minor bump in the operand image does not force an upgrade here
+    - name: pgcrypto

@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: dawarich-storage
+  namespace: dawarich
+  # ActiveStorage (imported photos/exports). Starts small -- the longhorn class
+  # allows expansion, so growing is a manifest edit.
+  annotations:
+    longhorn.io/recurring-job-group: default
+spec:
+  storageClassName: longhorn
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi

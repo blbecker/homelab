@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: dawarich-watched
+  namespace: dawarich
+  # Import drop folder (Google Takeout, GPX, photo archives). Plain files that
+  # are written from outside the cluster, so the QNAP NFS export -- not
+  # Longhorn -- is the right home.
+  annotations:
+    nfs.io/storage-path: "dawarich-watched"
+spec:
+  storageClassName: qnap-fixed-name-nfs-client
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 5Gi
