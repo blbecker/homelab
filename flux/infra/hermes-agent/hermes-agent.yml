@@ -57,6 +57,10 @@ spec:
             args: ["-y", "agentmail-mcp"]
             env:
               AGENTMAIL_API_KEY: "${env:AGENTMAIL_API_KEY}"
+          dawarich:
+            url: "https://dawarich.tartarus.us/api/v1/mcp"
+            headers:
+              Authorization: "Bearer ${env:DAWARICH_API_TOKEN}"
           openweathermap:
             url: "https://mcp.openweathermap.org/mcp"
             headers:

@@ -30,10 +30,14 @@ spec:
         force: false #
       - identifier: optional-skills/creative/meme-generation
       - identifier: NousResearch/hermes-agent/skills/productivity/google-workspace
+      - identifier: optional-skills/mcp/mcp-oauth-remote-gateway
     plugins: # install OpenViking memory plugin
       - identifier: volcengine/OpenViking/examples/hermes-plugin
         enable: true
         ref: e855796c83f9eb575d9b0f3082926660730f6a63
+      - identifier: LetsFG/LetsFG/integrations/hermes
+        enable: true
+        ref: f8836c842c0560e1695a1467ec17250911c908a2
       - identifier: rabilrbl/hermes-brave-search-plugin
     config:
       raw: # optional; omit if no custom config.yml is needed
@@ -48,6 +52,10 @@ spec:
               WORDPRESS_PASSWORD: "${env:WORDPRESS_APP_PASSWORD}"
               WORDPRESS_API_URL: "https://rayrayincolor.com"
               WORDPRESS_USERNAME: "${env:WORDPRESS_USERNAME}"
+          letsfg: # hosted travel MCP: OAuth 2.1 + DCR; tokens cached on the PVC under /opt/data/mcp-tokens/
+            url: "https://letsfg.co/mcp"
+            auth: oauth
+            connect_timeout: 60
         matrix:
           require_mention: true # Require @mention in rooms (default: true)
           allowed_users: # Matrix users allowed to trigger agent turns
