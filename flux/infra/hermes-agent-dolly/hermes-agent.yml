@@ -41,6 +41,8 @@ spec:
       - identifier: rabilrbl/hermes-brave-search-plugin
     config:
       raw: # optional; omit if no custom config.yml is needed
+        approvals:
+          destructive_slash_confirm: false
         tool_loop_guardrails:
           warnings_enabled: true # inject warnings into tool results (default: true)
           hard_stop_enabled: true # also BLOCK the call past the hard-stop threshold (default: false)
